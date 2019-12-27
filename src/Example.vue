@@ -76,7 +76,7 @@
     </z-view-header>
     <z-view-layout>
       <z-view-sider class="sider">
-        <z-view-menu direction="vertical" class="nav-menu" selected="intro">
+        <z-view-menu direction="vertical" class="nav-menu" :selected="selected">
           <z-view-menu-item name="intro">
             <router-link to="/">
               <p>介绍</p>
@@ -172,7 +172,26 @@
 </template>
 <script>
 import "highlight.js/styles/github.css";
-export default {};
+export default {
+  watch: {
+    '$route' (to,from){
+      if(to.path === '/'){
+        this.selected = 'intro'
+      }else{
+        this.$nextTick(()=>{
+          this.selected = to.path.substr(1)
+        })
+      }
+    }
+  },
+  data(){
+    return {
+      selected: ''
+    }
+  },
+  mounted(){
+  }
+};
 </script>
 <style lang="scss">
 *,
