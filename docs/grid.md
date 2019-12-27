@@ -255,9 +255,9 @@
 #### col 组件
 | 参数      | 说明    | 类型      | 可选值       | 默认值   | 必填 |
 |---------- |-------- |---------- |-------------  |-------- | ------- |
-| span     | 宽度   | string,number    |   0-24 之间  |     -    | 是 |
-| offset  | 偏移量 | string,number | - | - | 否 |
-| ipad | 宽度在 ipad 下的 span 和 offset 设置 | object | - | - | 否 |
-| narrowPc | 宽度在 narrowPc 下的 span 和 offset 设置 | object | - | - | 否 |
-| pc | 宽度在 pc 下的 span 和 offset 设置 | object | - | - | 否 |
-| widePc | 宽度在 widePc 下的 span 和 offset 设置 | object | - | - | 否 |
+| span     | 默认宽度   | string,number    |   0-24 之间  |     -    | 是 |
+| offset  | 默认偏移量  | string,number | - | - | 否 |
+| ipad | 宽度 577px 到 768px 之间的 span 和 offset 设置 | object | - | - | 否 |
+| narrowPc | 宽度 769px 到 991px 之间的 span 和 offset 设置 | object | - | - | 否 |
+| pc | 宽度 992px 到 1200px 之间的 span 和 offset 设置 | object | - | - | 否 |
+| widePc | 宽度超过 1200px 的 span 和 offset 设置 | object | - | - | 否 |
