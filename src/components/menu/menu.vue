@@ -46,9 +46,12 @@ export default {
       }
     }
   },
-  mounted() {
+  updated(){
     this.eventBus.$emit("update:selected", this.selected);
+  },
+  mounted() {
     this.eventBus.$on("add:open", this.onMenuOpen);
+    this.eventBus.$emit("update:selected", this.selected);
     // this.eventBus.$on('remove:open',this.onMenuClose)
   }
 };
