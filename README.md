@@ -1,4 +1,4 @@
-## zeroview
+# zeroview
 
 这是一套基于 Vue 2.6 的 UI 组件库。旨在学习 Vue 和手写组件，提高自己的熟练度。
 
@@ -26,6 +26,17 @@ Vue.use(zeroview)
     <z-view-button icon="like">点个赞</z-view-button>
   </div>
 </template>
+```
+
+ps: 请使用如下 css-reset, 否则样式会有问题
+```css
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 ```
 
 
