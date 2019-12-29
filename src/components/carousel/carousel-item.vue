@@ -1,11 +1,11 @@
 <template>
-  <div class="z-view-cascader-item-wrapper">
+  <span class="z-view-carousel-item-wrapper">
     <transition name="fade">
       <div class="z-view-carousel-item" v-if="visible">
         <slot />
       </div>
     </transition>
-  </div>
+  </span>
 </template>
 <script>
 export default {
@@ -33,7 +33,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.z-view-cascader-item-wrapper {
+.z-view-carousel-item-wrapper {
 
 }
 .z-view-carousel-item {
@@ -42,6 +42,7 @@ export default {
   line-height: 100px;
   width: 100px;
   height: 100px;
+  border: 1px solid red;
 }
 .fade-enter-active, .fade-leave-active {
   transition: all 3s;
