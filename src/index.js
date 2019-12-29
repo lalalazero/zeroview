@@ -9,6 +9,7 @@ import Collapse from "./components/collapse/index.js";
 import Menu from "./components/menu/index.js";
 import Popover from './components/popover/index.js'
 import Cascader from './components/cascader/index.js'
+import Carousel from './components/carousel/index.js'
 
 const components = [
   Button,
@@ -21,7 +22,8 @@ const components = [
   Collapse,
   Menu,
   Popover,
-  Cascader
+  Cascader,
+  Carousel
 ];
 
 const install = Vue => {
@@ -32,7 +34,7 @@ const install = Vue => {
 
 export {
   Button, Icon, ButtonGroup, Input,
-  Grid, Tab, Toast, Menu, Collapse, Popover, Cascader
+  Grid, Tab, Toast, Menu, Collapse, Popover, Cascader,Carousel
 };
 
 export default install;
