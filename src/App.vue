@@ -1,11 +1,14 @@
 <template>
   <div>
-    <div style="margin-top: 50px">
-      <z-view-cascader :options="options" :selected.sync="selected"></z-view-cascader>
-    </div>
-    <div style="margin-top: 200px">
-      {{ this.selected }}
-    </div>
+    <z-view-carousel :selected="selected">
+      <z-view-carousel-item name="0" >1</z-view-carousel-item>
+      <z-view-carousel-item name="1" >2</z-view-carousel-item>
+      <z-view-carousel-item name="2" >3</z-view-carousel-item>
+    </z-view-carousel>
+    <br>
+    <z-view-button @click="onClick">click</z-view-button>
+    <span>{{ this.selected }}</span>
+
   </div>
 </template>
 
@@ -17,70 +20,16 @@ export default {
   name: "App",
   mounted() {},
   methods: {
-
+    onClick(){
+      this.count++;
+      this.selected = this.count % 3 + ''
+    }
   },
   data() {
     return {
-      options: [
-        {
-          id: '1',
-          label: '四川',
-          children: [
-            {
-              id: '1-1',
-              label: '成都市',
-              children: [
-                {
-                  id: '1-1-1',
-                  label: '高新区'
-                },
-                {
-                  id: '1-1-2',
-                  label: '锦江区'
-                },
-                {
-                  id: '1-1-3',
-                  label: '金牛区'
-                },
-              ]
-            },
-            {
-              id: '1-2',
-              label: '泸州市',
-              children: [
-                {
-                  id: '1-2-1',
-                  label: '纳西区'
-                },
-                {
-                  id: '1-2-2',
-                  label: '江阳区'
-                },
-                {
-                  id: '1-3-3',
-                  label: '龙马谭区'
-                },
-              ]
-            },
-          ]
-        },
-        {
-          id: '2',
-          label: '重庆市',
-          children: [
-            {
-              id: '2-1',
-              label: '渝中区'
-            },
-            {
-              id: '2-2',
-              label: '北培区'
-            }
-          ]
-        }
-      ],
-      selected: [ { "id": "1", "label": "四川" }, { "id": "1-2", "label": "泸州市" }, { "id": "1-2-2", "label": "江阳区" } ]
-    };
+      selected: '1',
+      count: 1,
+    }
   },
   mounted() {
 
@@ -109,4 +58,7 @@ ul,
 ol {
   list-style: none;
 }
+
+
+
 </style>>
