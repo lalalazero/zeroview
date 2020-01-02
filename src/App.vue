@@ -12,7 +12,7 @@
       </z-view-carousel-item>
     </z-view-carousel>
     <br>
-    <span>{{ this.selected }}</span>
+    <span>app selected: {{ this.selected }}</span>
 
   </div>
 </template>
