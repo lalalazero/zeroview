@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="z-view-carousel-item" v-if="visible">
+    <div class="z-view-carousel-item" v-if="visible" :class="{reverse}">
       <slot />
     </div>
   </transition>
@@ -16,7 +16,8 @@ export default {
   },
   data() {
     return {
-      visible: false
+      visible: false,
+      reverse: false
     };
   },
   updated(){
@@ -38,8 +39,20 @@ export default {
 }
 .slide-enter {
   transform: translateX(100%);
+  opacity: 0;
 }
 .slide-leave-to {
   transform: translateX(-100%);
+  opacity: 0;
+  transform: scale(0.5)
+}
+.slide-enter.reverse {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-leave-to.reverse {
+  transform: translateX(100%);
+  opacity: 0;
+  transform: scale(0.5)
 }
 </style>

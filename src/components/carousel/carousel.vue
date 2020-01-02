@@ -8,9 +8,8 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
 export default {
-  name: 'zViewCarousel',
+  name: "zViewCarousel",
   props: {
     selected: {
       type: String
@@ -21,51 +20,59 @@ export default {
     }
   },
 
-  data(){
-    return {
-    }
+  data() {
+    return {};
   },
-  methods:{
-    playAutomatically(){
+  methods: {
+    playAutomatically() {
+      let names = this.$children.map(child => child.name);
+      let index = names.indexOf(this.getSelected());
+      let run = () => {
+        let newIndex = index - 1
+        if (newIndex >= names.length) {
+          newIndex = 0
+        }
+        if(newIndex < 0){
+          newIndex = names.length - 1
+        }
+        this.$emit("update:selected", names[newIndex]);
+        setTimeout(run, 3000);
+      };
+      setTimeout(run, 3000);
+    },
+    getSelected() {
+      return this.selected || this.$children[0].name;
+    },
+    updateChildren(selected) {
       let names = this.$children.map(child => child.name)
-      let index = names.indexOf(this.getSelected())
-      let run = ()=>{
-        if(index === names.length) { index = 0}
-        this.$emit('update:selected',names[index+1])
-        index++
-        setTimeout(run, 3000)
-      }
-      setTimeout(run, 3000)
-
-    },
-    getSelected(){
-      return this.selected || this.$children[0].name
-    },
-    updateChildren(selected){
-      this.$children.forEach(vm => vm.visible = vm.name === selected)
+      this.$children.forEach(vm => {
+        vm.visible = vm.name === selected;
+        let newIndex = names.indexOf(selected)
+        let oldIndex = names.indexOf(vm.name)
+        vm.reverse = newIndex > oldIndex ? false : true
+      });
     }
   },
-  updated(){
-    this.updateChildren(this.getSelected())
+  updated() {
+    this.updateChildren(this.getSelected());
   },
-  mounted(){
-    this.updateChildren(this.getSelected())
-    if(this.autoPlay){
-      this.playAutomatically()
+  mounted() {
+    this.updateChildren(this.getSelected());
+    if (this.autoPlay) {
+      this.playAutomatically();
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .z-view-carousel {
   display: inline-block;
   border: 1px solid;
   &-window {
-
+    overflow: hidden;
   }
   &-wrapper {
     position: relative;
   }
 }
-
 </style>

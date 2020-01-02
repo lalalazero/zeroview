@@ -2,13 +2,13 @@
   <div>
     <z-view-carousel :selected.sync="selected">
       <z-view-carousel-item name="a" >
-        <div class="box">a</div>
+        <div class="box" style="background: pink">a</div>
       </z-view-carousel-item>
       <z-view-carousel-item name="b" >
-        <div class="box">b</div>
+        <div class="box" style="background: green">b</div>
       </z-view-carousel-item>
       <z-view-carousel-item name="c" >
-        <div class="box">c</div>
+        <div class="box" style="background: lightgreen">c</div>
       </z-view-carousel-item>
     </z-view-carousel>
     <br>
@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      selected: 'a',
+      selected: 'c',
     }
   },
   mounted() {
@@ -60,8 +60,8 @@ ol {
   list-style: none;
 }
 .box {
-  width: 100px;
-  height: 100px;
+  width: 400px;
+  height: 300px;
   background: lightblue;
 }
 
