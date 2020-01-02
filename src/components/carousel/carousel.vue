@@ -1,5 +1,12 @@
 <template>
-  <div class="z-view-carousel" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
+  <div
+    class="z-view-carousel"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
+  >
     <div class="z-view-carousel-window" ref="window">
       <div class="z-view-carousel-wrapper">
         <slot />
@@ -32,7 +39,8 @@ export default {
       childrenLength: 0,
       names: [],
       lastSelected: undefined, // 上一次被选中的值
-      timerId: undefined
+      timerId: undefined,
+      touchStart: undefined
     };
   },
   computed: {
@@ -41,12 +49,55 @@ export default {
     }
   },
   methods: {
+    onTouchStart(e) {
+      console.log("开始摸");
+      // console.log(e);
+      if (e.touches.length > 1) {
+        return;
+      }
+      this.touchStart = e.touches[0];
+      this.pause();
+    },
+    onTouchMove() {
+      console.log("边摸边动");
+    },
+    onTouchEnd(e) {
+      console.log("摸完了");
+      // console.log(e);
+      let touchEnd = e.changedTouches[0];
+      let { clientX: x1, clientY: y1 } = this.touchStart;
+      let { clientX: x2, clientY: y2 } = touchEnd;
+      // console.log(x1, x2, y1, y2);
+      let distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      // console.log("distance");
+      // console.log(distance);
+      let deltaY = Math.abs(y2 - y1);
+      // console.log("deltaY");
+      // console.log(deltaY);
+      let rate = distance / deltaY;
+      if (rate < 2) {
+        console.log("上下滑动");
+        return;
+      } else {
+        // console.log("左右滑动");
+        if (x2 > x1) {
+          console.log("右滑");
+          let selectedIndex = this.names.indexOf(this.selected);
+          this.select(selectedIndex - 1);
+        } else {
+          console.log("左滑");
+          let selectedIndex = this.names.indexOf(this.selected);
+          this.select(selectedIndex + 1);
+        }
+      }
+      this.$nextTick(() => {
+        this.playAutomatically();
+      });
+    },
     onMouseEnter() {
-      console.log("mouse enter..");
       this.pause();
     },
     onMouseLeave() {
-      console.log("mouse leave..");
       this.playAutomatically();
     },
     pause() {
@@ -60,10 +111,7 @@ export default {
       let run = () => {
         let index = this.names.indexOf(this.getSelected());
         let newIndex = index + 1;
-        if (newIndex >= this.names.length) {
-          newIndex = 0;
-        }
-        this.$emit("update:selected", this.names[newIndex]);
+        this.select(newIndex);
         this.timerId = setTimeout(run, 3000);
       };
       this.timerId = setTimeout(run, 3000);
@@ -90,6 +138,12 @@ export default {
       });
     },
     select(index) {
+      if (index >= this.names.length) {
+        index = 0;
+      }
+      if (index < 0) {
+        index = this.names.length - 1;
+      }
       this.$emit("update:selected", this.names[index]);
     },
     collectChildren() {
