@@ -1,18 +1,17 @@
 <template>
   <div>
-    <z-view-carousel :selected="selected">
-      <z-view-carousel-item name="0" >
-        <div class="box">1</div>
+    <z-view-carousel :selected.sync="selected">
+      <z-view-carousel-item name="a" >
+        <div class="box">a</div>
       </z-view-carousel-item>
-      <z-view-carousel-item name="1" >
-        <div class="box">2</div>
+      <z-view-carousel-item name="b" >
+        <div class="box">b</div>
       </z-view-carousel-item>
-      <z-view-carousel-item name="2" >
-        <div class="box">3</div>
+      <z-view-carousel-item name="c" >
+        <div class="box">c</div>
       </z-view-carousel-item>
     </z-view-carousel>
     <br>
-    <z-view-button @click="onClick">click</z-view-button>
     <span>{{ this.selected }}</span>
 
   </div>
@@ -26,15 +25,11 @@ export default {
   name: "App",
   mounted() {},
   methods: {
-    onClick(){
-      this.count++;
-      this.selected = this.count % 3 + ''
-    }
+
   },
   data() {
     return {
-      selected: '1',
-      count: 1,
+      selected: 'a',
     }
   },
   mounted() {

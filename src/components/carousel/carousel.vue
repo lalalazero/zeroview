@@ -1,7 +1,7 @@
 <template>
   <div class="z-view-carousel">
     <div class="z-view-carousel-window" ref="window">
-      <div class="z-view-carousel-wrapper" ref="wrapper">
+      <div class="z-view-carousel-wrapper">
         <slot />
       </div>
     </div>
@@ -14,27 +14,44 @@ export default {
   props: {
     selected: {
       type: String
+    },
+    autoPlay: {
+      type: Boolean,
+      default: true
     }
   },
 
   data(){
     return {
-      bus: new Vue()
     }
   },
   methods:{
-    updateChildren(){
-      let selected = this.selected || this.$children[0].name
-      console.log(selected)
-      console.log(this.$children)
+    playAutomatically(){
+      let names = this.$children.map(child => child.name)
+      let index = names.indexOf(this.getSelected())
+      console.log(`index = ${index}`)
+      setInterval(()=>{
+        console.log('play auto.')
+        if(index === names.length) { index = 0}
+        this.$emit('update:selected',names[index+1])
+        index++
+      },1000)
+    },
+    getSelected(){
+      return this.selected || this.$children[0].name
+    },
+    updateChildren(selected){
       this.$children.forEach(vm => vm.visible = vm.name === selected)
     }
   },
   updated(){
-    this.updateChildren()
+    this.updateChildren(this.getSelected())
   },
   mounted(){
-    this.updateChildren()
+    this.updateChildren(this.getSelected())
+    if(this.autoPlay){
+      this.playAutomatically()
+    }
   }
 }
 </script>

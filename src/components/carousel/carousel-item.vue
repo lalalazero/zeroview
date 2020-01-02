@@ -35,7 +35,6 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-  border: 10px solid red;
 }
 .slide-enter {
   transform: translateX(100%);
