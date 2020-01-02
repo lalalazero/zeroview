@@ -1,9 +1,15 @@
 <template>
   <div>
     <z-view-carousel :selected="selected">
-      <z-view-carousel-item name="0" >1</z-view-carousel-item>
-      <z-view-carousel-item name="1" >2</z-view-carousel-item>
-      <z-view-carousel-item name="2" >3</z-view-carousel-item>
+      <z-view-carousel-item name="0" >
+        <div class="box">1</div>
+      </z-view-carousel-item>
+      <z-view-carousel-item name="1" >
+        <div class="box">2</div>
+      </z-view-carousel-item>
+      <z-view-carousel-item name="2" >
+        <div class="box">3</div>
+      </z-view-carousel-item>
     </z-view-carousel>
     <br>
     <z-view-button @click="onClick">click</z-view-button>
@@ -57,6 +63,11 @@ a {
 ul,
 ol {
   list-style: none;
+}
+.box {
+  width: 100px;
+  height: 100px;
+  background: lightblue;
 }
 
 

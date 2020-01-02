@@ -1,6 +1,10 @@
 <template>
   <div class="z-view-carousel">
-      <slot />
+    <div class="z-view-carousel-window" ref="window">
+      <div class="z-view-carousel-wrapper" ref="wrapper">
+        <slot />
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -12,11 +16,7 @@ export default {
       type: String
     }
   },
-  provide(){
-    return {
-      bus: this.bus
-    }
-  },
+
   data(){
     return {
       bus: new Vue()
@@ -25,7 +25,9 @@ export default {
   methods:{
     updateChildren(){
       let selected = this.selected || this.$children[0].name
-      this.bus.$emit('update:selected',selected)
+      console.log(selected)
+      console.log(this.$children)
+      this.$children.forEach(vm => vm.visible = vm.name === selected)
     }
   },
   updated(){
@@ -38,8 +40,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .z-view-carousel {
-  display: flex;
-  // border: 1px solid;
+  display: inline-block;
+  border: 1px solid;
+  &-window {
+
+  }
+  &-wrapper {
+    position: relative;
+  }
 }
 
 </style>

@@ -1,11 +1,9 @@
 <template>
-  <span class="z-view-carousel-item-wrapper">
-    <transition name="fade">
-      <div class="z-view-carousel-item" v-if="visible">
-        <slot />
-      </div>
-    </transition>
-  </span>
+  <transition name="slide">
+    <div class="z-view-carousel-item" v-if="visible">
+      <slot />
+    </div>
+  </transition>
 </template>
 <script>
 export default {
@@ -16,46 +14,33 @@ export default {
       required: true
     }
   },
-  inject: ["bus"],
   data() {
     return {
       visible: false
     };
   },
+  updated(){
+  },
   methods: {
-    onSelectedChange(selected) {
-      this.visible = selected === this.name;
-    }
   },
   mounted() {
-    this.bus.$on("update:selected", this.onSelectedChange);
   }
 };
 </script>
 <style lang="scss" scoped>
-.z-view-carousel-item-wrapper {
-
+.slide-enter-active, .slide-leave-active {
+  transition: all 1s;
 }
-.z-view-carousel-item {
-  background: lightblue;
-  text-align: center;
-  line-height: 100px;
-  width: 100px;
-  height: 100px;
-  border: 1px solid red;
-}
-.fade-enter-active, .fade-leave-active {
-  transition: all 3s;
-}
-.fade-enter {
-  opacity: 0;
-  transform: translateX(100%)
-}
-.fade-leave-active {
+.slide-leave-active {
   position: absolute;
+  left: 0;
+  top: 0;
+  border: 10px solid red;
 }
-.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  transform: translateX(-100%)
+.slide-enter {
+  transform: translateX(100%);
+}
+.slide-leave-to {
+  transform: translateX(-100%);
 }
 </style>
