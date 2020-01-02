@@ -52,10 +52,12 @@ export default {
     },
     updateChildren(selected) {
       this.$children.forEach(vm => {
-        vm.visible = vm.name === selected;
         let newIndex = this.names.indexOf(selected)
         let oldIndex = this.names.indexOf(this.lastSelected)
         vm.reverse = newIndex > oldIndex ? false : true
+        this.$nextTick(()=>{
+          vm.visible = vm.name === selected;
+        })
       });
     },
     select(index){
@@ -68,15 +70,13 @@ export default {
     }
   },
   updated() {
-    console.log(`lastSelected: ${this.lastSelected}`)
-    console.log(`selected: ${this.selected}`)
     this.updateChildren(this.getSelected());
     this.lastSelected = this.selected
   },
   mounted() {
     this.collectChildren()
     this.updateChildren(this.getSelected());
-    this.playAutomatically()
+    // this.playAutomatically()
 
   }
 };
