@@ -29,13 +29,14 @@ export default {
     playAutomatically(){
       let names = this.$children.map(child => child.name)
       let index = names.indexOf(this.getSelected())
-      console.log(`index = ${index}`)
-      setInterval(()=>{
-        console.log('play auto.')
+      let run = ()=>{
         if(index === names.length) { index = 0}
         this.$emit('update:selected',names[index+1])
         index++
-      },1000)
+        setTimeout(run, 3000)
+      }
+      setTimeout(run, 3000)
+
     },
     getSelected(){
       return this.selected || this.$children[0].name
