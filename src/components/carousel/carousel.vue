@@ -75,7 +75,15 @@ export default {
       this.$children.forEach(vm => {
         let newIndex = this.names.indexOf(selected);
         let oldIndex = this.names.indexOf(this.lastSelected);
-        vm.reverse = newIndex > oldIndex ? false : true;
+        let reverse = newIndex > oldIndex ? false : true;
+        // 处理首尾情况，变成真正的无缝轮播
+        if (newIndex === this.names.length - 1 && oldIndex === 0) {
+          reverse = true;
+        }
+        if (oldIndex === this.names.length - 1 && newIndex === 0) {
+          reverse = false;
+        }
+        vm.reverse = reverse;
         this.$nextTick(() => {
           vm.visible = vm.name === selected;
         });
