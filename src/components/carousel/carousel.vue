@@ -66,8 +66,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .z-view-carousel {
-  display: inline-block;
-  border: 1px solid;
+  display: block;
+  // border: 1px solid;
   &-window {
     overflow: hidden;
   }

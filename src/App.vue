@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <z-view-carousel :selected.sync="selected">
       <z-view-carousel-item name="a" >
         <div class="box" style="background: pink">a</div>
@@ -59,8 +59,10 @@ ul,
 ol {
   list-style: none;
 }
+.app {
+  margin: 40px;
+}
 .box {
-  width: 400px;
   height: 300px;
   background: lightblue;
 }
