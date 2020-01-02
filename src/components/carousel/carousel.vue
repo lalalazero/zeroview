@@ -112,7 +112,7 @@ export default {
 <style lang="scss" scoped>
 .z-view-carousel {
   display: block;
-  border: 1px solid;
+  position: relative;
   &-window {
     overflow: hidden;
   }
@@ -120,14 +120,29 @@ export default {
     position: relative;
   }
   &-dots {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
     text-align: center;
+    padding: 8px 0;
     > span {
       display: inline-block;
-      padding: 0.5em;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
       border-radius: 50%;
-      border: 1px solid;
+      font-size: 12px;
+      margin: 0.3em;
+      background: $bg-gray-light;
+      &:hover {
+        cursor: pointer;
+      }
       &.active {
-        border-color: red;
+        background: $bg-black;
+        color: white;
+        &:hover {
+          cursor: default;
+        }
       }
     }
   }
