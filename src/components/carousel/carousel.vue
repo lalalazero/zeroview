@@ -25,28 +25,22 @@ export default {
   data() {
     return {
       childrenLength: 0,
-      names: []
+      names: [],
+      lastSelected: undefined, // 上一次被选中的值
     };
   },
   computed:{
     selectedIndex(){
       return this.names.indexOf(this.selected)
     },
-    // names(){
-    //   return this.$children.map(child => child.name)
-    // }
   },
   methods: {
     playAutomatically() {
-      // let names = this.$children.map(child => child.name);
-      let index = this.names.indexOf(this.getSelected());
       let run = () => {
-        let newIndex = index - 1
+        let index = this.names.indexOf(this.getSelected());
+        let newIndex = index + 1
         if (newIndex >= this.names.length) {
           newIndex = 0
-        }
-        if(newIndex < 0){
-          newIndex = this.names.length - 1
         }
         this.$emit("update:selected", this.names[newIndex]);
         setTimeout(run, 3000);
@@ -57,11 +51,10 @@ export default {
       return this.selected || this.$children[0].name;
     },
     updateChildren(selected) {
-      // let names = this.$children.map(child => child.name)
       this.$children.forEach(vm => {
         vm.visible = vm.name === selected;
         let newIndex = this.names.indexOf(selected)
-        let oldIndex = this.names.indexOf(vm.name)
+        let oldIndex = this.names.indexOf(this.lastSelected)
         vm.reverse = newIndex > oldIndex ? false : true
       });
     },
@@ -69,17 +62,21 @@ export default {
       this.$emit('update:selected', this.names[index])
     },
     collectChildren(){
+      this.lastSelected = this.getSelected()
       this.childrenLength = this.$children.length
       this.names = this.$children.map(child => child.name)
     }
   },
   updated() {
+    console.log(`lastSelected: ${this.lastSelected}`)
+    console.log(`selected: ${this.selected}`)
     this.updateChildren(this.getSelected());
+    this.lastSelected = this.selected
   },
   mounted() {
     this.collectChildren()
     this.updateChildren(this.getSelected());
-    // this.playAutomatically()
+    this.playAutomatically()
 
   }
 };
@@ -87,7 +84,6 @@ export default {
 <style lang="scss" scoped>
 .z-view-carousel {
   display: block;
-  // border: 1px solid;
   &-window {
     overflow: hidden;
   }
