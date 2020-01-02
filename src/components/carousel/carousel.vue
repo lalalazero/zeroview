@@ -4,7 +4,6 @@
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
     @touchstart="onTouchStart"
-    @touchmove="onTouchMove"
     @touchend="onTouchEnd"
   >
     <div class="z-view-carousel-window" ref="window">
@@ -50,42 +49,28 @@ export default {
   },
   methods: {
     onTouchStart(e) {
-      console.log("开始摸");
-      // console.log(e);
       if (e.touches.length > 1) {
         return;
       }
       this.touchStart = e.touches[0];
       this.pause();
     },
-    onTouchMove() {
-      console.log("边摸边动");
-    },
     onTouchEnd(e) {
-      console.log("摸完了");
-      // console.log(e);
       let touchEnd = e.changedTouches[0];
       let { clientX: x1, clientY: y1 } = this.touchStart;
       let { clientX: x2, clientY: y2 } = touchEnd;
-      // console.log(x1, x2, y1, y2);
       let distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-      // console.log("distance");
-      // console.log(distance);
       let deltaY = Math.abs(y2 - y1);
-      // console.log("deltaY");
-      // console.log(deltaY);
       let rate = distance / deltaY;
       if (rate < 2) {
-        console.log("上下滑动");
         return;
       } else {
-        // console.log("左右滑动");
         if (x2 > x1) {
-          console.log("右滑");
+          // console.log("右滑");
           let selectedIndex = this.names.indexOf(this.selected);
           this.select(selectedIndex - 1);
         } else {
-          console.log("左滑");
+          // console.log("左滑");
           let selectedIndex = this.names.indexOf(this.selected);
           this.select(selectedIndex + 1);
         }
