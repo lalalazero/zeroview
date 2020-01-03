@@ -13,6 +13,7 @@
     </div>
     <div class="z-view-carousel-dots">
       <span
+        :data-name="index"
         @click="select(index)"
         :key="index"
         v-for="(child,index) in childrenLength"
@@ -30,7 +31,11 @@ export default {
     },
     autoPlay: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    autoPlayDelay: {
+      type: Number,
+      default: 1500
     }
   },
   data() {
@@ -97,9 +102,9 @@ export default {
         let index = this.names.indexOf(this.getSelected());
         let newIndex = index + 1;
         this.select(newIndex);
-        this.timerId = setTimeout(run, 3000);
+        this.timerId = setTimeout(run, this.autoPlayDelay);
       };
-      this.timerId = setTimeout(run, 3000);
+      this.timerId = setTimeout(run, this.autoPlayDelay);
     },
     getSelected() {
       return this.selected || this.$children[0].name;
@@ -129,6 +134,7 @@ export default {
       if (index < 0) {
         index = this.names.length - 1;
       }
+      // console.log('this.select',index)
       this.$emit("update:selected", this.names[index]);
     },
     collectChildren() {
@@ -144,7 +150,9 @@ export default {
   mounted() {
     this.collectChildren();
     this.updateChildren(this.getSelected());
-    this.playAutomatically();
+    if(this.autoPlay){
+      this.playAutomatically();
+    }
   }
 };
 </script>
