@@ -5,8 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "serve-example": "cross-env EXAMPLE_ENV=true vue-cli-service serve src/example.js",
-    "build": "vue-cli-service build --target lib --name zeroview src/index.js",
-    "build-example": "cross-env EXAMPLE_ENV=true vue-cli-service build src/example.js",
+    "build": "cross-env ANALYZE=true vue-cli-service build --target lib --name zeroview src/index.js",
+    "build-example": "cross-env EXAMPLE_ENV=true ANALYZE=true vue-cli-service build src/example.js",
     "test": "karma start --single-run",
     "test-dev": "karma start",
     "test:unit": "vue-cli-service test:unit",

@@ -1,5 +1,6 @@
 const path = require("path");
 const example = process.env.EXAMPLE_ENV;
+const analyze = process.env.ANALYZE;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 module.exports = {
   publicPath: example === "true" ? "/zeroview/" : "/",
@@ -16,14 +17,14 @@ module.exports = {
     //   app: example === 'true' ? './src/example.js' : './src/index.js' ,
     //   vendor: ['vue']
     // },
-    plugins: [
+    plugins: analyze === "true" ? [
       new BundleAnalyzerPlugin({
         // default config
         // analyzerMode: 'server',
         // analyzerHost: '127.0.0.1',
         // analyzerPort: 8888
       })
-    ]
+    ] : []
   },
   chainWebpack: config => {
     config.module
