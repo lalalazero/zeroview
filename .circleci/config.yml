@@ -41,6 +41,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - add_ssh_keys:
+          fingerprints:
+          - f1:fb:20:1b:8b:31:46:ce:bf:ae:39:aa:8a:d6:b4:87
       - run: chmod +x ./deploy_ghpages.sh
       - run: ./deploy_ghpages.sh
 
