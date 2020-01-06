@@ -40,6 +40,7 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run: chmod +x ./deploy_ghpages.sh
       - run: ./deploy_ghpages.sh
 
 
