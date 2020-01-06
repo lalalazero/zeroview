@@ -61,8 +61,11 @@ const router = new Router({
     {
       path: "/cascader",
       component: () => import('../docs/cascader.md')
-    }
-
+    },
+    {
+      path: "/carousel",
+      component: () => import('../docs/carousel.md')
+    },
   ]
 })
 

@@ -161,6 +161,14 @@
                 </router-link>
               </z-view-menu-item>
             </z-view-menu-group>
+            <z-view-menu-group name="其他">
+              <z-view-menu-item name="carousel">
+                <router-link to="/carousel">
+                  <p>Carousel</p>
+                </router-link>
+              </z-view-menu-item>
+            </z-view-menu-group>
+
           </z-view-sub-menu>
         </z-view-menu>
       </z-view-sider>
