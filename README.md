@@ -42,17 +42,18 @@ ps: 请使用如下 css-reset, 否则样式会有问题
 
 ### 目前完成了
 
-- Button
-- Icon
-- Grid
-- Layout
-- Menu
-- Collapse
-- Tab
-- Input
-- Cascader
-- Popover
-- Toast
+- Button 按钮
+- Icon 图标
+- Grid 响应式栅格
+- Layout 布局
+- Menu 导航菜单
+- Collapse 折叠面板
+- Tab 标签
+- Input 输入框
+- Cascader 级联选择器
+- Popover 弹出框
+- Toast 消息提示
+- Carousel 跑马灯
 
 ### 组件库参考
 
