@@ -41,10 +41,6 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - persist_to_workspace:
-          root: .
-          paths:
-            - null
       - run: chmod +x ./deploy_ghpages.sh
       - run: ./deploy_ghpages.sh
 
