@@ -4,21 +4,17 @@
       <div class="source">
         <slot name="source"></slot>
       </div>
-      <div class="description">
-        <slot name="description"></slot>
-      </div>
-      <div class="html">
-        <div class="code-wrapper">
-          <div class="code-line"></div>
-          <span class="code-toggle" v-show="!codeVisible" @click="codeVisible = true">&lt; 查看代码 &gt;</span>
-          <span
-            class="code-toggle"
-            v-show="codeVisible"
-            @click="codeVisible = false"
-          >&lt; 隐藏代码 /&gt;</span>
-        </div>
 
-        <div class="demo-script" @click="codeVisible = !codeVisible" v-show="codeVisible">
+      <div class="html">
+        <div class="code-toggle" @click="codeVisible = !codeVisible" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
+          <z-view-icon name="down" ></z-view-icon>
+          <span v-if="spanVisible && !codeVisible">查看代码</span>
+          <span v-if="codeVisible">隐藏代码</span>
+        </div>
+        <div class="demo-script" v-show="codeVisible">
+          <div class="description">
+            <slot name="description"></slot>
+          </div>
           <slot name="highlight"></slot>
         </div>
       </div>
@@ -30,8 +26,17 @@ export default {
   name: "DemoBlock",
   data() {
     return {
-      codeVisible: false
+      codeVisible: false,
+      spanVisible: false,
     };
+  },
+  methods: {
+    onMouseEnter(){
+      this.spanVisible = true
+    },
+    onMouseLeave(){
+      this.spanVisible = false
+    }
   },
   mounted() {}
 };
@@ -39,8 +44,8 @@ export default {
 <style lang="scss" scoped>
 .demo-block {
   border: 1px solid $border-color-ant-design;
+  border-bottom: none;
   margin: 10px 0;
-  padding: 10px 0;
   code {
     font-family: Menlo, Monaco, Consolas, Courier, monospace;
   }
@@ -55,32 +60,40 @@ export default {
   .demo-content {
     border-radius: 3px;
   }
-  .code-line {
-    border-bottom: 1px solid $border-color-ant-design;
-  }
+
   .source {
     padding: 20px;
     border-bottom: 1px solid $border-color-ant-design;
   }
   .html {
-    background: #fafafa;
-    margin: 20px 0;
-    .demo-script {
-      padding: 5px;
-    }
-    .code-wrapper {
-      position: relative;
-    }
     .code-toggle {
-      position: absolute;
-      display: inline-block;
-      padding: 2px 5px;
-      background: $bg-white;
-      border: 1px solid $border-color-ant-design;
-      border-radius: $border-radius;
-      font-size: 12px;
-      color: #5e6d82;
-      @extend %pos-center;
+      border-bottom: 1px solid $border-color-ant-design;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 15px;
+      color: $bg-gray-light;
+      .z-view-icon {
+        transition: all 300ms;
+      }
+      &:hover {
+        .z-view-icon {
+          transform: rotate(180deg);
+          fill: $active-color;
+        }
+        span {
+          transition: all 300ms;
+          color: $active-color;
+        }
+      }
+      .z-view-icon {
+        margin-right: 10px;
+        fill: $bg-gray-light;
+
+      }
+    }
+    .demo-script {
+      background: #fafafa;
+      padding: 5px;
     }
   }
 }
