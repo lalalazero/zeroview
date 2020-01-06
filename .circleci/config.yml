@@ -76,7 +76,7 @@ jobs:
             yarn global add gh-pages@2.0.1
       - run:
           name: Deploy docs to gh-pages branch
-          command: gh-pages --dist dist
+          command: gh-pages --message "[skip ci] Updates" --dist dist
   publish:
     <<: *defaults
     steps:
