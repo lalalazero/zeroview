@@ -41,7 +41,6 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - working-
       - persist_to_workspace:
           root: .
           paths:
