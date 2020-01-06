@@ -11,6 +11,8 @@ remote=$(git config remote.origin.url)
 
 siteSource="$1"
 
+echo $siteSource
+
 if [ ! -d "$siteSource" ]
 then
     echo "Usage: $0 <site source dir>"

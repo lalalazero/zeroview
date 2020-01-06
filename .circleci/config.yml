@@ -46,7 +46,7 @@ jobs:
           fingerprints:
           - "6a:08:9c:18:ae:a5:f8:f0:fb:b4:2b:9f:fc:4b:c8:b1"
       - run: chmod +x ./deploy_gh_pages.sh
-      - run: sh ./deploy_gh_pages.sh dist
+      - run: sh ./deploy_gh_pages.sh ./dist
 
 
 
