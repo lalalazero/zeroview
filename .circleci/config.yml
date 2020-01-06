@@ -44,7 +44,7 @@ jobs:
           at: .
       - add_ssh_keys:
           fingerprints:
-          - "6a:08:9c:18:ae:a5:f8:f0:fb:b4:2b:9f:fc:4b:c8:b1"
+          - "10:58:28:b5:0f:2a:1b:c5:da:df:a8:c0:14:fc:15:6b"
       - run: chmod +x ./deploy_gh_pages.sh
       - run: sh ./deploy_gh_pages.sh ./dist
 
