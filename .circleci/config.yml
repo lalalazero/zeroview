@@ -23,7 +23,7 @@ jobs:
           paths:
             - node_modules
             - deploy_ghpages.sh
-  build_example:
+  build-example:
     <<: *defaults
     steps:
       - checkout
