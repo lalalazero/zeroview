@@ -64,6 +64,11 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+            - deploy_ghpages.sh
       - run: ./deploy_ghpages.sh
   publish:
     <<: *defaults
