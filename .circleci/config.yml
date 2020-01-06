@@ -46,7 +46,13 @@ jobs:
           fingerprints:
           - "10:58:28:b5:0f:2a:1b:c5:da:df:a8:c0:14:fc:15:6b"
       - run: chmod +x ./deploy_gh_pages.sh
-      - run: sh ./deploy_gh_pages.sh ./dist
+      # - run: sh ./deploy_gh_pages.sh ./dist
+      - deploy:
+          name: Deploy website
+          command: |
+            git config --global user.name "Circle CI"
+            git config --global user.email "bot@circleci.com"
+            sh ./deploy_gh_pages.sh ./dist
 
 
 
