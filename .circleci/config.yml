@@ -22,20 +22,7 @@ jobs:
           root: .
           paths:
             - node_modules
-  build:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run: yarn build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - dist
-            - package.json
-            - LICENSE
-            - README.md
+            - deploy_ghpages.sh
   build_example:
     <<: *defaults
     steps:
@@ -47,61 +34,25 @@ jobs:
           root: .
           paths:
             - dist
-            - package.json
-            - LICENSE
-            - README.md
-  test:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run: yarn test
-      - store_test_results:
-          path: test-results
+            - deploy_ghpages.sh
   deploy-example:
     <<: *defaults
     steps:
       - attach_workspace:
           at: .
-      # - persist_to_workspace:
-      #     root: .
-          # paths:
-          #   - dist
-          #   - deploy_ghpages.sh
-      # - run: ./deploy_ghpages.sh
-      - run:
-          name: Install and configure dependencies
-          command:
-            yarn global add gh-pages@2.0.1
-      - run:
-          name: Deploy docs to gh-pages branch
-          command: yarn gh-pages --message "[skip ci] Updates" --dist dist
-  publish:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: .
-      - run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-      - run: npm publish
+      - run: ./deploy_ghpages.sh
+
 
 
 
 workflows:
   version: 2
-  build_accept_deploy:
+  deploy_docs:
     jobs:
       - prepare
-      # - build:
-      #     requires:
-      #       - test
-      - build_example:
+      - build-example:
           requires:
-            - prepare
-            # - test
-      # - test:
-      #     requires:
-      #       - prepare
+          - prepare
       - deploy-example:
           requires:
-          - build_example
+          - build-example
