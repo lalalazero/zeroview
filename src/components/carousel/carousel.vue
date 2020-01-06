@@ -27,7 +27,8 @@ export default {
   name: "zViewCarousel",
   props: {
     selected: {
-      type: String
+      type: String,
+      required: true
     },
     autoPlay: {
       type: Boolean,
@@ -85,10 +86,14 @@ export default {
       });
     },
     onMouseEnter() {
-      this.pause();
+      if(this.autoPlay){
+        this.pause();
+      }
     },
     onMouseLeave() {
-      this.playAutomatically();
+      if(this.autoPlay){
+        this.playAutomatically();
+      }
     },
     pause() {
       window.clearTimeout(this.timerId);
