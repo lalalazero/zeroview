@@ -60,13 +60,17 @@ else
     git checkout --orphan gh-pages
 fi
 
-console.log('copy from dist ')
+
+echo 'copy from dist '
 
 # copy over or recompile the new site
 cp -a "../${siteSource}/." .
 
 # stage any changes and new files
 git add -A
+echo 'git status..'
+
+git status
 # now commit, ignoring branch gh-pages doesn't seem to work, so trying skip
 git commit --allow-empty -m "Deploy to GitHub pages [ci skip]"
 # and push, but send any output to /dev/null to hide anything sensitive
