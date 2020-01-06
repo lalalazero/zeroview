@@ -18,13 +18,21 @@ then
 fi
 
 # make a directory to put the gp-pages branch
+echo 'mkdir pg-pages-branch'
+
 mkdir gh-pages-branch
 cd gh-pages-branch
+
+echo 'enter ..'
+
+pwd
 # now lets setup a new repo so we can update the gh-pages branch
 git config --global user.email "$GH_EMAIL" > /dev/null 2>&1
 git config --global user.name "$GH_NAME" > /dev/null 2>&1
 git init
 git remote add --fetch origin "$remote"
+
+echo $remote
 
 # switch into the gh-pages branch
 if git rev-parse --verify origin/gh-pages > /dev/null 2>&1
@@ -36,6 +44,8 @@ then
 else
     git checkout --orphan gh-pages
 fi
+
+console.log('copy from dist ')
 
 # copy over or recompile the new site
 cp -a "../${siteSource}/." .
