@@ -64,12 +64,21 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - persist_to_workspace:
-          root: .
-          paths:
-            - dist
-            - deploy_ghpages.sh
-      - run: ./deploy_ghpages.sh
+      # - persist_to_workspace:
+      #     root: .
+          # paths:
+          #   - dist
+          #   - deploy_ghpages.sh
+      # - run: ./deploy_ghpages.sh
+      - run:
+          name: Install and configure dependencies
+          command: |
+            yarn global add gh-pages@2.0.1
+            git config user.email "zzzero520@hotmail.com"
+            git config user.name "lalalazero"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dist dist
   publish:
     <<: *defaults
     steps:
