@@ -9,6 +9,9 @@ pwd
 
 remote=$(git config remote.origin.url)
 
+echo 'remote'
+echo $remote
+
 siteSource="$1"
 
 echo 'hello'
