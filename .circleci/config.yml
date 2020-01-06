@@ -3,6 +3,7 @@ defaults: &defaults
   working_directory: ~/zeroview
   docker:
     - image: circleci/node:8
+    - image: docker:stable-git
     # - image: selenium/standalone-chrome:3.1.0
 
 version: 2
@@ -23,7 +24,7 @@ jobs:
           root: .
           paths:
             - node_modules
-            - deploy_ghpages.sh
+            - deploy_gh_pages.sh
   build-example:
     <<: *defaults
     steps:
@@ -35,7 +36,7 @@ jobs:
           root: .
           paths:
             - dist
-            - deploy_ghpages.sh
+            - deploy_gh_pages.sh
   deploy-example:
     <<: *defaults
     steps:
@@ -44,8 +45,8 @@ jobs:
       - add_ssh_keys:
           fingerprints:
           - "4a:aa:b1:b4:37:fe:e7:67:d1:31:36:d5:bb:84:c0:b1"
-      - run: chmod +x ./deploy_ghpages.sh
-      - run: ./deploy_ghpages.sh
+      - run: chmod +x ./deploy_gh_pages.sh
+      - run: sh ./deploy_gh_pages.sh dist
 
 
 
