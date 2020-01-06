@@ -64,16 +64,7 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      # - run: ./deploy_ghpages.sh
-      - run:
-          name: Install and configure dependencies
-          command: |
-            npm install -g --silent gh-pages@2.0.1
-            git config user.email "zzzero520@hotmail.com"
-            git config user.name "lalalazero"
-      - run:
-          name: Deploy docs to gh-pages branch
-          command: gh-pages --dist dist
+      - run: ./deploy_ghpages.sh
   publish:
     <<: *defaults
     steps:
