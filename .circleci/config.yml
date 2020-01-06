@@ -1,5 +1,6 @@
 #https://github.com/revolunet/create-react-app-circleci/blob/master/.circleci/config.yml
 defaults: &defaults
+  working_directory: ~/zeroview
   docker:
     - image: circleci/node:8
     # - image: selenium/standalone-chrome:3.1.0
@@ -40,6 +41,11 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - working-
+      - persist_to_workspace:
+          root: .
+          paths:
+            - null
       - run: chmod +x ./deploy_ghpages.sh
       - run: ./deploy_ghpages.sh
 
