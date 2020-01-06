@@ -14,9 +14,17 @@ echo $remote
 
 siteSource="$1"
 
+if [ -z $remote]
+then
+  echo '给 remote 赋值'
+  remote=https://github.com/lalalazero/zeroview.git
+fi
+
 echo 'hello'
 
 echo $siteSource
+
+echo $remote
 
 if [ ! -d "$siteSource" ]
 then
