@@ -14,6 +14,9 @@ git add -A
 git commit --allow-empty -m 'deploy to github pages [circleci]'
 git checkout gh-pages
 
+git config --global user.email 'zzzero520@hotmail.com'
+git config --global user.name 'lalalazero'
+
 git remote add origin https://github.com/lalalazero/zeroview
 # send any output to /dev/null to hide anything sensitive
 git push -u origin gh-pages > /dev/null 2>&1
