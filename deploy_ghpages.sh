@@ -16,6 +16,7 @@ git config --global user.name 'lalalazero'
 
 git add -A
 git commit --allow-empty -m 'deploy to github pages [circleci]'
+git branch gh-pages
 git checkout gh-pages
 
 
