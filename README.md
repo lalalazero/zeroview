@@ -1,4 +1,4 @@
-# zeroview
+# zeroview [![CircleCI](https://circleci.com/gh/lalalazero/zeroview.svg?style=svg)](https://circleci.com/gh/lalalazero/zeroview)
 
 这是一套基于 Vue 2.6 的 UI 组件库。旨在学习 Vue 和手写组件，提高自己的熟练度。
 
