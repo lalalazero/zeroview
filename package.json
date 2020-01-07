@@ -12,7 +12,8 @@
     "analyze": "cross-env ANALYZE=true vue-cli-service build --target lib --name zeroview src/index.js",
     "analyze-example": "cross-env EXAMPLE_ENV=true ANALYZE=true vue-cli-service build src/example.js",
     "webpack-build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
-    "webpack-build-example": "cross-env EXAMPLE_ENV=true webpack --config build/webpack.config.example.js"
+    "webpack-build-example": "cross-env EXAMPLE_ENV=true webpack --config build/webpack.config.example.js",
+    "deploy": "sh ./deploy.sh"
   },
   "main": "dist/zeroview.umd.min.js",
   "dependencies": {
