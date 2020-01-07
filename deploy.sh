@@ -4,6 +4,8 @@ echo 'deploy'
 
 git checkout gh-pages
 
+rm -rf css js favicon.ico index.html
+
 cp -a ./dist/. .
 
 
