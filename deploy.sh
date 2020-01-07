@@ -4,25 +4,27 @@ echo 'deploy'
 
 git checkout gh-pages
 
-if [ -d 'dist' ]
-then
-  echo 'dist is empty'
-  git checkout master
-  exit 1
-fi
-
-echo 'checkout master'
 git checkout master
 
-exit 0
+# if [ -d 'dist' ]
+# then
+#   echo 'dist is empty'
+#   git checkout master
+#   exit 1
+# fi
 
-cp -a dist .
+# echo 'checkout master'
+# git checkout master
 
-git status
+# exit 0
 
-git add -A
-git commit -m 'deploy'
+# cp -a dist .
 
-git push
+# git status
 
-git checkout master
+# git add -A
+# git commit -m 'deploy'
+
+# git push
+
+# git checkout master
