@@ -9,7 +9,7 @@ cp -a ./dist/. .
 
 git status
 
-git add -A
+git add .
 git commit -m 'deploy'
 
 git push
