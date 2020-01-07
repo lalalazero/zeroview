@@ -4,7 +4,7 @@ defaults: &defaults
   docker:
     - image: circleci/node:lts
     # - image: docker:stable-git
-    # - image: selenium/standalone-chrome:3.1.0
+    - image: selenium/standalone-chrome:3.1.0
 
 version: 2
 jobs:
@@ -24,12 +24,18 @@ jobs:
           root: .
           paths:
             - node_modules
-            # - deploy_gh_pages.sh
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: yarn test
+
   build:
     <<: *defaults
     steps:
       - checkout
-      -run: yarn build
+      - run: yarn build
+
   build-example:
     <<: *defaults
     steps:
@@ -37,27 +43,7 @@ jobs:
       - attach_workspace:
           at: .
       - run: yarn build-example
-      # - persist_to_workspace:
-          # root: .
-          # paths:
-            # - dist
-            # - deploy_gh_pages.sh
-  # deploy-example:
-  #   <<: *defaults
-  #   steps:
-  #     - attach_workspace:
-  #         at: .
-  #     - add_ssh_keys:
-  #         fingerprints:
-  #         - "10:58:28:b5:0f:2a:1b:c5:da:df:a8:c0:14:fc:15:6b"
-  #     - run: chmod +x ./deploy_gh_pages.sh
-  #     # - run: sh ./deploy_gh_pages.sh ./dist
-  #     - deploy:
-  #         name: Deploy website
-  #         command: |
-  #           git config --global user.name "Circle CI"
-  #           git config --global user.email "bot@circleci.com"
-  #           sh ./deploy_gh_pages.sh ./dist
+
 
 
 
@@ -67,6 +53,7 @@ workflows:
   deploy_docs:
     jobs:
       - prepare
+      - test
       - build:
           requires:
           - prepare
