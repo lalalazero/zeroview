@@ -70,9 +70,12 @@ workflows:
       - build:
           requires:
           - prepare
+          filters:
+            branches:
+              only: master
       - build-example:
           requires:
           - prepare
-      # - deploy-example:
-      #     requires:
-      #     - build-example
+          filters:
+            branches:
+              only: master
