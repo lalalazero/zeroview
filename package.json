@@ -6,14 +6,14 @@
     "serve": "vue-cli-service serve",
     "serve-example": "cross-env EXAMPLE_ENV=true vue-cli-service serve src/example.js",
     "build": "vue-cli-service build --target lib --name zeroview src/index.js",
-    "build-example": "vue-cli-service build src/example.js",
+    "build-example": "cross-env EXAMPLE_ENV=true vue-cli-service build src/example.js",
     "test": "karma start --single-run",
     "test-dev": "karma start",
     "analyze": "cross-env ANALYZE=true vue-cli-service build --target lib --name zeroview src/index.js",
     "analyze-example": "cross-env EXAMPLE_ENV=true ANALYZE=true vue-cli-service build src/example.js",
     "webpack-build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
     "webpack-build-example": "cross-env EXAMPLE_ENV=true webpack --config build/webpack.config.example.js",
-    "deploy": "yarn build-example && sh ./deploy.sh"
+    "deploy": "yarn build-example && sh ./deploy-gh-pages.sh"
   },
   "main": "dist/zeroview.umd.min.js",
   "dependencies": {
