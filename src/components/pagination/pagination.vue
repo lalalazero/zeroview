@@ -1,6 +1,13 @@
 <template>
   <div class="z-view-pagination">
-    <span class="z-view-pagination-item" @click="onClick(page)" :key="index" v-for="(page, index) in pages" :class="{active: current === page}">{{page}}</span>
+    <!-- <span class="z-view-pagination-item" @click="onClick(page)" :key="index" v-for="(page, index) in pages" :class="{active: current === page}">{{page}}</span> -->
+    <span class="z-view-pagination-nav z-view-pagination-nav-prev">&lt;</span>
+    <template v-for="(page, index) in pages">
+      <span :key="index" v-if="page === '...'" class="z-view-pagination-seperator" >{{page}}</span>
+      <span :key="index" v-else class="z-view-pagination-item" @click="onClick(page)"
+        :class="{active: current === page}">{{page}}</span>
+    </template>
+    <span class="z-view-pagination-nav z-view-pagination-nav-next">&gt;</span>
   </div>
 </template>
 <script>
@@ -47,15 +54,39 @@ export default {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  &-item {
-    min-width: 20px;
+  $height: 24px;
+  &-seperator,&-nav,&-item {
     margin: 0 4px;
+    font-size: 14px;
+    width: 20px;
+    height: 24px;
     padding: 2px 6px;
     border: 1px solid $border-color;
     border-radius: $border-radius;
-    font-size: 14px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+
+  }
+  &-seperator {
+    cursor: default;
+  }
+  &-nav {
+    &:hover {
+      border-color: $active-color;
+    }
+  }
+  &-item {
+    min-width: 20px;
+    width: unset;
+    &:hover {
+      border-color: $active-color;
+    }
     &.active {
       border-color: $active-color;
+      cursor: default;
     }
   }
   &-item:first-child {
