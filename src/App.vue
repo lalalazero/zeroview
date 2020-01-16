@@ -1,18 +1,6 @@
 <template>
   <div class="app">
-    <z-view-carousel :selected.sync="selected">
-      <z-view-carousel-item name="a">
-        <div class="box">a</div>
-      </z-view-carousel-item>
-      <z-view-carousel-item name="b">
-        <div class="box">b</div>
-      </z-view-carousel-item>
-      <z-view-carousel-item name="c">
-        <div class="box">c</div>
-      </z-view-carousel-item>
-    </z-view-carousel>
-    <br />
-    <span>app selected: {{ this.selected }}</span>
+    <z-view-pagination :total-pages="20" :current.sync="current"></z-view-pagination>
   </div>
 </template>
 
@@ -25,7 +13,7 @@ export default {
   methods: {},
   data() {
     return {
-      selected: "a"
+      current: 1
     };
   },
   mounted() {}
