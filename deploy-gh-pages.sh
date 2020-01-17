@@ -23,6 +23,9 @@ git clone --depth 1 --branch gh-pages $remote
 
 cd zeroview
 
+git config --local user.name 'lalalazero'
+git config --local user.email 'zzzero520@hotmail.com'
+
 git status
 
 
