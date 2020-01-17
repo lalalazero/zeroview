@@ -55,7 +55,7 @@ export default {
   computed: {
     pages() {
       let pages = []
-      if (this.totalPages > 10) {
+      if (this.totalPages > 5) {
         pages = unique([
           1,
           this.current - 1,

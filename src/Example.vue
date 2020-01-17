@@ -124,6 +124,11 @@
                   <p>Menu</p>
                 </router-link>
               </z-view-menu-item>
+              <z-view-menu-item name="pagination">
+                <router-link to="/pagination">
+                  <p>Pagination</p>
+                </router-link>
+              </z-view-menu-item>
             </z-view-menu-group>
             <z-view-menu-group name="数据展示">
               <z-view-menu-item name="collapse">

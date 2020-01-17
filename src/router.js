@@ -66,6 +66,10 @@ const router = new Router({
       path: "/carousel",
       component: () => import('../docs/carousel.md')
     },
+    {
+      path: "/pagination",
+      component: () => import('../docs/pagination.md')
+    },
   ]
 })
 
