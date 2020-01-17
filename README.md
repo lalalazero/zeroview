@@ -2,6 +2,8 @@
 
 这是一套基于 Vue 2.6 的 UI 组件库。旨在学习 Vue 和手写组件，提高自己的熟练度。
 
+:warning: 不要用在生产环境，这就是用来学习的。:joy_cat:
+
 ### 安装
 
 `yarn add zeroview` 或者 `npm install zeroview` 安装
@@ -42,18 +44,55 @@ ps: 请使用如下 css-reset, 否则样式会有问题
 
 ### 目前完成了
 
-- Button 按钮
-- Icon 图标
-- Grid 响应式栅格
-- Layout 布局
-- Menu 导航菜单
-- Collapse 折叠面板
-- Tab 标签
-- Input 输入框
-- Cascader 级联选择器
-- Popover 弹出框
-- Toast 消息提示
-- Carousel 跑马灯
+- [x] Button 按钮
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Icon 图标
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Grid 响应式栅格  
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Layout 布局
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Menu 导航菜单
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Collapse 折叠面板
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Tab 标签
+  - [x] 示例文档
+  - [x] 测试用例
+  - [ ] 纵向 tab
+- [x] Input 输入框
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Cascader 级联选择器
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Popover 弹出框
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Toast 消息提示
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Carousel 跑马灯
+  - [x] 示例文档
+  - [x] 测试用例
+- [x] Pagination 分页器
+  - [x] 示例文档
+  - [ ] 测试用例
+- [ ] Upload 文件上传
+- [ ] Table 表格
+- [ ] Sticky 
+- [ ] DatePicker 日期
+- [ ] Scroll 滑动
+
+### 其他
+
+- [ ] 打包优化
 
 ### 组件库参考
 
