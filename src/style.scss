@@ -30,7 +30,7 @@ $bg-white: #fff;
 $bg-black: #000;
 $bg-gray-light: #ccc;
 
-$disabled-color: gray;
+$disabled-color: lighten(gray, 20%);
 
 $toast-bg: rgba(0, 0, 0, 0.75);
 $font-size: 14px;

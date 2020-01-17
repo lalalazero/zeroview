@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <z-view-pagination :total-pages="20" :current.sync="current"></z-view-pagination>
+    <z-view-pagination :total-pages="1" :current.sync="current" :hide-if-one-page="false" simple></z-view-pagination>
   </div>
 </template>
 
