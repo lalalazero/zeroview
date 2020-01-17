@@ -14,7 +14,7 @@
         v-else
         class="z-view-pagination-item"
         @click="onClick(page)"
-        :class="{active: current === page}"
+        :class="{'z-view-pagination-item-active': current === page}"
       >{{page}}</span>
     </template>
     <span
@@ -146,7 +146,7 @@ export default {
     &:hover {
       border-color: $active-color;
     }
-    &.active {
+    &-active {
       border-color: $active-color;
       cursor: default;
     }
@@ -170,7 +170,7 @@ export default {
         color: $active-color;
         border-color: $active-color;
       }
-      &.active {
+      &-active {
         color: $active-color;
       }
     }
