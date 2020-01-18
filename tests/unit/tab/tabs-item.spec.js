@@ -37,12 +37,13 @@ describe('TabsItem.vue', () => {
         const Constructor = Vue.extend(TabsItem)
         const vm = new Constructor({
             propsData: {
-                disabled: true
+                disabled: true,
+                name: 'xxx'
             }
         }).$mount()
         // console.log(vm.$el.outerHTML)
         const callback = sinon.fake()
-        vm.$on('click',callback)
+        vm.$on('click', callback)
         vm.$el.click()
         expect(vm.$el.classList.contains('disabled')).to.eq(true)
         expect(callback).to.have.not.been.called
