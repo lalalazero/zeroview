@@ -1,10 +1,10 @@
 <template>
   <div class="app">
-    <z-view-pagination :total-pages="1" :current.sync="current" :hide-if-one-page="false" simple></z-view-pagination>
-    <br>
+    <z-view-pagination :total-pages="1" :current.sync="current" simple></z-view-pagination>
+    <br />
     <z-view-pagination :total-pages="5" :current.sync="current2"></z-view-pagination>
-    <br>
-    <z-view-pagination :total-pages="12" :current.sync="current3" ></z-view-pagination>
+    <br />
+    <z-view-pagination :total-pages="12" :current.sync="current3"></z-view-pagination>
   </div>
 </template>
 
@@ -18,8 +18,8 @@ export default {
   data() {
     return {
       current: 1,
-      current2: 1,
-      current3: 1,
+      current2: 2,
+      current3: 1
     };
   },
   mounted() {}

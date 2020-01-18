@@ -83,7 +83,7 @@ ps: 请使用如下 css-reset, 否则样式会有问题
   - [x] 测试用例
 - [x] Pagination 分页器
   - [x] 示例文档
-  - [ ] 测试用例
+  - [x] 测试用例
 - [ ] Upload 文件上传
 - [ ] Table 表格
 - [ ] Sticky 

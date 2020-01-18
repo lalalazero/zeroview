@@ -1,5 +1,9 @@
 <template>
-  <div class="z-view-pagination" v-if="!hideIfOnePage || totalPages > 1" :class="{'z-view-pagination-simple': simple}">
+  <div
+    class="z-view-pagination"
+    v-if="!hideIfOnePage || totalPages > 1"
+    :class="{'z-view-pagination-simple': simple}"
+  >
     <span
       class="z-view-pagination-nav z-view-pagination-nav-prev"
       @click="onClick(current-1)"
@@ -54,7 +58,7 @@ export default {
   },
   computed: {
     pages() {
-      let pages = []
+      let pages = [];
       if (this.totalPages > 5) {
         pages = unique([
           1,
@@ -74,9 +78,9 @@ export default {
           }
           return prev;
         }, []);
-      }else {
-        for(let i = 1; i <= this.totalPages; i++){
-          pages.push(i)
+      } else {
+        for (let i = 1; i <= this.totalPages; i++) {
+          pages.push(i);
         }
       }
       return pages;
@@ -161,12 +165,12 @@ export default {
 
 .z-view-pagination-simple {
   .z-view-pagination {
-    &-item,&-nav {
+    &-item,
+    &-nav {
       border-color: transparent;
-
     }
     &-item {
-      &:hover{
+      &:hover {
         color: $active-color;
         border-color: $active-color;
       }
