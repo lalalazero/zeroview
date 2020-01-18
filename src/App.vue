@@ -1,10 +1,6 @@
 <template>
   <div class="app">
-    <z-view-pagination :total-pages="1" :current.sync="current" simple></z-view-pagination>
-    <br />
-    <z-view-pagination :total-pages="5" :current.sync="current2"></z-view-pagination>
-    <br />
-    <z-view-pagination :total-pages="12" :current.sync="current3"></z-view-pagination>
+    <z-view-table :data-source="dataSource" :columns="columns"></z-view-table>
   </div>
 </template>
 
@@ -17,9 +13,48 @@ export default {
   methods: {},
   data() {
     return {
-      current: 1,
-      current2: 2,
-      current3: 1
+      columns: [
+        {
+          index: "name",
+          text: "姓名"
+        },
+        {
+          index: "score",
+          text: "分数"
+        }
+      ],
+      dataSource: [
+        {
+          id: 1,
+          name: "张三",
+          score: 85
+        },
+        {
+          id: 2,
+          name: "李四",
+          score: 99
+        },
+        {
+          id: 3,
+          name: "王麻子",
+          score: 100
+        },
+        {
+          id: 4,
+          name: "狗蛋",
+          score: 72
+        },
+        {
+          id: 5,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 6,
+          name: "丫丫",
+          score: 60
+        }
+      ]
     };
   },
   mounted() {}
@@ -49,13 +84,5 @@ ol {
 }
 .app {
   margin: 40px;
-}
-.box {
-  height: 300px;
-  background: lightblue;
-  font-size: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 </style>>
