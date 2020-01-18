@@ -70,6 +70,10 @@ const router = new Router({
       path: "/pagination",
       component: () => import('../docs/pagination.md')
     },
+    {
+      path: "/table",
+      component: () => import('../docs/table.md')
+    },
   ]
 })
 

@@ -141,6 +141,11 @@
                   <p>Tab</p>
                 </router-link>
               </z-view-menu-item>
+              <z-view-menu-item name="table">
+                <router-link to="/table">
+                  <p>Table</p>
+                </router-link>
+              </z-view-menu-item>
             </z-view-menu-group>
             <z-view-menu-group name="数据录入">
               <z-view-menu-item name="input">
@@ -173,7 +178,6 @@
                 </router-link>
               </z-view-menu-item>
             </z-view-menu-group>
-
           </z-view-sub-menu>
         </z-view-menu>
       </z-view-sider>
@@ -187,23 +191,22 @@
 import "highlight.js/styles/github.css";
 export default {
   watch: {
-    '$route' (to,from){
-      if(to.path === '/'){
-        this.selected = 'intro'
-      }else{
-        this.$nextTick(()=>{
-          this.selected = to.path.substr(1)
-        })
+    $route(to, from) {
+      if (to.path === "/") {
+        this.selected = "intro";
+      } else {
+        this.$nextTick(() => {
+          this.selected = to.path.substr(1);
+        });
       }
     }
   },
-  data(){
+  data() {
     return {
-      selected: ''
-    }
+      selected: ""
+    };
   },
-  mounted(){
-  }
+  mounted() {}
 };
 </script>
 <style lang="scss">
