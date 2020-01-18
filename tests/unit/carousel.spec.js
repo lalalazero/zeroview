@@ -16,10 +16,11 @@ describe('Carousel.vue', () => {
     expect(Carousel).to.be.exist
   })
 
-  it('接受 carousel-item，默认展示第一个',(done)=>{
+  it('接受 carousel-item，默认展示第一个', (done) => {
     const wrapper = mount(Carousel, {
       propsData: {
-        autoPlay: false
+        autoPlay: false,
+        selected: ''
       },
       slots: {
         default: `
@@ -36,7 +37,7 @@ describe('Carousel.vue', () => {
       }
     })
 
-    setTimeout(()=>{
+    setTimeout(() => {
       let len = wrapper.findAll('.box').length
       expect(len).to.equal(1)
       expect(wrapper.find('.box').text()).to.equal('a')
@@ -45,7 +46,7 @@ describe('Carousel.vue', () => {
     })
   })
 
-  it('接受 selected',(done)=>{
+  it('接受 selected', (done) => {
     const wrapper = mount(Carousel, {
       propsData: {
         autoPlay: false,
@@ -66,7 +67,7 @@ describe('Carousel.vue', () => {
       }
     })
 
-    setTimeout(()=>{
+    setTimeout(() => {
       let len = wrapper.findAll('.box').length
       expect(len).to.equal(1)
       expect(wrapper.find('.box').text()).to.equal('b')
@@ -75,11 +76,12 @@ describe('Carousel.vue', () => {
     })
   })
 
-  it('click 切换',(done)=>{
+  it('click 切换', (done) => {
     let callback = sinon.fake()
     const wrapper = mount(Carousel, {
       propsData: {
         autoPlay: false,
+        selected: ''
       },
       slots: {
         default: `
@@ -99,7 +101,7 @@ describe('Carousel.vue', () => {
       }
     })
 
-    setTimeout(()=>{
+    setTimeout(() => {
       wrapper.find('span[data-name="2"]').trigger('click')
       expect(callback).to.have.been.calledWith('c')
       wrapper.destroy()
@@ -107,12 +109,13 @@ describe('Carousel.vue', () => {
     })
   })
 
-  it('会自动播放',(done)=>{
+  it('会自动播放', (done) => {
     let callback = sinon.fake()
     const wrapper = mount(Carousel, {
       propsData: {
         autoPlay: true,
         autoPlayDelay: 20,
+        selected: ''
       },
       slots: {
         default: `
@@ -132,11 +135,11 @@ describe('Carousel.vue', () => {
       }
     })
     // done()
-    setTimeout(()=>{
+    setTimeout(() => {
       expect(callback).to.have.been.calledWith('b')
       wrapper.destroy()
       done()
-    },21)
+    }, 21)
   })
 
 
