@@ -2,6 +2,7 @@
 
 常用于循环展示一组图片
 
+#### 基础用法，点击切换
 :::demo 基础的用法
 ```html
 <z-view-carousel :selected.sync="selected">
@@ -38,6 +39,7 @@ export default {
 ```
 :::
 
+#### 自动播放
 :::demo 支持自动播放
 ```html
 <z-view-carousel autoPlay :selected.sync="selected">

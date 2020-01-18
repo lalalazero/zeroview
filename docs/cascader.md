@@ -2,6 +2,7 @@
 
 常用于省市区，公司层级的关联选择。
 
+#### 基础层级选择
 :::demo 基础的省市区级联，支持不限层数
 ```html
 <z-view-cascader :options="options" :selected.sync="selected"></z-view-cascader>
@@ -76,7 +77,7 @@ export default {
 ```
 :::
 
-
+#### 远程加载数据
 :::demo 动态加载选项，指定节点 isLeaf 为 false，同时传入 loadData 加载数据的方法。需要自己去实现更新 options 的方法以及更新 loading 。
 ```html
 <z-view-cascader :options="options" :load-data="loadData" :selected.sync="selected" :loading="loading"></z-view-cascader>

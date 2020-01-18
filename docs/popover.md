@@ -2,38 +2,62 @@
 
 常用的基础弹出消息框
 
-
-:::demo 默认 hover 弹出提示
+#### hover 弹出
+:::demo 默认 hover 弹出提示，支持四个方位
 ```html
 <z-view-popover>
   <template slot='content'>
     <p>Hello World~</p>
   </template>
-  <z-view-button>上方弹出</z-view-button>
+  <z-view-button>上方</z-view-button>
 </z-view-popover>
 <z-view-popover position="bottom">
   <template slot='content'>
     <p>Hello World~</p>
   </template>
-  <z-view-button>下方弹出</z-view-button>
+  <z-view-button>下方</z-view-button>
 </z-view-popover>
-
+<z-view-popover position="left">
+  <template slot='content'>
+    <p>Hello World~</p>
+  </template>
+  <z-view-button>左方</z-view-button>
+</z-view-popover>
+<z-view-popover position="right">
+  <template slot='content'>
+    <p>Hello World~</p>
+  </template>
+  <z-view-button>右方</z-view-button>
+</z-view-popover>
 ```
 :::
 
-:::demo 可以指定 click 方式弹出
+#### click 弹出
+:::demo 指定 trigger 属性等于 click
 ```html
+<z-view-popover trigger="click">
+  <template slot='content'>
+    <p>Hello World~</p>
+  </template>
+  <z-view-button>上方</z-view-button>
+</z-view-popover>
+<z-view-popover trigger="click" position="bottom">
+  <template slot='content'>
+    <p>Hello World~</p>
+  </template>
+  <z-view-button>下方</z-view-button>
+</z-view-popover>
 <z-view-popover trigger="click" position="left">
   <template slot='content'>
     <p>Hello World~</p>
   </template>
-  <z-view-button>点击左方弹出</z-view-button>
+  <z-view-button>左方</z-view-button>
 </z-view-popover>
 <z-view-popover trigger="click" position="right">
   <template slot='content'>
     <p>Hello World~</p>
   </template>
-  <z-view-button>点击右方弹出</z-view-button>
+  <z-view-button>右方</z-view-button>
 </z-view-popover>
 
 ```

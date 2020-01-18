@@ -2,6 +2,7 @@
 
 用来展示大量数据。
 
+#### 基础表格
 :::demo 基础表格
 ```html
 <z-view-table :data-source="dataSource" :columns="columns"></z-view-table>
@@ -58,6 +59,8 @@ export default {
 ```
 :::
 
+
+#### 紧凑型表格
 :::demo 紧凑型表格
 ```html
 <z-view-table :data-source="dataSource" :columns="columns" compact></z-view-table>
@@ -114,6 +117,7 @@ export default {
 ```
 :::
 
+#### 带斑马纹表格
 :::demo 带斑马纹表格
 ```html
 <z-view-table :data-source="dataSource" :columns="columns" strip></z-view-table>
@@ -170,6 +174,7 @@ export default {
 ```
 :::
 
+#### 带边框表格
 :::demo 带边框表格
 ```html
 <z-view-table :data-source="dataSource" :columns="columns" bordered></z-view-table>

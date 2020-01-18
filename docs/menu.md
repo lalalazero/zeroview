@@ -1,6 +1,7 @@
 ## Menu 导航菜单
 提供导航功能的菜单
 
+#### 水平菜单
 :::demo 水平的顶部导航栏
 ```html
 <z-view-menu selected="b">
@@ -25,6 +26,7 @@
 ```
 :::
 
+#### 带分组的垂直菜单
 :::demo 垂直的侧边导航栏，可以设置菜单分组和子菜单默认打开
 ```html
 <z-view-menu direction="vertical" selected="g4">
@@ -59,6 +61,7 @@
 ```
 :::
 
+#### 单次只打开一个的垂直菜单
 :::demo 竖直方向上一次只允许打开一个菜单，保持聚焦和整洁
 ```html
 <z-view-menu direction="vertical" singleOpen>
