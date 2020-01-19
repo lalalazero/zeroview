@@ -1,12 +1,12 @@
 <template>
-  <div class="z-view-table-wrapper">
+  <div class="z-view-table-wrapper" :class="{'z-view-table-showHeader': showHeader}">
     <table
       class="z-view-table"
       :class="{'z-view-table-compact': compact,
         'z-view-table-bordered': bordered, 'z-view-table-striped': strip}"
     >
       <thead>
-        <tr>
+        <tr v-if="showHeader">
           <th v-if="selectable"><input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)"></th>
           <th v-if="idVisible">id</th>
           <th :key="index" v-for="(column,index) in columns">{{column.text}}</th>
@@ -20,11 +20,21 @@
         </tr>
       </tbody>
     </table>
+    <div class="z-view-table-body-wrapper" v-if="dataSource.length <= 0">
+        <div class="z-view-table-noData-Wrapper">
+              <z-view-icon name="emptysearch"></z-view-icon><br/>
+              <span>暂无数据</span>
+          </div>
+    </div>
   </div>
 </template>
 <script>
+import Icon from '../icon/icon.vue'
 export default {
   name: "zViewTable",
+  components: {
+    zViewIcon: Icon
+  },
   props: {
     columns: {
       type: Array,
@@ -67,7 +77,11 @@ export default {
     selectable: {
       type: Boolean,
       default: false
-    }
+    },
+    showHeader: {
+      type: Boolean,
+      default: true
+    },
   },
   computed:{
     selectedIds(){
@@ -173,6 +187,26 @@ export default {
           background: $table-strip-color;
         }
       }
+    }
+  }
+  &-body-wrapper {
+    width: 100%;
+  }
+  &-noData-Wrapper{
+    text-align: center;
+    padding: 42px 0;
+    border-top: 1px solid $table-border-color;
+    border-bottom: 1px solid $table-border-color;
+    width: 100%;
+    color: $bg-gray-light;
+    > svg {
+      width: 2em;
+      height: 2em;
+    }
+  }
+  &-showHeader {
+    .z-view-table-noData-Wrapper {
+      border-top: none;
     }
   }
 }
