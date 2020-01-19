@@ -15,6 +15,9 @@
 <z-view-icon name="alipay"/>
 <z-view-icon name="setting"/>
 <z-view-icon name="emptysearch" />
+<z-view-icon name="filled-up" />
+<z-view-icon name="filled-down" />
+
 ```
 :::
 
