@@ -2,18 +2,20 @@
   <div class="z-view-table-wrapper">
     <table
       class="z-view-table"
-      :class="{'z-view-table-compact': compact, 
+      :class="{'z-view-table-compact': compact,
         'z-view-table-bordered': bordered, 'z-view-table-striped': strip}"
     >
       <thead>
         <tr>
-          <th>id</th>
+          <th v-if="selectable"><input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)"></th>
+          <th v-if="idVisible">id</th>
           <th :key="index" v-for="(column,index) in columns">{{column.text}}</th>
         </tr>
       </thead>
       <tbody>
         <tr :key="dataItem.id" v-for="(dataItem,index) in dataSource">
-          <td>{{index+1}}</td>
+          <td v-if="selectable"><input type="checkbox" @change="onSelectedItemsChange(dataItem, $event)" :checked="inSelectedItems(dataItem)"></td>
+          <td v-if="idVisible">{{index+1}}</td>
           <td :key="column.index" v-for="(column) in columns">{{dataItem[column.index]}}</td>
         </tr>
       </tbody>
@@ -32,7 +34,11 @@ export default {
       type: Array,
       default: () => [],
       validator(value) {
-        return value.filter(data => data.id === undefined).length > 0;
+        if(value.filter(data => data.id === undefined).length > 0){
+          console.error('dataSource 的对象要包含 id 属性')
+          return false
+        }
+        return true
       }
     },
     compact: {
@@ -46,6 +52,79 @@ export default {
     strip: {
       type: Boolean,
       default: false
+    },
+    selectedItems: {
+      type: Array,
+      default: () => [],
+      validator(value) {
+        if(value.filter(data => data.id === undefined).length > 0){
+          console.error('需要指定 selectable 属性为 true 并且 selectedItems 的对象要包含 id 属性')
+          return false
+        }
+        return true;
+      }
+    },
+    selectable: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed:{
+    selectedIds(){
+      return this.selectedItems.map(i => i.id)
+    },
+    dataSourceIds(){
+      return this.dataSource.map(i => i.id)
+    }
+  },
+  data(){
+    return {
+      idVisible: false
+    }
+  },
+  watch: {
+    selectedItems(){
+      let isSelected = (id) => this.selectedIds.indexOf(id) >= 0
+      let isNotSelected = (id) => this.selectedIds.indexOf(id) < 0
+      if(this.dataSourceIds.every(isSelected)){
+        this.$refs.allCheck.checked = true
+        this.$refs.allCheck.indeterminate = false
+        return
+      }
+      if(this.dataSourceIds.every(isNotSelected)){
+        this.$refs.allCheck.checked = false
+        this.$refs.allCheck.indeterminate = false
+        return
+      }
+      if(this.dataSourceIds.some(isSelected)){
+        this.$refs.allCheck.checked = false
+        this.$refs.allCheck.indeterminate = true
+        return
+      }
+    }
+  },
+  methods: {
+    onSelectedItemsChange(dataItem, $event){
+      let copy = JSON.parse(JSON.stringify(this.selectedItems))
+      if($event.target.checked){
+        if(!copy.find(i => i.id === dataItem.id)){
+          copy.push(dataItem)
+        }
+      }else{
+        copy = copy.filter(i => i.id !== dataItem.id)
+      }
+      this.$emit('update:selectedItems',copy)
+    },
+    inSelectedItems(dataItem){
+      return this.selectedItems.find(i => i.id === dataItem.id) ? true : false
+    },
+    onSelectAllChange($event){
+      if($event.target.checked){
+        let copy = JSON.parse(JSON.stringify(this.dataSource))
+        this.$emit('update:selectedItems',copy)
+      }else{
+        this.$emit('update:selectedItems',[])
+      }
     }
   }
 };

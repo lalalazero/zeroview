@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <z-view-table :data-source="dataSource" :columns="columns"></z-view-table>
+    <z-view-table :data-source="dataSource" :columns="columns" :selected-items.sync="selectedItems" selectable></z-view-table>
   </div>
 </template>
 
@@ -54,6 +54,9 @@ export default {
           name: "丫丫",
           score: 60
         }
+      ],
+      selectedItems: [
+
       ]
     };
   },
