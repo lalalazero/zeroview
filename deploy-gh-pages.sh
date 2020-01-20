@@ -52,6 +52,8 @@ git commit --allow-empty -m 'deploy'
 
 git push --force --quiet $remote
 
+cd ../..
+
 rm -rf gh-pages
 
 
