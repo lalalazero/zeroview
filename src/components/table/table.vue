@@ -12,23 +12,23 @@
           <th :key="index" v-for="(column,index) in columns">
             <div class="z-view-table-th-wrapper">
               <span>{{column.text}}</span>
-              <span class="z-view-table-th-sorter" @click="onSort" :class="{}">
-                <z-view-icon name="filled-up" :class="{'z-view-table-th-sorter-asc': sortDirection === 'asc'}"></z-view-icon>
-                <z-view-icon name="filled-down" :class="{'z-view-table-th-sorter-desc': sortDirection === 'desc'}"></z-view-icon>
+              <span v-if="column.sorter" class="z-view-table-th-sorter" @click="onSort(column)">
+                <z-view-icon name="filled-up" :class="{'z-view-table-th-sorter-asc': getSortDirection(column.index) === 'asc'}"></z-view-icon>
+                <z-view-icon name="filled-down" :class="{'z-view-table-th-sorter-desc': getSortDirection(column.index) === 'desc'}"></z-view-icon>
               </span>
             </div>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr :key="dataItem.id" v-for="(dataItem,index) in dataSource">
+        <tr :key="dataItem.id" v-for="(dataItem,index) in copyDataSource">
           <td v-if="selectable"><input type="checkbox" @change="onSelectedItemsChange(dataItem, $event)" :checked="inSelectedItems(dataItem)"></td>
           <td v-if="idVisible">{{index+1}}</td>
           <td :key="column.index" v-for="(column) in columns">{{dataItem[column.index]}}</td>
         </tr>
       </tbody>
     </table>
-    <div class="z-view-table-body-wrapper" v-if="dataSource.length <= 0">
+    <div class="z-view-table-body-wrapper" v-if="copyDataSource.length <= 0">
         <div class="z-view-table-noData-Wrapper">
               <z-view-icon name="emptysearch"></z-view-icon><br/>
               <span>暂无数据</span>
@@ -96,13 +96,15 @@ export default {
       return this.selectedItems.map(i => i.id)
     },
     dataSourceIds(){
-      return this.dataSource.map(i => i.id)
+      return this.copyDataSource.map(i => i.id)
     }
   },
   data(){
     return {
       idVisible: false,
-      sortDirection: ''
+      sortDirection: '',
+      copyDataSource: [],
+      sortMap: {}
     }
   },
   watch: {
@@ -124,6 +126,10 @@ export default {
         this.$refs.allCheck.indeterminate = true
         return
       }
+    },
+    dataSource(){
+      console.log('dataSource changed...')
+      this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource))
     }
   },
   methods: {
@@ -149,17 +155,44 @@ export default {
         this.$emit('update:selectedItems',[])
       }
     },
-    onSort(){
-      console.log('sort')
-      if(!this.sortDirection){
-        this.sortDirection = 'asc'
-      }else if(this.sortDirection === 'asc'){
-        this.sortDirection = 'desc'
-      }else {
-        this.sortDirection = ''
+    initSortMap(){
+      this.columns.forEach(column => {
+        if(column.sorter){
+          this.sortMap[column.index] = {
+            direction: column.sortDirection
+          }
+        }
+      })
+    },
+    onSort(column){
+      console.log('sort..')
+      let { index, sorter, sortDirection } = column
+      let columnSort = this.sortMap[index]
+      let { direction } = columnSort
+      if(!direction){
+        columnSort.direction = 'asc'
+        this.copyDataSource.sort(sorter)
+      }else if(direction === 'asc'){
+        columnSort.direction = 'desc'
+        this.copyDataSource.reverse()
+      }else if(direction === 'desc'){
+        columnSort.direction = ''
+        this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource))
       }
     },
+    getSortDirection(columnIndex){
+      if(!this.sortMap[columnIndex]) return
+      return this.sortMap[columnIndex].direction
+    }
 
+  },
+  created(){
+    if(this.dataSource.length > 0){
+      this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource))
+    }
+    this.initSortMap()
+  },
+  mounted(){
   }
 };
 </script>
