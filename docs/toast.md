@@ -18,7 +18,7 @@ export default {
 ```
 :::
 
-
+#### 设置关闭时间和回调函数
 :::demo 可以设置是否自动关闭，关闭时间，弹出位置还有关闭回调函数
 ```html
 <z-view-button @click="click1">底部弹出</z-view-button>
