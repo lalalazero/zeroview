@@ -9,7 +9,15 @@
         <tr v-if="showHeader">
           <th v-if="selectable"><input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)"></th>
           <th v-if="idVisible">id</th>
-          <th :key="index" v-for="(column,index) in columns">{{column.text}}</th>
+          <th :key="index" v-for="(column,index) in columns">
+            <div class="z-view-table-th-wrapper">
+              <span>{{column.text}}</span>
+              <span class="z-view-table-th-sorter" @click="onSort" :class="{}">
+                <z-view-icon name="filled-up" :class="{'z-view-table-th-sorter-asc': sortDirection === 'asc'}"></z-view-icon>
+                <z-view-icon name="filled-down" :class="{'z-view-table-th-sorter-desc': sortDirection === 'desc'}"></z-view-icon>
+              </span>
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -93,7 +101,8 @@ export default {
   },
   data(){
     return {
-      idVisible: false
+      idVisible: false,
+      sortDirection: ''
     }
   },
   watch: {
@@ -139,7 +148,18 @@ export default {
       }else{
         this.$emit('update:selectedItems',[])
       }
-    }
+    },
+    onSort(){
+      console.log('sort')
+      if(!this.sortDirection){
+        this.sortDirection = 'asc'
+      }else if(this.sortDirection === 'asc'){
+        this.sortDirection = 'desc'
+      }else {
+        this.sortDirection = ''
+      }
+    },
+
   }
 };
 </script>
@@ -207,6 +227,25 @@ export default {
   &-showHeader {
     .z-view-table-noData-Wrapper {
       border-top: none;
+    }
+  }
+  &-th-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  &-th-sorter {
+    display: flex;
+    flex-direction: column;
+    width: 1.2em;
+    height: 1.2em;
+    margin: 0 4px;
+    user-select: none;
+    > svg {
+      fill: $disabled-color;
+    }
+    &-asc,&-desc {
+      fill: $active-color !important;
+
     }
   }
 }
