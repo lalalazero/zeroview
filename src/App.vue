@@ -1,6 +1,11 @@
 <template>
   <div class="app">
-    <z-view-table :data-source="dataSource" :columns="columns" selectable :selected-items.sync="selectedItems"></z-view-table>
+    <z-view-table
+      :data-source="dataSource"
+      :columns="columns"
+      selectable
+      :selected-items.sync="selectedItems"
+    ></z-view-table>
   </div>
 </template>
 
@@ -21,8 +26,11 @@ export default {
         {
           index: "score",
           text: "分数",
-          sorter: (a,b) => { console.log('sort 被调用了'); return (a.score - b.score) },
-          sortDirection: 'asc'
+          sorter: (a, b) => {
+            console.log("sort 被调用了");
+            return a.score - b.score;
+          },
+          sortDirection: "asc"
         }
       ],
       dataSource: [
@@ -57,16 +65,14 @@ export default {
           score: 60
         }
       ],
-      selectedItems: [
-
-      ]
+      selectedItems: []
     };
   },
   mounted() {
-    setTimeout(()=>{
-      console.log('对 dataSource 进行排序')
-      this.dataSource.sort((a,b)=>a.score - b.score)
-    },3000)
+    setTimeout(() => {
+      console.log("对 dataSource 进行排序");
+      this.dataSource.sort((a, b) => a.score - b.score);
+    }, 3000);
   }
 };
 </script>

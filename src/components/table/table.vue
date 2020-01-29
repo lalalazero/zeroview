@@ -7,14 +7,22 @@
     >
       <thead>
         <tr v-if="showHeader">
-          <th v-if="selectable"><input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)"></th>
+          <th v-if="selectable">
+            <input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)" />
+          </th>
           <th v-if="idVisible">id</th>
           <th :key="index" v-for="(column,index) in columns">
             <div class="z-view-table-th-wrapper">
               <span>{{column.text}}</span>
               <span v-if="column.sorter" class="z-view-table-th-sorter" @click="onSort(column)">
-                <z-view-icon name="filled-up" :class="{'z-view-table-th-sorter-asc': getSortDirection(column.index) === 'asc'}"></z-view-icon>
-                <z-view-icon name="filled-down" :class="{'z-view-table-th-sorter-desc': getSortDirection(column.index) === 'desc'}"></z-view-icon>
+                <z-view-icon
+                  name="filled-up"
+                  :class="{'z-view-table-th-sorter-asc': getSortDirection(column.index) === 'asc'}"
+                ></z-view-icon>
+                <z-view-icon
+                  name="filled-down"
+                  :class="{'z-view-table-th-sorter-desc': getSortDirection(column.index) === 'desc'}"
+                ></z-view-icon>
               </span>
             </div>
           </th>
@@ -22,28 +30,42 @@
       </thead>
       <tbody>
         <tr :key="dataItem.id" v-for="(dataItem,index) in copyDataSource">
-          <td v-if="selectable"><input type="checkbox" @change="onSelectedItemsChange(dataItem, $event)" :checked="inSelectedItems(dataItem)"></td>
+          <td v-if="selectable">
+            <input
+              type="checkbox"
+              @change="onSelectedItemsChange(dataItem, $event)"
+              :checked="inSelectedItems(dataItem)"
+            />
+          </td>
           <td v-if="idVisible">{{index+1}}</td>
           <td :key="column.index" v-for="(column) in columns">{{dataItem[column.index]}}</td>
         </tr>
       </tbody>
     </table>
-    <div class="z-view-table-body-wrapper" v-if="copyDataSource.length <= 0">
-        <div class="z-view-table-noData-Wrapper">
-              <z-view-icon name="emptysearch"></z-view-icon><br/>
-              <span>暂无数据</span>
-          </div>
+    <div class="z-view-table-body-wrapper">
+      <div class="z-view-table-noData-wrapper" v-if="copyDataSource.length <= 0">
+        <z-view-icon name="emptysearch"></z-view-icon>
+        <br />
+        <span>暂无数据</span>
+      </div>
+      <div class="z-view-table-loading-wrapper" v-if="loading">
+        <z-view-icon name="loading"></z-view-icon>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import Icon from '../icon/icon.vue'
+import Icon from "../icon/icon.vue";
 export default {
   name: "zViewTable",
   components: {
     zViewIcon: Icon
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     columns: {
       type: Array,
       default: () => []
@@ -52,11 +74,11 @@ export default {
       type: Array,
       default: () => [],
       validator(value) {
-        if(value.filter(data => data.id === undefined).length > 0){
-          console.error('dataSource 的对象要包含 id 属性')
-          return false
+        if (value.filter(data => data.id === undefined).length > 0) {
+          console.error("dataSource 的对象要包含 id 属性");
+          return false;
         }
-        return true
+        return true;
       }
     },
     compact: {
@@ -75,9 +97,11 @@ export default {
       type: Array,
       default: () => [],
       validator(value) {
-        if(value.filter(data => data.id === undefined).length > 0){
-          console.error('需要指定 selectable 属性为 true 并且 selectedItems 的对象要包含 id 属性')
-          return false
+        if (value.filter(data => data.id === undefined).length > 0) {
+          console.error(
+            "需要指定 selectable 属性为 true 并且 selectedItems 的对象要包含 id 属性"
+          );
+          return false;
         }
         return true;
       }
@@ -89,111 +113,107 @@ export default {
     showHeader: {
       type: Boolean,
       default: true
-    },
-  },
-  computed:{
-    selectedIds(){
-      return this.selectedItems.map(i => i.id)
-    },
-    dataSourceIds(){
-      return this.copyDataSource.map(i => i.id)
     }
   },
-  data(){
+  computed: {
+    selectedIds() {
+      return this.selectedItems.map(i => i.id);
+    },
+    dataSourceIds() {
+      return this.copyDataSource.map(i => i.id);
+    }
+  },
+  data() {
     return {
       idVisible: false,
-      sortDirection: '',
+      sortDirection: "",
       copyDataSource: [],
       sortMap: {}
-    }
+    };
   },
   watch: {
-    selectedItems(){
-      let isSelected = (id) => this.selectedIds.indexOf(id) >= 0
-      let isNotSelected = (id) => this.selectedIds.indexOf(id) < 0
-      if(this.dataSourceIds.every(isSelected)){
-        this.$refs.allCheck.checked = true
-        this.$refs.allCheck.indeterminate = false
-        return
+    selectedItems() {
+      let isSelected = id => this.selectedIds.indexOf(id) >= 0;
+      let isNotSelected = id => this.selectedIds.indexOf(id) < 0;
+      if (this.dataSourceIds.every(isSelected)) {
+        this.$refs.allCheck.checked = true;
+        this.$refs.allCheck.indeterminate = false;
+        return;
       }
-      if(this.dataSourceIds.every(isNotSelected)){
-        this.$refs.allCheck.checked = false
-        this.$refs.allCheck.indeterminate = false
-        return
+      if (this.dataSourceIds.every(isNotSelected)) {
+        this.$refs.allCheck.checked = false;
+        this.$refs.allCheck.indeterminate = false;
+        return;
       }
-      if(this.dataSourceIds.some(isSelected)){
-        this.$refs.allCheck.checked = false
-        this.$refs.allCheck.indeterminate = true
-        return
+      if (this.dataSourceIds.some(isSelected)) {
+        this.$refs.allCheck.checked = false;
+        this.$refs.allCheck.indeterminate = true;
+        return;
       }
     },
-    dataSource(){
-      console.log('dataSource changed...')
-      this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource))
+    dataSource() {
+      this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource));
     }
   },
   methods: {
-    onSelectedItemsChange(dataItem, $event){
-      let copy = JSON.parse(JSON.stringify(this.selectedItems))
-      if($event.target.checked){
-        if(!copy.find(i => i.id === dataItem.id)){
-          copy.push(dataItem)
+    onSelectedItemsChange(dataItem, $event) {
+      let copy = JSON.parse(JSON.stringify(this.selectedItems));
+      if ($event.target.checked) {
+        if (!copy.find(i => i.id === dataItem.id)) {
+          copy.push(dataItem);
         }
-      }else{
-        copy = copy.filter(i => i.id !== dataItem.id)
+      } else {
+        copy = copy.filter(i => i.id !== dataItem.id);
       }
-      this.$emit('update:selectedItems',copy)
+      this.$emit("update:selectedItems", copy);
     },
-    inSelectedItems(dataItem){
-      return this.selectedItems.find(i => i.id === dataItem.id) ? true : false
+    inSelectedItems(dataItem) {
+      return this.selectedItems.find(i => i.id === dataItem.id) ? true : false;
     },
-    onSelectAllChange($event){
-      if($event.target.checked){
-        let copy = JSON.parse(JSON.stringify(this.dataSource))
-        this.$emit('update:selectedItems',copy)
-      }else{
-        this.$emit('update:selectedItems',[])
+    onSelectAllChange($event) {
+      if ($event.target.checked) {
+        let copy = JSON.parse(JSON.stringify(this.dataSource));
+        this.$emit("update:selectedItems", copy);
+      } else {
+        this.$emit("update:selectedItems", []);
       }
     },
-    initSortMap(){
+    initSortMap() {
       this.columns.forEach(column => {
-        if(column.sorter){
+        if (column.sorter) {
           this.sortMap[column.index] = {
             direction: column.sortDirection
-          }
+          };
         }
-      })
+      });
     },
-    onSort(column){
-      console.log('sort..')
-      let { index, sorter, sortDirection } = column
-      let columnSort = this.sortMap[index]
-      let { direction } = columnSort
-      if(!direction){
-        columnSort.direction = 'asc'
-        this.copyDataSource.sort(sorter)
-      }else if(direction === 'asc'){
-        columnSort.direction = 'desc'
-        this.copyDataSource.reverse()
-      }else if(direction === 'desc'){
-        columnSort.direction = ''
-        this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource))
+    onSort(column) {
+      let { index, sorter, sortDirection } = column;
+      let columnSort = this.sortMap[index];
+      let { direction } = columnSort;
+      if (!direction) {
+        columnSort.direction = "asc";
+        this.copyDataSource.sort(sorter);
+      } else if (direction === "asc") {
+        columnSort.direction = "desc";
+        this.copyDataSource.reverse();
+      } else if (direction === "desc") {
+        columnSort.direction = "";
+        this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource));
       }
     },
-    getSortDirection(columnIndex){
-      if(!this.sortMap[columnIndex]) return
-      return this.sortMap[columnIndex].direction
+    getSortDirection(columnIndex) {
+      if (!this.sortMap[columnIndex]) return;
+      return this.sortMap[columnIndex].direction;
     }
-
   },
-  created(){
-    if(this.dataSource.length > 0){
-      this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource))
+  created() {
+    if (this.dataSource.length > 0) {
+      this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource));
     }
-    this.initSortMap()
+    this.initSortMap();
   },
-  mounted(){
-  }
+  mounted() {}
 };
 </script>
 <style lang="scss" scoped>
@@ -220,6 +240,9 @@ export default {
       padding: 12px 10px;
     }
   }
+  &-wrapper {
+    position: relative;
+  }
   &-compact {
     thead th,
     tbody td {
@@ -245,11 +268,12 @@ export default {
   &-body-wrapper {
     width: 100%;
   }
-  &-noData-Wrapper{
-    text-align: center;
-    padding: 42px 0;
+  &-noData-wrapper {
+    min-height: 160px;
     border-top: 1px solid $table-border-color;
     border-bottom: 1px solid $table-border-color;
+    padding: 42px 0;
+    text-align: center;
     width: 100%;
     color: $bg-gray-light;
     > svg {
@@ -257,8 +281,25 @@ export default {
       height: 2em;
     }
   }
+  &-loading-wrapper {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($color: white, $alpha: 0.5);
+    > svg {
+      width: 2em;
+      height: 2em;
+      fill: $active-color;
+      animation: $spinAnimation;
+    }
+  }
   &-showHeader {
-    .z-view-table-noData-Wrapper {
+    .z-view-table-body-wrapper {
       border-top: none;
     }
   }
@@ -276,9 +317,9 @@ export default {
     > svg {
       fill: $disabled-color;
     }
-    &-asc,&-desc {
+    &-asc,
+    &-desc {
       fill: $active-color !important;
-
     }
   }
 }
