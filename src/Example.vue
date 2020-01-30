@@ -302,6 +302,9 @@ ol {
       font-size: 22px;
       margin: 20px 0 10px;
     }
+    > h4 {
+      margin: 10px 0;
+    }
     > p {
       margin: 14px 0;
       font-size: 14px;
@@ -313,7 +316,7 @@ ol {
       width: 100%;
       background-color: #fff;
       font-size: 14px;
-      margin: 20px 0;
+      // margin: 20px 0;
       // margin-bottom: 45px;
       line-height: 1.5em;
       th:first-child {

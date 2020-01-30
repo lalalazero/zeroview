@@ -12,7 +12,7 @@ Vue.use(zeroview)
 
 在 `App.vue` 中使用
 
-```javascript
+```html
 <template>
   <div id="app">
     <z-view-button icon="like">点个赞</z-view-button>

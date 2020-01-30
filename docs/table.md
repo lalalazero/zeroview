@@ -450,4 +450,5 @@ export default {
 | selectable | 是否开启选择 | boolean | - | false | - |
 | selectedItems | 被选中的对象，需要 .sync 语法否则不起作用 | array | - | [] | - | 
 | loading | 表格加载状态 | boolean | - | false | - |
+| height | 表格高度,固定表头时需要 | number | - | - | - |
 | fixedHeader | 是否固定表头，如果固定，需在 columns 传递列的 width 属性，否则可能表头会对不齐 | boolean | - | false | - |
