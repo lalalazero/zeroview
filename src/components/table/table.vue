@@ -226,6 +226,8 @@ export default {
       padding: 12px 10px;
       border-bottom: 1px solid $table-border-color;
       background: $table-strip-color;
+      font-weight: 500;
+      color: $bg-black;
     }
   }
   tbody {
