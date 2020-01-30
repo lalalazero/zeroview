@@ -1,47 +1,63 @@
 <template>
-  <div class="z-view-table-wrapper" :class="{'z-view-table-showHeader': showHeader}">
-    <table
-      class="z-view-table"
-      :class="{'z-view-table-compact': compact,
-        'z-view-table-bordered': bordered, 'z-view-table-striped': strip}"
+  <div class="z-view-table-wrapper" ref="wrapper" :class="{'z-view-table-showHeader': showHeader}">
+    <div
+      class="z-view-table-wrapper2"
+      ref="wrapper2"
+      :style="{height: height + 'px',overflow: 'auto'}"
     >
-      <thead>
-        <tr v-if="showHeader">
-          <th v-if="selectable">
-            <input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)" />
-          </th>
-          <th v-if="idVisible">id</th>
-          <th :key="index" v-for="(column,index) in columns">
-            <div class="z-view-table-th-wrapper">
-              <span>{{column.text}}</span>
-              <span v-if="column.sorter" class="z-view-table-th-sorter" @click="onSort(column)">
-                <z-view-icon
-                  name="filled-up"
-                  :class="{'z-view-table-th-sorter-asc': getSortDirection(column.index) === 'asc'}"
-                ></z-view-icon>
-                <z-view-icon
-                  name="filled-down"
-                  :class="{'z-view-table-th-sorter-desc': getSortDirection(column.index) === 'desc'}"
-                ></z-view-icon>
-              </span>
-            </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr :key="dataItem.id" v-for="(dataItem,index) in copyDataSource">
-          <td v-if="selectable">
-            <input
-              type="checkbox"
-              @change="onSelectedItemsChange(dataItem, $event)"
-              :checked="inSelectedItems(dataItem)"
-            />
-          </td>
-          <td v-if="idVisible">{{index+1}}</td>
-          <td :key="column.index" v-for="(column) in columns">{{dataItem[column.index]}}</td>
-        </tr>
-      </tbody>
-    </table>
+      <table
+        ref="table"
+        class="z-view-table"
+        :class="{'z-view-table-compact': compact,
+        'z-view-table-bordered': bordered, 'z-view-table-striped': strip}"
+      >
+        <thead>
+          <tr v-if="showHeader">
+            <th v-if="selectable" :style="{width: '50px'}">
+              <input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)" />
+            </th>
+            <th v-if="idVisible" :style="{width: '50px'}">id</th>
+            <th
+              :key="index"
+              v-for="(column,index) in columns"
+              :style="{width: column.width + 'px'}"
+            >
+              <div class="z-view-table-th-wrapper">
+                <span>{{column.text}}</span>
+                <span v-if="column.sorter" class="z-view-table-th-sorter" @click="onSort(column)">
+                  <z-view-icon
+                    name="filled-up"
+                    :class="{'z-view-table-th-sorter-asc': getSortDirection(column.index) === 'asc'}"
+                  ></z-view-icon>
+                  <z-view-icon
+                    name="filled-down"
+                    :class="{'z-view-table-th-sorter-desc': getSortDirection(column.index) === 'desc'}"
+                  ></z-view-icon>
+                </span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr :key="dataItem.id" v-for="(dataItem,index) in copyDataSource">
+            <td v-if="selectable" :style="{width: '50px'}">
+              <input
+                type="checkbox"
+                @change="onSelectedItemsChange(dataItem, $event)"
+                :checked="inSelectedItems(dataItem)"
+              />
+            </td>
+            <td v-if="idVisible" :style="{width: '50px'}">{{index+1}}</td>
+            <td
+              :key="column.index"
+              :style="{width: column.width + 'px'}"
+              v-for="(column) in columns"
+            >{{dataItem[column.index]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="z-view-table-body-wrapper">
       <div class="z-view-table-noData-wrapper" v-if="copyDataSource.length <= 0">
         <z-view-icon name="emptysearch"></z-view-icon>
@@ -81,6 +97,9 @@ export default {
         return true;
       }
     },
+    height: {
+      type: Number
+    },
     compact: {
       type: Boolean,
       default: false
@@ -113,6 +132,10 @@ export default {
     showHeader: {
       type: Boolean,
       default: true
+    },
+    fixedHeader: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -125,7 +148,7 @@ export default {
   },
   data() {
     return {
-      idVisible: false,
+      idVisible: true,
       sortDirection: "",
       copyDataSource: [],
       sortMap: {}
@@ -205,6 +228,20 @@ export default {
     getSortDirection(columnIndex) {
       if (!this.sortMap[columnIndex]) return;
       return this.sortMap[columnIndex].direction;
+    },
+    makeFixedHeaderStyle() {
+      let table = this.$refs.table;
+      let copyTable = table.cloneNode(false);
+      // console.log(copyTable);
+      let thead = table.children[0];
+      // console.log(thead);
+      let { height } = thead.getBoundingClientRect();
+      // console.log(height);
+      copyTable.appendChild(thead);
+      copyTable.classList.add("z-view-table-copy-fix-header");
+      this.$refs.wrapper.appendChild(copyTable);
+      this.$refs.wrapper.style.paddingTop = height + "px";
+      this.$refs.wrapper2.style.height = this.height - height + "px";
     }
   },
   created() {
@@ -213,7 +250,11 @@ export default {
     }
     this.initSortMap();
   },
-  mounted() {}
+  mounted() {
+    if (this.fixedHeader) {
+      this.makeFixedHeaderStyle();
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -323,6 +364,12 @@ export default {
     &-desc {
       fill: $active-color !important;
     }
+  }
+  &-copy-fix-header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    // box-shadow: 1px 1px 2px 1px #ccc;
   }
 }
 </style>

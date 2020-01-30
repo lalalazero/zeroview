@@ -1,11 +1,6 @@
 <template>
   <div class="app">
-    <z-view-table
-      :data-source="dataSource"
-      :columns="columns"
-      selectable
-      :selected-items.sync="selectedItems"
-    ></z-view-table>
+    <z-view-table :height="300" :data-source="dataSource" :columns="columns" fixedHeader></z-view-table>
   </div>
 </template>
 
@@ -21,16 +16,15 @@ export default {
       columns: [
         {
           index: "name",
-          text: "姓名"
+          text: "姓名",
+          width: 200
         },
         {
           index: "score",
           text: "分数",
           sorter: (a, b) => {
-            console.log("sort 被调用了");
-            return a.score - b.score;
-          },
-          sortDirection: "asc"
+            return a.score === b.score ? 0 : a.score > b.score ? 1 : -1;
+          }
         }
       ],
       dataSource: [
@@ -63,17 +57,82 @@ export default {
           id: 6,
           name: "丫丫",
           score: 60
+        },
+        {
+          id: 7,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 8,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 9,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 10,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 11,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 12,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 13,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 14,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 15,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 16,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 17,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 18,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 19,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 20,
+          name: "翠花",
+          score: 88
         }
       ],
       selectedItems: []
     };
   },
-  mounted() {
-    setTimeout(() => {
-      console.log("对 dataSource 进行排序");
-      this.dataSource.sort((a, b) => a.score - b.score);
-    }, 3000);
-  }
+  mounted() {}
 };
 </script>
 
