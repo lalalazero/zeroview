@@ -303,6 +303,138 @@ export default {
 ```
 :::
 
+#### 固定表头
+:::demo 指定 fixedHeader 属性为 true，同时传入列的 width，否则可能出现对不齐的情况。建议留最后一行自适应宽度。 
+```html
+<z-view-table :height="300" :data-source="dataSource" :columns="columns" fixedHeader></z-view-table>
+<script>
+export default {
+    data() {
+    return {
+      columns: [
+        {
+          index: "name",
+          text: "姓名",
+          width: 200
+        },
+        {
+          index: "score",
+          text: "分数",
+          sorter: (a, b) => {
+            return a.score === b.score ? 0 : a.score > b.score ? 1 : -1;
+          }
+        }
+      ],
+      dataSource: [
+        {
+          id: 1,
+          name: "张三",
+          score: 85
+        },
+        {
+          id: 2,
+          name: "李四",
+          score: 99
+        },
+        {
+          id: 3,
+          name: "王麻子",
+          score: 100
+        },
+        {
+          id: 4,
+          name: "狗蛋",
+          score: 72
+        },
+        {
+          id: 5,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 6,
+          name: "丫丫",
+          score: 60
+        },
+        {
+          id: 7,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 8,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 9,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 10,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 11,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 12,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 13,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 14,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 15,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 16,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 17,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 18,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 19,
+          name: "翠花",
+          score: 88
+        },
+        {
+          id: 20,
+          name: "翠花",
+          score: 88
+        }
+      ],
+    };
+  }
+  
+}
+</script>
+```
+:::
+
 
 ### 属性 API
 
@@ -318,3 +450,4 @@ export default {
 | selectable | 是否开启选择 | boolean | - | false | - |
 | selectedItems | 被选中的对象，需要 .sync 语法否则不起作用 | array | - | [] | - | 
 | loading | 表格加载状态 | boolean | - | false | - |
+| fixedHeader | 是否固定表头，如果固定，需在 columns 传递列的 width 属性，否则可能表头会对不齐 | boolean | - | false | - |

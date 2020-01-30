@@ -97,6 +97,10 @@ export default {
         return true;
       }
     },
+    idVisible: {
+      type: Boolean,
+      default: false
+    },
     height: {
       type: Number
     },
@@ -148,7 +152,6 @@ export default {
   },
   data() {
     return {
-      idVisible: true,
       sortDirection: "",
       copyDataSource: [],
       sortMap: {}
