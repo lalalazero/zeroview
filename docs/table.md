@@ -174,14 +174,21 @@ export default {
 ```
 :::
 
-#### 带边框表格
+#### 带边框和加载状态表格
 :::demo 带边框表格
 ```html
-<z-view-table :data-source="dataSource" :columns="columns" bordered></z-view-table>
+<z-view-button type="primary" @click="onClick">点我切换</z-view-button>
+<z-view-table :data-source="dataSource" :columns="columns" bordered :loading="loading"></z-view-table>
 <script>
 export default {
+    methods: {
+      onClick(){
+        this.loading = !this.loading
+      }
+    },
     data() {
     return {
+      loading: true,
       columns: [
         {
           index: "name",
@@ -310,3 +317,4 @@ export default {
 | sortDirection | 初始排序方向，需要指定在 columns 的对象里。形如 [ {index: 'age', sortDirection: 'asc' }] | string | - | - | - |
 | selectable | 是否开启选择 | boolean | - | false | - |
 | selectedItems | 被选中的对象，需要 .sync 语法否则不起作用 | array | - | [] | - | 
+| loading | 表格加载状态 | boolean | - | false | - |
