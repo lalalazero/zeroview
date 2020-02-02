@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <z-view-table :height="300" :data-source="dataSource" :columns="columns" fixedHeader></z-view-table>
+    <z-view-table :data-source="dataSource" :columns="columns" expandKey="desc"></z-view-table>
   </div>
 </template>
 
@@ -21,42 +21,48 @@ export default {
         },
         {
           index: "score",
-          text: "分数",
-          sorter: (a, b) => {
-            return a.score === b.score ? 0 : a.score > b.score ? 1 : -1;
-          }
+          text: "分数"
+          // sorter: (a, b) => {
+          //   return a.score === b.score ? 0 : a.score > b.score ? 1 : -1;
+          // }
         }
       ],
       dataSource: [
         {
           id: 1,
           name: "张三",
-          score: 85
+          score: 85,
+          desc: "张三是个男孩子"
         },
         {
           id: 2,
           name: "李四",
-          score: 99
+          score: 99,
+          desc: "张三是个男孩子"
         },
         {
           id: 3,
           name: "王麻子",
-          score: 100
+          score: 100,
+          desc: "张三是个男孩子"
         },
         {
           id: 4,
           name: "狗蛋",
-          score: 72
+          score: 72,
+          desc: "张三是个男孩子"
         },
         {
           id: 5,
           name: "翠花",
-          score: 88
+          score: 88,
+          desc: "张三是个男孩子"
         },
         {
           id: 6,
           name: "丫丫",
-          score: 60
+          score: 60,
+          desc: "张三是个男孩子"
         },
         {
           id: 7,
@@ -77,57 +83,57 @@ export default {
           id: 10,
           name: "翠花",
           score: 88
-        },
-        {
-          id: 11,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 12,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 13,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 14,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 15,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 16,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 17,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 18,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 19,
-          name: "翠花",
-          score: 88
-        },
-        {
-          id: 20,
-          name: "翠花",
-          score: 88
         }
+        // {
+        //   id: 11,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 12,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 13,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 14,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 15,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 16,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 17,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 18,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 19,
+        //   name: "翠花",
+        //   score: 88
+        // },
+        // {
+        //   id: 20,
+        //   name: "翠花",
+        //   score: 88
+        // }
       ],
       selectedItems: []
     };

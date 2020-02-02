@@ -13,10 +13,11 @@
       >
         <thead>
           <tr v-if="showHeader">
-            <th v-if="selectable" :style="{width: '50px'}">
+            <th v-if="selectable" :style="{width: '50px'}" class="z-view-table-center">
               <input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)" />
             </th>
-            <th v-if="idVisible" :style="{width: '50px'}">id</th>
+            <th :style="{ width: '50px' }"></th>
+            <th v-if="idVisible" :style="{width: '50px'}" class="z-view-table-center">id</th>
             <th
               :key="index"
               v-for="(column,index) in columns"
@@ -39,21 +40,45 @@
           </tr>
         </thead>
         <tbody>
-          <tr :key="dataItem.id" v-for="(dataItem,index) in copyDataSource">
-            <td v-if="selectable" :style="{width: '50px'}">
-              <input
-                type="checkbox"
-                @change="onSelectedItemsChange(dataItem, $event)"
-                :checked="inSelectedItems(dataItem)"
-              />
-            </td>
-            <td v-if="idVisible" :style="{width: '50px'}">{{index+1}}</td>
-            <td
-              :key="column.index"
-              :style="{width: column.width + 'px'}"
-              v-for="(column) in columns"
-            >{{dataItem[column.index]}}</td>
-          </tr>
+          <template v-for="(dataItem,index) in copyDataSource">
+            <tr :key="dataItem.id">
+              <td v-if="selectable" :style="{width: '50px'}" class="z-view-table-center">
+                <input
+                  type="checkbox"
+                  @change="onSelectedItemsChange(dataItem, $event)"
+                  :checked="inSelectedItems(dataItem)"
+                />
+              </td>
+              <td
+                class="z-view-table-center"
+                @click="expandItem(dataItem.id)"
+                :style="{cursor: 'pointer'}"
+              >
+                <span
+                  class="z-view-table-expand-icon"
+                  :class="{'z-view-table-expand-icon-down': isExpand(dataItem.id)}"
+                >
+                  <z-view-icon name="right"></z-view-icon>
+                </span>
+              </td>
+              <td v-if="idVisible" :style="{width: '50px'}" class="z-view-table-center">{{index+1}}</td>
+              <td
+                :key="column.index"
+                :style="{width: column.width + 'px'}"
+                v-for="(column) in columns"
+              >{{dataItem[column.index]}}</td>
+            </tr>
+            <tr
+              :key="`${dataItem.id}-expand-key`"
+              class="z-view-table-expand-row"
+              v-if="isExpand(dataItem.id)"
+            >
+              <td
+                :colspan="colspan"
+                :style="{ paddingLeft: `${paddingLeft}px`}"
+              >{{ dataItem[expandKey] || '暂无描述' }}</td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
@@ -140,6 +165,9 @@ export default {
     fixedHeader: {
       type: Boolean,
       default: false
+    },
+    expandKey: {
+      type: String
     }
   },
   computed: {
@@ -148,13 +176,26 @@ export default {
     },
     dataSourceIds() {
       return this.copyDataSource.map(i => i.id);
+    },
+    colspan() {
+      let len = this.columns.length + 1;
+      if (this.selectable) len = len + 1;
+      if (this.idVisible) len = len + 1;
+      return len;
+    },
+    paddingLeft() {
+      let left = 50;
+      if (this.selectable) left += 50;
+      if (this.idVisible) left += 50;
+      return left;
     }
   },
   data() {
     return {
       sortDirection: "",
       copyDataSource: [],
-      sortMap: {}
+      sortMap: {},
+      expandIds: []
     };
   },
   watch: {
@@ -245,6 +286,16 @@ export default {
       this.$refs.wrapper.appendChild(copyTable);
       this.$refs.wrapper.style.paddingTop = height + "px";
       this.$refs.wrapper2.style.height = this.height - height + "px";
+    },
+    expandItem(id) {
+      if (this.expandIds.indexOf(id) >= 0) {
+        this.expandIds.splice(this.expandIds.indexOf(id), 1);
+      } else {
+        this.expandIds.push(id);
+      }
+    },
+    isExpand(id) {
+      return this.expandIds.indexOf(id) >= 0;
     }
   },
   created() {
@@ -373,6 +424,24 @@ export default {
     left: 0;
     top: 0;
     // box-shadow: 1px 1px 2px 1px #ccc;
+  }
+  &-expand-row {
+    background: $table-strip-color;
+  }
+  &-expand-icon {
+    // outline: 1px solid red;
+    font-size: 12px;
+    > svg {
+      transition: all 300ms;
+    }
+    &-down {
+      > svg {
+        transform: rotate(90deg);
+      }
+    }
+  }
+  & &-center {
+    text-align: center;
   }
 }
 </style>

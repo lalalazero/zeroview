@@ -436,6 +436,63 @@ export default {
 :::
 
 
+#### 可展开的行
+:::demo 指定 expandKey 属性为展开的信息 
+```html
+<z-view-table :data-source="dataSource" :columns="columns" expandKey="desc"></z-view-table>
+<script>
+export default {
+  data() {
+    return {
+      columns: [
+        {
+          index: "name",
+          text: "姓名",
+        },
+        {
+          index: "score",
+          text: "分数"
+        }
+      ],
+      dataSource: [
+        {
+          id: 1,
+          name: "张三",
+          score: 85,
+          desc: "张三是个男孩子"
+        },
+        {
+          id: 2,
+          name: "李四",
+          score: 99,
+          desc: "李四体育成绩好"
+        },
+        {
+          id: 3,
+          name: "王麻子",
+          score: 100,
+        },
+        {
+          id: 4,
+          name: "狗蛋",
+          score: 72,
+          desc: "狗蛋喜欢写诗歌"
+        },
+        {
+          id: 5,
+          name: "翠花",
+          score: 88,
+          desc: "翠花是文艺委员"
+        }
+      ]
+    }
+  }
+}
+</script>
+```
+:::
+
+
 ### 属性 API
 
 | 参数      | 说明    | 类型      | 可选值       | 默认值   | 是否必填 |
@@ -452,3 +509,4 @@ export default {
 | loading | 表格加载状态 | boolean | - | false | - |
 | height | 表格高度,固定表头时需要 | number | - | - | - |
 | fixedHeader | 是否固定表头，如果固定，需在 columns 传递列的 width 属性，否则可能表头会对不齐 | boolean | - | false | - |
+| expandKey | 展开行的信息，值为列名 | string | - | - | - |
