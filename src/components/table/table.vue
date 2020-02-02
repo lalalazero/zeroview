@@ -37,6 +37,7 @@
                 </span>
               </div>
             </th>
+            <th ref="actionHeader" v-if="$scopedSlots.default">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +69,11 @@
                 :style="{width: column.width + 'px'}"
                 v-for="(column) in columns"
               >{{dataItem[column.index]}}</td>
+              <td v-if="$scopedSlots.default">
+                <div ref="actions" style="display: inline-block">
+                  <slot :item="dataItem" />
+                </div>
+              </td>
             </tr>
             <tr
               :key="`${dataItem.id}-expand-key`"
@@ -98,6 +104,7 @@
 </template>
 <script>
 import Icon from "../icon/icon.vue";
+import { get } from "https";
 export default {
   name: "zViewTable",
   components: {
@@ -297,6 +304,36 @@ export default {
     },
     isExpand(id) {
       return this.expandIds.indexOf(id) >= 0;
+    },
+    updateActionColWidth() {
+      let div = this.$refs.actions[0]; // 只取第一行
+      let { width } = div.getBoundingClientRect();
+      console.log(width);
+      let parent = div.parentNode;
+      let paddingLeft = getComputedStyle(parent).getPropertyValue(
+        "padding-left"
+      );
+      let paddingRight = getComputedStyle(parent).getPropertyValue(
+        "padding-right"
+      );
+      let borderLeftWidth = getComputedStyle(parent).getPropertyValue(
+        "border-left-width"
+      );
+      let borderRightWidth = getComputedStyle(parent).getPropertyValue(
+        "border-right-width"
+      );
+      console.log(paddingLeft, paddingRight, borderLeftWidth, borderRightWidth);
+      let colWidth =
+        width +
+        parseInt(paddingRight) +
+        parseInt(paddingLeft) +
+        parseInt(borderLeftWidth) +
+        parseInt(borderRightWidth);
+      console.log(colWidth);
+      this.$refs.actionHeader.style.width = colWidth + "px";
+      this.$refs.actions.map(div => {
+        div.parentNode.style.width = colWidth + "px";
+      });
     }
   },
   created() {
@@ -308,6 +345,9 @@ export default {
   mounted() {
     if (this.fixedHeader) {
       this.makeFixedHeaderStyle();
+    }
+    if (this.$scopedSlots.default) {
+      this.updateActionColWidth();
     }
   }
 };
