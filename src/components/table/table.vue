@@ -16,7 +16,7 @@
             <th v-if="selectable" :style="{width: '50px'}" class="z-view-table-center">
               <input type="checkbox" ref="allCheck" @change="onSelectAllChange($event)" />
             </th>
-            <th :style="{ width: '50px' }"></th>
+            <th :style="{ width: '50px' }" v-if="expandKey"></th>
             <th v-if="idVisible" :style="{width: '50px'}" class="z-view-table-center">id</th>
             <th
               :key="index"
@@ -53,6 +53,7 @@
                 class="z-view-table-center"
                 @click="expandItem(dataItem.id)"
                 :style="{cursor: 'pointer'}"
+                v-if="expandKey"
               >
                 <span
                   class="z-view-table-expand-icon"
