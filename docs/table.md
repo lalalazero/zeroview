@@ -493,6 +493,88 @@ export default {
 :::
 
 
+#### 可操作列
+:::demo 通过 template 插槽定制操作按钮，只支持最后一列显示 
+```html
+<z-view-table :data-source="dataSource" :columns="columns">
+    <template slot-scope="scope">
+      <div style="minWidth: 80px">
+        <button @click="edit(scope.item)" style="color: blue">编辑</button>
+        <button @click="view(scope.item)" style="color: blue">查看</button>
+      </div>
+    </template>
+</z-view-table>
+<script>
+export default {
+  methods: {
+    edit(item) {
+      alert(`编辑了id=${item.id}`);
+    },
+    view(item) {
+      alert(`查看了id=${item.id}`);
+    }
+  },
+  data() {
+    return {
+      item: undefined,
+      columns: [
+        {
+          index: "name",
+          text: "姓名",
+          width: 200
+        },
+        {
+          index: "score",
+          text: "分数"
+        },
+        {
+          index: "addr",
+          text: "住址"
+        }
+      ],
+      dataSource: [
+        {
+          id: 1,
+          name: "张三",
+          score: 85,
+          addr: "中国四川成都市天府新区麓山大道"
+        },
+        {
+          id: 2,
+          name: "李四",
+          score: 99,
+          addr: "中国四川成都市天府新区麓山大道"
+        },
+        {
+          id: 3,
+          name: "王麻子",
+          score: 100,
+          addr: "中国四川成都市天府新区麓山大道"
+        },
+        {
+          id: 4,
+          name: "狗蛋",
+          score: 72,
+          addr: "中国四川成都市天府新区麓山大道"
+        },
+        {
+          id: 5,
+          name: "翠花",
+          score: 88,
+          addr: "中国四川成都市天府新区麓山大道"
+        },
+        
+      ],
+      selectedItems: []
+    };
+  }
+}
+</script>
+
+```
+:::
+
+
 ### 属性 API
 
 | 参数      | 说明    | 类型      | 可选值       | 默认值   | 是否必填 |
