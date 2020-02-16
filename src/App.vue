@@ -1,11 +1,6 @@
 <template>
   <div class="app">
-    <z-view-table :data-source="dataSource" :columns="columns" expandKey="desc">
-      <template slot-scope="scope">
-        <button @click="edit(scope.item)" style="marginRight: 20px">编辑</button>
-        <button @click="view(scope.item)">查看</button>
-      </template>
-    </z-view-table>
+    <z-view-upload>upload</z-view-upload>
   </div>
 </template>
 

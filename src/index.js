@@ -12,6 +12,7 @@ import Cascader from './components/cascader/index.js'
 import Carousel from './components/carousel/index.js'
 import Pagination from './components/pagination/index.js'
 import Table from './components/table/index.js'
+import Upload from './components/upload/index.js'
 
 const components = [
   Button,
@@ -27,7 +28,8 @@ const components = [
   Cascader,
   Carousel,
   Pagination,
-  Table
+  Table,
+  Upload
 ];
 
 const install = Vue => {
@@ -39,7 +41,7 @@ const install = Vue => {
 export {
   Button, Icon, ButtonGroup, Input,
   Grid, Tab, Toast, Menu, Collapse, Popover, Cascader, Carousel, Pagination,
-  Table
+  Table, Upload
 };
 
 export default install;
