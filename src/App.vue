@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <z-view-upload accept="image/**" action="http://localhost:3000/asubmit" name="file">
+    <z-view-upload accept="image/**" action="http://localhost:3000/asubmit" :parse-response="parseResponse" name="file" :fileList.sync="fileList" >
       <button>上传</button>
       <template slot="tips">
         <div>只能上传 300kb 以内的 png,jpeg 文件</div>
@@ -13,6 +13,19 @@
 
 <script>
 export default{
+  methods:{
+    parseResponse(resp){
+      console.log(typeof resp)
+      console.log(resp)
+      let obj = JSON.parse(resp)
+      return `http://localhost:3000/preview/${obj.id}`
+    }
+  },
+  data(){
+    return {
+      fileList: []
+    }
+  }
 };
 </script>
 
