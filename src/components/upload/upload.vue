@@ -86,6 +86,7 @@ export default {
     createInput(){
       let input = document.createElement('input')
       input.type = 'file'
+      this.$refs.temp.innerHTML = ''
       this.$refs.temp.appendChild(input)
       return input
     },
@@ -154,7 +155,7 @@ export default {
   .z-view-uploader {
     width: 400px;
     &-tips {
-      font-size: .8em;
+      font-size: 12px;
       color: $--color;
       margin: 5px 0;
     }
@@ -182,7 +183,7 @@ export default {
         flex-shrink: 0;
       }
       &-itemName {
-        margin-left: 10px;
+        font-size: 12px;
         flex-grow: 2;
         text-overflow: ellipsis;
         overflow: hidden;
