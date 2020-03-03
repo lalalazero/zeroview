@@ -1,12 +1,12 @@
 <template>
   <div class="app">
     <z-view-upload accept="image/**" action="http://localhost:3000/asubmit" :parse-response="parseResponse" name="file" :fileList.sync="fileList" >
-      <button>上传</button>
+      <z-view-button type="primary">点击上传</z-view-button>
       <template slot="tips">
         <div>只能上传 300kb 以内的 png,jpeg 文件</div>
       </template>
     </z-view-upload>
-    <button>保存</button>
+<!--    <z-view-button>保存</z-view-button>-->
   </div>
 </template>
 
@@ -23,10 +23,7 @@ export default{
   },
   data(){
     return {
-      fileList: [{
-        name: 'xxx',
-        status: 'failed'
-      }]
+      fileList: []
     }
   }
 };

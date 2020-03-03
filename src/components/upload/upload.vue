@@ -3,17 +3,24 @@
     <div @click="onClickUpload" ref="trigger">
       <slot></slot>
     </div>
+    <div class="z-view-uploader-tips">
+      <slot name="tips"></slot>
+    </div>
     <div ref="temp" style="width: 0;height: 0;overflow: hidden"></div>
-    <slot name="tips"></slot>
     <div>
-      <ol>
+      <ol class="z-view-uploader-fileList">
         <li v-for="(file,index) in fileList" :key="`${index}-${file.name}`">
-          <span :class="`z-view-uploader-status-${file.status}`">{{ file.name }}</span>
           <span v-if="file.status === 'uploading'" class="z-view-uploader-uploading">
             <z-view-icon name="loading"></z-view-icon>
           </span>
-          <img :src="file.url" style="width: 40px; height: 40px"/>
-          <button @click="onRemoveFile(file)">x</button>
+          <span class="z-view-uploader-fileList-item-image-wrapper">
+            <img v-if="file.type && file.type.startsWith('image') && file.status === 'success' " :src="file.url" style="width: 40px; height: 40px"/>
+          </span>
+          <span class="z-view-uploader-fileList-itemName" :class="`z-view-uploader-status-${file.status}`">{{ file.name }}</span>
+          <div class="z-view-uploader-fileList-icon">
+            <span @click="_onDownload(file)"><z-view-icon name="download" ></z-view-icon></span>
+            <span @click="onRemoveFile(file)"><z-view-icon name="error" ></z-view-icon></span>
+          </div>
         </li>
       </ol>
     </div>
@@ -25,12 +32,52 @@ export default {
   components: {
     zViewIcon
   },
+
+  name: "zViewUpload",
+  props: {
+    name: {
+      type: String,
+      required: true
+    },
+    method: {
+      type: String,
+      default: 'POST'
+    },
+    action: {
+      type: String
+    },
+    parseResponse: {
+      type: Function
+    },
+    fileList: {
+      type: Array,
+      default: () => []
+    },
+    onDownload: {
+      type: Function
+    },
+    beforeUpload: {
+      type: Function
+    }
+  },
+  data(){
+    return {
+      url: 'about:blank',
+      uid: 1,
+    }
+  },
   methods: {
     onClickUpload(){
       let input = this.createInput()
       // listen to input
       input.addEventListener('change',()=>{
         let file = input.files[0]
+        if(this.beforeUpload){
+          let check = this.beforeUpload(file)
+          if(!check){
+            return
+          }
+        }
         this.updateFile(file)
         input.remove()
       })
@@ -96,50 +143,66 @@ export default {
         copy.splice(index, 1)
         this.$emit('update:fileList',copy)
       }
+    },
+    _onDownload(file){
+      this.onDownload && this.onDownload(file)
     }
   },
-  name: "zViewUpload",
-  props: {
-    name: {
-      type: String,
-      required: true
-    },
-    method: {
-      type: String,
-      default: 'POST'
-    },
-    action: {
-      type: String
-    },
-    parseResponse: {
-      type: Function
-    },
-    fileList: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data(){
-    return {
-      url: 'about:blank',
-      uid: 1,
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>
   .z-view-uploader {
-    border: 1px solid #000;
+    width: 400px;
+    &-tips {
+      font-size: .8em;
+      color: $--color;
+      margin: 5px 0;
+    }
     &-uploading {
       > svg {
         animation: $spinAnimation;
       }
     }
     &-status-success {
-      color: $--primary-color;
+      color: $--success-color;
     }
     &-status-failed {
       color: $--error-color;
+    }
+    &-fileList {
+      > li {
+        margin: 8px 0;
+        display: flex;
+        align-items: center;
+        &:hover {
+          background: $table-row-hover-color;
+        }
+      }
+      &-item-image-wrapper {
+        flex-shrink: 0;
+      }
+      &-itemName {
+        margin-left: 10px;
+        flex-grow: 2;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      &-icon {
+        /*border: 1px solid red;*/
+        flex-shrink: 0;
+        margin-right: 10px;
+        margin-left: auto;
+        cursor: pointer;
+        > span {
+          margin-right: 5px;
+          &:hover {
+            > svg {
+              transform: scale(1.2);
+            }
+          }
+        }
+      }
+
     }
   }
 </style>
