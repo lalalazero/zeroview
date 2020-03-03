@@ -10,6 +10,7 @@
         <li v-for="(file,index) in fileList" :key="`${index}-${file.name}`">
           {{ file.name }}
           <img :src="file.url" style="width: 40px; height: 40px"/>
+          <button @click="onRemoveFile(file)">x</button>
         </li>
       </ol>
     </div>
@@ -78,6 +79,15 @@ export default {
         success(xhr.response)
       }
       xhr.send(formData)
+    },
+    onRemoveFile(file){
+      let answer = window.confirm('确定删除吗？')
+      if(answer){
+        let copy = [...this.fileList]
+        let index = copy.indexOf(file)
+        copy.splice(index, 1)
+        this.$emit('update:fileList',copy)
+      }
     }
   }
 };
