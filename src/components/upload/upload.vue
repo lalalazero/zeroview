@@ -8,7 +8,7 @@
     <div>
       <ol>
         <li v-for="(file,index) in fileList" :key="`${index}-${file.name}`">
-          {{ file.name }}
+          <span :class="`z-view-uploader-status-${file.status}`">{{ file.name }}</span>
           <span v-if="file.status === 'uploading'" class="z-view-uploader-uploading">
             <z-view-icon name="loading"></z-view-icon>
           </span>
@@ -46,12 +46,20 @@ export default {
       let { name, size, type } = file
       this.$emit('update:fileList',[...this.fileList, { uid, name, type, size, status:'uploading'}])
     },
-    afterUploadFile(rawFile, url, uid){
+    afterUploadFileSuccess(rawFile, url, uid){
       let file = this.fileList.find(file => file.uid === uid)
       let copy = JSON.parse(JSON.stringify(file))
       copy.status = 'success'
       copy.url = url
-      console.log(copy)
+      let index = this.fileList.indexOf(file)
+      this.fileList.splice(index, 1, copy)
+      let copyList = [...this.fileList]
+      this.$emit('update:fileList',copyList)
+    },
+    afterUploadFileFail(rawFile, uid){
+      let file = this.fileList.find(file => file.uid === uid)
+      let copy = JSON.parse(JSON.stringify(file))
+      copy.status = 'failed'
       let index = this.fileList.indexOf(file)
       this.fileList.splice(index, 1, copy)
       let copyList = [...this.fileList]
@@ -64,14 +72,19 @@ export default {
       formData.append(this.name, rawFile)
       this.doUploadFile(formData,(response)=>{
         let url = this.parseResponse(response)
-        this.afterUploadFile(rawFile, url, uid)
+        this.afterUploadFileSuccess(rawFile, url, uid)
+      }, ()=>{
+        this.afterUploadFileFail(rawFile, uid)
       })
     },
-    doUploadFile(formData, success){
+    doUploadFile(formData, success, failed){
       let xhr = new XMLHttpRequest()
       xhr.open(this.method, this.action)
       xhr.onload = ()=>{
         success(xhr.response)
+      }
+      xhr.onerror = ()=>{
+        failed(xhr.response)
       }
       xhr.send(formData)
     },
@@ -121,6 +134,12 @@ export default {
       > svg {
         animation: $spinAnimation;
       }
+    }
+    &-status-success {
+      color: $--primary-color;
+    }
+    &-status-failed {
+      color: $--error-color;
     }
   }
 </style>

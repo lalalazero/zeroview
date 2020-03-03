@@ -23,7 +23,10 @@ export default{
   },
   data(){
     return {
-      fileList: []
+      fileList: [{
+        name: 'xxx',
+        status: 'failed'
+      }]
     }
   }
 };
