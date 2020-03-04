@@ -46,6 +46,9 @@ export default {
     action: {
       type: String
     },
+    accept: {
+      type: String
+    },
     parseResponse: {
       type: Function
     },
@@ -86,6 +89,7 @@ export default {
     createInput(){
       let input = document.createElement('input')
       input.type = 'file'
+      input.accept = this.accept
       this.$refs.temp.innerHTML = ''
       this.$refs.temp.appendChild(input)
       return input
