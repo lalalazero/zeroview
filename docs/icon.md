@@ -17,6 +17,7 @@
 <z-view-icon name="emptysearch" />
 <z-view-icon name="filled-up" />
 <z-view-icon name="filled-down" />
+<z-view-icon name="download" />
 
 ```
 :::
