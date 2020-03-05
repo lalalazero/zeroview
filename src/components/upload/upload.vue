@@ -78,29 +78,17 @@ export default {
       let input = this.createInput()
       // listen to input
       input.addEventListener('change',()=>{
-        if(this.multiple){
-          let files = input.files
-          if (this.beforeUpload) {
-            let check = this.beforeUpload(files)
-            if (!check) {
-              return
-            }
-          }
-          let fileArr = Array.from(files)
-          fileArr.forEach(file => {
-            this.uploadFile(file)
-          })
-
-        }else {
-          let file = input.files[0]
-          if (this.beforeUpload) {
-            let check = this.beforeUpload(file)
-            if (!check) {
-              return
-            }
-          }
-          this.uploadFile(file)
+        let rawFiles = []
+        if(!this.multiple){
+          rawFiles.push(input.files[0])
+        }else{
+          rawFiles = Array.from(input.files)
         }
+        if(this.beforeUpload){
+          let check = this.beforeUpload(rawFiles)
+          if(!check) return
+        }
+        this.uploadFiles(rawFiles)
         input.remove()
       })
       input.click()
@@ -114,13 +102,20 @@ export default {
       this.$refs.temp.appendChild(input)
       return input
     },
-    beforeUploadFile(file, uid){
-      let { name, size, type } = file
-      this.$emit('addFile', { uid, name, size, type, status:'uploading' })
-      // this.$emit('update:fileList',[...this.fileList, { uid, name, type, size, status:'uploading'}])
+    beforeUploadFiles(rawFiles){
+      let fileList = []
+      for(let i = 0; i < rawFiles.length; i++){
+        let rawFile = rawFiles[i]
+        let { name, size, type } = rawFile
+        let uid = this.uid++
+        rawFile.uid = uid
+        fileList.push({ uid, name, size, type, status:'uploading' })
+      }
+      this.$emit('update:fileList',[...this.fileList, ...fileList])
+      return rawFiles
     },
-    afterUploadFileSuccess(rawFile, url, uid){
-      let file = this.fileList.find(file => file.uid === uid)
+    afterUploadFileSuccess(uidFile, url){
+      let file = this.fileList.find(file => file.uid === uidFile.uid)
       let copy = JSON.parse(JSON.stringify(file))
       copy.status = 'success'
       copy.url = url
@@ -129,8 +124,8 @@ export default {
       let copyList = [...this.fileList]
       this.$emit('update:fileList',copyList)
     },
-    afterUploadFileFail(rawFile, uid){
-      let file = this.fileList.find(file => file.uid === uid)
+    afterUploadFileFail(uidFile){
+      let file = this.fileList.find(file => file.uid === uidFile.uid)
       let copy = JSON.parse(JSON.stringify(file))
       copy.status = 'failed'
       let index = this.fileList.indexOf(file)
@@ -138,17 +133,19 @@ export default {
       let copyList = [...this.fileList]
       this.$emit('update:fileList',copyList)
     },
-    uploadFile(rawFile){
-      let uid = this.uid++
-      this.beforeUploadFile(rawFile, uid)
-      let formData = new FormData()
-      formData.append(this.name, rawFile)
-      this.doUploadFile(formData,(response)=>{
-        let url = this.parseResponse(response)
-        this.afterUploadFileSuccess(rawFile, url, uid)
-      }, ()=>{
-        this.afterUploadFileFail(rawFile, uid)
-      })
+    uploadFiles(rawFiles){
+      let uidFiles = this.beforeUploadFiles(rawFiles)
+      for(let i = 0; i < uidFiles.length; i++){
+        let formData = new FormData()
+        let uidFile = uidFiles[i]
+        formData.append(this.name, uidFile)
+        this.doUploadFile(formData,(response)=>{
+          let url = this.parseResponse(response)
+          this.afterUploadFileSuccess(uidFile, url)
+        }, ()=>{
+          this.afterUploadFileFail(uidFile)
+        })
+      }
     },
     doUploadFile(formData, success, failed){
       let xhr = new XMLHttpRequest()
