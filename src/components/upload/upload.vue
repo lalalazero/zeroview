@@ -28,6 +28,7 @@
 </template>
 <script>
 import zViewIcon from '../icon/icon.vue'
+import http from './http.js'
 export default {
   components: {
     zViewIcon
@@ -47,7 +48,7 @@ export default {
       type: String
     },
     accept: {
-      type: String
+      type: String,
     },
     parseResponse: {
       type: Function
@@ -147,16 +148,12 @@ export default {
         })
       }
     },
-    doUploadFile(formData, success, failed){
-      let xhr = new XMLHttpRequest()
-      xhr.open(this.method, this.action)
-      xhr.onload = ()=>{
-        success(xhr.response)
-      }
-      xhr.onerror = ()=>{
-        failed(xhr.response)
-      }
-      xhr.send(formData)
+    doUploadFile(formData, success, fail){
+      http(this.method, this.action, {
+        success,
+        fail,
+        data: formData
+      })
     },
     onRemoveFile(file){
       let answer = window.confirm('确定删除吗？')
