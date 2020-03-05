@@ -61,6 +61,10 @@ export default {
     },
     beforeUpload: {
       type: Function
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     }
   },
   data(){
@@ -74,14 +78,29 @@ export default {
       let input = this.createInput()
       // listen to input
       input.addEventListener('change',()=>{
-        let file = input.files[0]
-        if(this.beforeUpload){
-          let check = this.beforeUpload(file)
-          if(!check){
-            return
+        if(this.multiple){
+          let files = input.files
+          if (this.beforeUpload) {
+            let check = this.beforeUpload(files)
+            if (!check) {
+              return
+            }
           }
+          let fileArr = Array.from(files)
+          fileArr.forEach(file => {
+            this.uploadFile(file)
+          })
+
+        }else {
+          let file = input.files[0]
+          if (this.beforeUpload) {
+            let check = this.beforeUpload(file)
+            if (!check) {
+              return
+            }
+          }
+          this.uploadFile(file)
         }
-        this.updateFile(file)
         input.remove()
       })
       input.click()
@@ -90,6 +109,7 @@ export default {
       let input = document.createElement('input')
       input.type = 'file'
       input.accept = this.accept
+      input.multiple = this.multiple
       this.$refs.temp.innerHTML = ''
       this.$refs.temp.appendChild(input)
       return input
@@ -117,7 +137,7 @@ export default {
       let copyList = [...this.fileList]
       this.$emit('update:fileList',copyList)
     },
-    updateFile(rawFile){
+    uploadFile(rawFile){
       let uid = this.uid++
       this.beforeUploadFile(rawFile, uid)
       let formData = new FormData()
