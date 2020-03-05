@@ -116,7 +116,8 @@ export default {
     },
     beforeUploadFile(file, uid){
       let { name, size, type } = file
-      this.$emit('update:fileList',[...this.fileList, { uid, name, type, size, status:'uploading'}])
+      this.$emit('addFile', { uid, name, size, type, status:'uploading' })
+      // this.$emit('update:fileList',[...this.fileList, { uid, name, type, size, status:'uploading'}])
     },
     afterUploadFileSuccess(rawFile, url, uid){
       let file = this.fileList.find(file => file.uid === uid)

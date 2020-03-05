@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <z-view-upload multiple action="http://localhost:3000/msubmit" :parse-response="parseResponse" name="files" :fileList.sync="fileList" @update:fileList="updateFileList"
+    <z-view-upload multiple action="http://localhost:3000/msubmit" :parse-response="parseResponse" name="files" :fileList.sync="fileList" @update:fileList="updateFileList" @addFile="addFile"
                    :before-upload="beforeUpload" :on-download="onDownload">
       <z-view-button type="primary">点击上传</z-view-button>
       <template slot="tips">
@@ -34,6 +34,11 @@ export default{
     updateFileList(fileList){
       console.log('fileList')
       console.log(fileList.map(file => file.name))
+    },
+    addFile(file){
+      this.fileList.push(file)
+      console.log(`addFile ${file.name}`)
+      console.log(this.fileList)
     }
   },
   data(){
