@@ -1,10 +1,10 @@
 <template>
   <div class="app">
-    <z-view-upload multiple action="http://localhost:3000/asubmit" :parse-response="parseResponse" name="file" :fileList.sync="fileList" @update:fileList="updateFileList"
+    <z-view-upload multiple accept="image/*" action="http://localhost:3000/asubmit" :parse-response="parseResponse" name="file" :fileList.sync="fileList"
                    :before-upload="beforeUpload" :on-download="onDownload">
       <z-view-button type="primary">点击上传</z-view-button>
       <template slot="tips">
-        <div>只能上传 300kb 以内的 png,jpeg 文件</div>
+        <div>只能上传 30MB 以内的图片</div>
       </template>
     </z-view-upload>
 <!--    <z-view-button>保存</z-view-button>-->
@@ -16,7 +16,6 @@
 export default{
   methods:{
     parseResponse(resp){
-      console.log(typeof resp)
       console.log(resp)
       let obj = JSON.parse(resp)
       return `http://localhost:3000/preview/${obj.id}`
@@ -24,17 +23,16 @@ export default{
     onDownload(file){
       window.open(file.url)
     },
-    beforeUpload(file){
-      // if(!file.type.startsWith('image') || file.size > 1024 * 300){
-      //   this.$toast('只能上传不大于300kb的图片')
-      //   return false
-      // }
+    beforeUpload(files){
+      for(let i = 0; i < files.length; i++) {
+        let file = files[i]
+        if (!file.type.startsWith('image') || file.size > 1024 * 1024 * 30) {
+          this.$toast('只能上传不大于30MB的图片')
+          return false
+        }
+      }
       return true
     },
-    updateFileList(fileList){
-      console.log('fileList')
-      console.log(fileList.map(file => file.name))
-    }
   },
   data(){
     return {

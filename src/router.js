@@ -74,6 +74,10 @@ const router = new Router({
       path: "/table",
       component: () => import('../docs/table.md')
     },
+    {
+      path: '/upload',
+      component: () => import('../docs/upload.md')
+    }
   ]
 })
 

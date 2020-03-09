@@ -158,6 +158,11 @@
                   <p>Cascader</p>
                 </router-link>
               </z-view-menu-item>
+              <z-view-menu-item name="upload">
+                <router-link to="/upload">
+                  <p>Upload</p>
+                </router-link>
+              </z-view-menu-item>
             </z-view-menu-group>
             <z-view-menu-group name="反馈">
               <z-view-menu-item name="popover">
