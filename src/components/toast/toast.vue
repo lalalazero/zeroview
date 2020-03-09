@@ -62,11 +62,13 @@ export default {
     },
     updateStyles() {
       this.$nextTick(() => {
-        let height = this.$refs.toast.getBoundingClientRect().height;
-        // console.log("height", height);
-        if(this.$refs.line){
-          this.$refs.line.style.height = `${height}px`;
+        if(this.$refs.toast){
+          let height = this.$refs.toast.getBoundingClientRect().height;
+          if(this.$refs.line){
+            this.$refs.line.style.height = `${height}px`;
+          }
         }
+
       });
     },
     close() {
