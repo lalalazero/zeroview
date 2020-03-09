@@ -1,44 +1,115 @@
 <template>
   <div class="app">
-    <z-view-upload multiple accept="image/*" action="http://localhost:3000/asubmit" :parse-response="parseResponse" name="file" :fileList.sync="fileList"
-                   :before-upload="beforeUpload" :on-download="onDownload">
-      <z-view-button type="primary">点击上传</z-view-button>
-      <template slot="tips">
-        <div>只能上传 30MB 以内的图片</div>
-      </template>
-    </z-view-upload>
-<!--    <z-view-button>保存</z-view-button>-->
+    <z-view-stickey>
+      <div>我是粘滞内容</div>
+    </z-view-stickey>
+    <p>段落 1</p>
+    <p>段落 2</p>
+    <p>段落 3</p>
+    <p>段落 4</p>
+    <p>段落 5</p>
+    <p>段落 6</p>
+    <p>段落 7</p>
+    <p>段落 8</p>
+    <p>段落 9</p>
+    <p>段落 10</p>
+    <p>段落 11</p>
+    <p>段落 12</p>
+    <p>段落 13</p>
+    <p>段落 14</p>
+    <p>段落 15</p>
+    <p>段落 16</p>
+    <p>段落 17</p>
+    <p>段落 18</p>
+    <p>段落 19</p>
+    <p>段落 20</p>
+    <p>段落 21</p>
+    <p>段落 22</p>
+    <p>段落 23</p>
+    <p>段落 24</p>
+    <p>段落 25</p>
+    <p>段落 26</p>
+    <p>段落 27</p>
+    <p>段落 28</p>
+    <p>段落 29</p>
+    <p>段落 30</p>
+    <p>段落 31</p>
+    <p>段落 32</p>
+    <p>段落 33</p>
+    <p>段落 34</p>
+    <p>段落 35</p>
+    <p>段落 36</p>
+    <p>段落 37</p>
+    <p>段落 38</p>
+    <p>段落 39</p>
+    <p>段落 40</p>
+    <p>段落 41</p>
+    <p>段落 42</p>
+    <p>段落 43</p>
+    <p>段落 44</p>
+    <p>段落 45</p>
+    <p>段落 46</p>
+    <p>段落 47</p>
+    <p>段落 48</p>
+    <p>段落 49</p>
+    <p>段落 50</p>
+    <p>段落 51</p>
+    <p>段落 52</p>
+    <p>段落 53</p>
+    <p>段落 54</p>
+    <p>段落 55</p>
+    <p>段落 56</p>
+    <p>段落 57</p>
+    <p>段落 58</p>
+    <p>段落 59</p>
+    <p>段落 60</p>
+    <p>段落 61</p>
+    <p>段落 62</p>
+    <p>段落 63</p>
+    <p>段落 64</p>
+    <p>段落 65</p>
+    <p>段落 66</p>
+    <p>段落 67</p>
+    <p>段落 68</p>
+    <p>段落 69</p>
+    <p>段落 70</p>
+    <p>段落 71</p>
+    <p>段落 72</p>
+    <p>段落 73</p>
+    <p>段落 74</p>
+    <p>段落 75</p>
+    <p>段落 76</p>
+    <p>段落 77</p>
+    <p>段落 78</p>
+    <p>段落 79</p>
+    <p>段落 80</p>
+    <p>段落 81</p>
+    <p>段落 82</p>
+    <p>段落 83</p>
+    <p>段落 84</p>
+    <p>段落 85</p>
+    <p>段落 86</p>
+    <p>段落 87</p>
+    <p>段落 88</p>
+    <p>段落 89</p>
+    <p>段落 90</p>
+    <p>段落 91</p>
+    <p>段落 92</p>
+    <p>段落 93</p>
+    <p>段落 94</p>
+    <p>段落 95</p>
+    <p>段落 96</p>
+    <p>段落 97</p>
+    <p>段落 98</p>
+    <p>段落 99</p>
+    <p>段落 100</p>
   </div>
 </template>
 
 
 <script>
 export default{
-  methods:{
-    parseResponse(resp){
-      console.log(resp)
-      let obj = JSON.parse(resp)
-      return `http://localhost:3000/preview/${obj.id}`
-    },
-    onDownload(file){
-      window.open(file.url)
-    },
-    beforeUpload(files){
-      for(let i = 0; i < files.length; i++) {
-        let file = files[i]
-        if (!file.type.startsWith('image') || file.size > 1024 * 1024 * 30) {
-          this.$toast('只能上传不大于30MB的图片')
-          return false
-        }
-      }
-      return true
-    },
-  },
-  data(){
-    return {
-      fileList: []
-    }
-  },
+
 };
 </script>
 
@@ -54,7 +125,6 @@ a {
   &:hover,
   &:visited,
   &:active {
-    // text-decoration: unset;
     color: unset;
   }
   text-decoration: unset;
