@@ -124,6 +124,7 @@ export default {
       this.fileList.splice(index, 1, copy)
       let copyList = [...this.fileList]
       this.$emit('update:fileList',copyList)
+      this.$emit('uploaded')
     },
     afterUploadFileFail(uidFile){
       let file = this.fileList.find(file => file.uid === uidFile.uid)
@@ -133,6 +134,7 @@ export default {
       this.fileList.splice(index, 1, copy)
       let copyList = [...this.fileList]
       this.$emit('update:fileList',copyList)
+
     },
     uploadFiles(rawFiles){
       let uidFiles = this.beforeUploadFiles(rawFiles)
@@ -149,7 +151,7 @@ export default {
       }
     },
     doUploadFile(formData, success, fail){
-      http(this.method, this.action, {
+      http[this.method.toLowerCase()](this.action, {
         success,
         fail,
         data: formData
