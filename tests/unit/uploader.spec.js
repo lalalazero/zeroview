@@ -17,11 +17,11 @@ describe('Upload.vue', ()=>{
   })
 
   it('可以上传一个文件', (done)=>{
-    http.post = (data, options) => {
+    let stub = sinon.stub(http, 'post').callsFake((url, options) => {
       setTimeout(()=>{
         options.success(JSON.stringify({id:'1234'}))
       },1000)
-    }
+    })
     const wrapper = mount(Upload, {
       propsData: {
         name: 'file',
@@ -46,6 +46,8 @@ describe('Upload.vue', ()=>{
           let span = wrapper.find('.z-view-uploader-fileList-itemName')
           expect(span.text()).to.equal('hello.txt')
           expect(span.classes().includes('z-view-uploader-status-success')).to.equal(true)
+          // 恢复原来的 http.post 方法
+          stub.restore()
           done()
         }
       }
@@ -63,4 +65,9 @@ describe('Upload.vue', ()=>{
     let use = wrapper.find('use').element
     expect(use.getAttribute('xlink:href')).to.equal('#icon-loading')
   })
+
+  // it('test http', ()=>{
+  //   // 由于之前有 stub.restore() 因此这里仍旧是真实的 http.post() 方法的调用
+  //   http.post()
+  // })
 })
