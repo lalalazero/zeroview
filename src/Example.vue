@@ -182,6 +182,11 @@
                   <p>Carousel</p>
                 </router-link>
               </z-view-menu-item>
+              <z-view-menu-item name="sticky">
+                <router-link to="/sticky">
+                  <p>Sticky</p>
+                </router-link>
+              </z-view-menu-item>
             </z-view-menu-group>
           </z-view-sub-menu>
         </z-view-menu>

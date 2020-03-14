@@ -90,7 +90,8 @@ ps: 请使用如下 css-reset, 否则样式会有问题
 - [x] Table 表格
   - [x] 示例文档
   - [ ] 测试用例
-- [ ] Sticky 
+- [x] Sticky 
+  - [x] 示例文档
 - [ ] DatePicker 日期
 - [ ] Scroll 滑动
 

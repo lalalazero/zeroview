@@ -77,6 +77,10 @@ const router = new Router({
     {
       path: '/upload',
       component: () => import('../docs/upload.md')
+    },
+    {
+      path: '/sticky',
+      component: () => import('../docs/sticky.md')
     }
   ]
 })
