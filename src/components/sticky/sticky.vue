@@ -22,12 +22,16 @@ export default {
     }
   },
   mounted() {
-    let { top, height } = this.top()
-    this.$refs.wrapper.style.height = `${height}px`
+    let top = this.top()
+    // let height = this.height()
+    // this.$refs.wrapper.style.height = `${height}px`
     window.addEventListener('scroll', () => {
       if(window.scrollY > top){
         console.log('滚过去了')
         this.sticky = true
+        let height = this.height()
+        console.log(`height: ${height}`)
+        this.$refs.wrapper.style.height = `${height}px`
       }else{
         console.log('没滚过去')
         this.sticky = false
@@ -39,8 +43,12 @@ export default {
   },
   methods: {
     top(){
-      let { top,height } = this.$refs.wrapper.getBoundingClientRect()
-      return { top: top + window.scrollY, height }
+      let { top } = this.$refs.wrapper.getBoundingClientRect()
+      return top + window.scrollY
+    },
+    height(){
+      let { height } = this.$refs.wrapper.getBoundingClientRect()
+      return height
     }
   }
 }

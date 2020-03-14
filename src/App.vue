@@ -2,6 +2,7 @@
   <div class="app">
     <z-view-sticky>
       <div>我是粘滞内容</div>
+      <img src="https://user-images.githubusercontent.com/20458239/76285300-6380cf00-62da-11ea-93b1-807f8c175120.png"/>
     </z-view-sticky>
     <p>段落 1</p>
     <p>段落 2</p>
