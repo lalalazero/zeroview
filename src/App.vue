@@ -1,8 +1,7 @@
 <template>
   <div class="app">
     <z-view-sticky>
-      <div>我是粘滞内容</div>
-      <img src="https://user-images.githubusercontent.com/20458239/76285300-6380cf00-62da-11ea-93b1-807f8c175120.png"/>
+      <img src="http://5b0988e595225.cdn.sohucs.com/images/20190916/b1675e46a14b4630a13f324dd97ce074.jpeg"/>
     </z-view-sticky>
     <p>段落 1</p>
     <p>段落 2</p>
@@ -45,6 +44,7 @@ ol {
   list-style: none;
 }
 .app {
-  /*margin: 40px;*/
+  padding: 40px;
 }
+
 </style>>

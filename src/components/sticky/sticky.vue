@@ -1,6 +1,6 @@
 <template>
-    <div class="z-view-sticky-wrapper" ref="wrapper">
-      <div class="z-view-sticky" :class="classes">
+    <div class="z-view-sticky-wrapper" ref="wrapper" :style="{height}">
+      <div class="z-view-sticky" :class="classes" :style="{left,width}">
         <slot></slot>
       </div>
     </div>
@@ -11,7 +11,10 @@ export default {
   name: "zViewSticky",
   data(){
     return {
-      sticky: false
+      sticky: false,
+      height: undefined,
+      left: undefined,
+      width: undefined
     }
   },
   computed: {
@@ -23,32 +26,27 @@ export default {
   },
   mounted() {
     let top = this.top()
-    // let height = this.height()
-    // this.$refs.wrapper.style.height = `${height}px`
-    window.addEventListener('scroll', () => {
+    let handler = () => {
       if(window.scrollY > top){
-        console.log('滚过去了')
         this.sticky = true
-        let height = this.height()
-        console.log(`height: ${height}`)
-        this.$refs.wrapper.style.height = `${height}px`
+        let { left, width, height } = this.$refs.wrapper.getBoundingClientRect()
+        this.left = left + 'px'
+        this.width = width + 'px'
+        this.height = height + 'px'
       }else{
-        console.log('没滚过去')
         this.sticky = false
       }
-    })
+    }
+    this.handler = handler
+    window.addEventListener('scroll',this.handler)
   },
-  created() {
-
+  beforeDestroy() {
+    window.removeEventListener('scroll',this.handler)
   },
   methods: {
     top(){
       let { top } = this.$refs.wrapper.getBoundingClientRect()
       return top + window.scrollY
-    },
-    height(){
-      let { height } = this.$refs.wrapper.getBoundingClientRect()
-      return height
     }
   }
 }
@@ -56,7 +54,7 @@ export default {
 
 <style scoped lang="scss">
 .z-view-sticky-wrapper {
-
+  /*display: inline-block;*/
 }
 .z-view-sticky {
   border: 1px solid red;
