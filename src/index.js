@@ -13,7 +13,7 @@ import Carousel from './components/carousel/index.js'
 import Pagination from './components/pagination/index.js'
 import Table from './components/table/index.js'
 import Upload from './components/upload/index.js'
-import Stickey from './components/stickey/index'
+import Sticky from './components/sticky/index.js'
 
 const components = [
   Button,
@@ -31,7 +31,7 @@ const components = [
   Pagination,
   Table,
   Upload,
-  Stickey
+  Sticky
 ];
 
 const install = Vue => {
@@ -43,7 +43,7 @@ const install = Vue => {
 export {
   Button, Icon, ButtonGroup, Input,
   Grid, Tab, Toast, Menu, Collapse, Popover, Cascader, Carousel, Pagination,
-  Table, Upload, Stickey
+  Table, Upload, Sticky
 };
 
 export default install;
