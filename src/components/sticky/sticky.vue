@@ -25,8 +25,19 @@ export default {
     }
   },
   mounted() {
-    let top = this.top()
-    let handler = () => {
+    this.windowScrollHander = this._windowScrollHandler.bind(this)
+    window.addEventListener('scroll',this._windowScrollHandler)
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll',this._windowScrollHandler)
+  },
+  methods: {
+    top(){
+      let { top } = this.$refs.wrapper.getBoundingClientRect()
+      return top + window.scrollY
+    },
+    _windowScrollHandler(){
+      let top = this.top()
       if(window.scrollY > top){
         this.sticky = true
         let { left, width, height } = this.$refs.wrapper.getBoundingClientRect()
@@ -36,17 +47,6 @@ export default {
       }else{
         this.sticky = false
       }
-    }
-    this.handler = handler
-    window.addEventListener('scroll',this.handler)
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll',this.handler)
-  },
-  methods: {
-    top(){
-      let { top } = this.$refs.wrapper.getBoundingClientRect()
-      return top + window.scrollY
     }
   }
 }
