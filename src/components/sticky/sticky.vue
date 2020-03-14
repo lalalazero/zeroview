@@ -1,6 +1,6 @@
 <template>
     <div class="z-view-sticky-wrapper" ref="wrapper" :style="{height}">
-      <div class="z-view-sticky" :class="classes" :style="{left,width}">
+      <div class="z-view-sticky" ref="sticky" :class="classes" :style="{left,width,top}">
         <slot></slot>
       </div>
     </div>
@@ -14,7 +14,8 @@ export default {
       sticky: false,
       height: undefined,
       left: undefined,
-      width: undefined
+      width: undefined,
+      top: undefined,
     }
   },
   computed: {
@@ -32,21 +33,37 @@ export default {
     window.removeEventListener('scroll',this._windowScrollHandler)
   },
   methods: {
-    top(){
+    calculateTop(){
       let { top } = this.$refs.wrapper.getBoundingClientRect()
       return top + window.scrollY
     },
     _windowScrollHandler(){
-      let top = this.top()
-      if(window.scrollY > top){
+      let top = this.calculateTop()
+      let heightOccupied = this.calculateHeight()
+      if(window.scrollY + heightOccupied > top){
         this.sticky = true
         let { left, width, height } = this.$refs.wrapper.getBoundingClientRect()
         this.left = left + 'px'
         this.width = width + 'px'
         this.height = height + 'px'
+        this.top = heightOccupied + 'px'
       }else{
         this.sticky = false
       }
+    },
+    calculateHeight(){
+      let stickyList = document.querySelectorAll('.z-view-sticky.sticky')
+      let heightOccupied = 0
+      for(let i = 0; i < stickyList.length; i++){
+        let node = stickyList[i]
+        if(node === this.$refs.sticky){
+          break
+        }
+        let { height } = node.getBoundingClientRect()
+        heightOccupied += height
+      }
+      return heightOccupied
+
     }
   }
 }
@@ -54,10 +71,8 @@ export default {
 
 <style scoped lang="scss">
 .z-view-sticky-wrapper {
-  /*display: inline-block;*/
 }
 .z-view-sticky {
-  border: 1px solid red;
   &.sticky {
     position: fixed;
     top: 0;
