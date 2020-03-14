@@ -49,6 +49,10 @@ export default {
         this.top = heightOccupied + 'px'
       }else{
         this.sticky = false
+        this.left = undefined
+        this.width =  undefined
+        this.height = undefined
+        this.top = undefined
       }
     },
     calculateHeight(){
