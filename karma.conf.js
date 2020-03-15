@@ -6,7 +6,6 @@ module.exports = function(config) {
     // 这里设置了就不用代码里面再引入 sinon-chai
     // frameworks: ['mocha', 'sinon-chai',
 
-    // 这里设置为 dist/**/*.spec.js ？
     files: ['tests/**/*.spec.js'],
 
     preprocessors: {
@@ -14,9 +13,15 @@ module.exports = function(config) {
     },
 
     webpack: webpackConfig,
-
-    reporters: ['spec'],
-
+    reporters: ['spec', 'coverage'],
+    coverageReporter: {
+      dir: './coverage',
+      reporters: [
+        { type: 'lcov', subdir: '.' },
+        { type: 'text-summary' }
+      ]
+    },
+    autoWatch: true,
     browsers: ['ChromeHeadless']
   })
 }
