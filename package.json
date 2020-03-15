@@ -16,6 +16,18 @@
     "deploy": "yarn build-example && sh ./deploy-gh-pages.sh"
   },
   "main": "dist/zeroview.umd.min.js",
+  "files": [
+    "src/components",
+    "src/directives",
+    "src/index.js",
+    "src/style.scss",
+    "vue.config.js",
+    "babel.config.js",
+    "README.md",
+    "dist/zeroview.common.js",
+    "dist/zeroview.css",
+    "dist/zeroview.umd.js"
+  ],
   "dependencies": {
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
@@ -55,6 +67,9 @@
     "plugins": {
       "autoprefixer": {}
     }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "browserslist": [
     "> 1%",
