@@ -1,56 +1,115 @@
 <template>
-  <div class="app">
-    <p>段落 1</p>
-    <p>段落 1</p>
-    <p>段落 1</p>
-    <p>段落 3</p>
-    <z-view-sticky>
-      <p class="sticky-p">滑动页面查看吸顶效果</p>
-    </z-view-sticky>
-    <p>段落 1</p>
-    <p>段落 2</p>
-    <p>段落 3</p>
-    <p>段落 4</p>
-    <z-view-sticky>
-      <p class="sticky-p" style="background: pink; margin-top: 10px;">滑动页面查看吸顶效果</p>
-    </z-view-sticky>
-    <p>段落 5</p>
-    <p>段落 6</p>
-    <p>段落 7</p>
-    <p>段落 8</p>
-    <z-view-sticky>
-      <p class="sticky-p" style="background: lightgreen; margin-top: 10px;">滑动页面查看吸顶效果</p>
-    </z-view-sticky>
-    <p>段落 2</p>
-    <p>段落 3</p>
-    <p>段落 2</p>
-    <p>段落 3</p>
-    <p>段落 2</p>
-    <p>段落 9</p>
-    <p>段落 10</p>
-    <p>段落 1</p>
-    <p>段落 1</p>
-    <p>段落 2</p>
-    <p>段落 3</p>
-    <p>段落 4</p>
-    <p>段落 5</p>
-    <p>段落 6</p>
-    <p>段落 7</p>
-    <p>段落 8</p>
-    <p>段落 2</p>
-    <p>段落 3</p>
-    <p>段落 4</p>
-    <p>段落 5</p>
-    <p>段落 6</p>
-    <p>段落 7</p>
-    <p>段落 8</p>
-  </div>
+   <div id="app">
+     <jsx-test></jsx-test>
+     <z-view-table :data-source="dataSource" :columns="columns"></z-view-table>
+   </div>
 </template>
 
 
 <script>
+import JsxTest from "./JsxTest";
 export default{
-
+  components: {
+    JsxTest
+  },
+  data(){
+    return {
+      dataSource:[
+        {
+          'id': 1,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 2,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 3,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 4,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 5,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 6,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 7,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 8,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 9,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 10,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 11,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 12,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+        {
+          'id': 13,
+          'name': '张三',
+          'address': 'China',
+          'score': '100'
+        },
+      ],
+      columns:[
+        {
+        index: 'name',
+        text: 'name'
+        },
+        {
+        index: 'address',
+        text: 'address'
+        },
+        {
+        index: 'score',
+        text: 'score'
+        }
+      ]
+    }
+  }
 };
 </script>
 
@@ -74,14 +133,8 @@ ul,
 ol {
   list-style: none;
 }
-.app {
+#app {
   padding: 40px;
-  border: 1px solid red;
-}
-.sticky-p {
-  background: lightblue;
-  padding: 10px 0;
-  text-align: center;
 }
 
 </style>>
