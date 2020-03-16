@@ -16,6 +16,13 @@
       },
       width: {
         type: Number
+      },
+      sorter: {
+        type: Function
+      },
+      sortDirection: {
+        type: String,
+
       }
     }
   }
