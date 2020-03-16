@@ -37,7 +37,7 @@
                 </span>
               </div>
             </th>
-            <th ref="actionHeader" v-if="$scopedSlots.default">操作</th>
+<!--            <th ref="actionHeader" v-if="$scopedSlots.default">操作</th>-->
           </tr>
         </thead>
         <tbody>
@@ -76,11 +76,11 @@
                   {{dataItem[column.index]}}
                 </template>
               </td>
-              <td v-if="$scopedSlots.default">
-                <div ref="actions" style="display: inline-block">
-                  <slot :item="dataItem" />
-                </div>
-              </td>
+<!--              <td v-if="$scopedSlots.default">-->
+<!--                <div ref="actions" style="display: inline-block">-->
+<!--                  <slot :item="dataItem" />-->
+<!--                </div>-->
+<!--              </td>-->
             </tr>
             <tr
               :key="`${dataItem.id}-expand-key`"
@@ -274,8 +274,14 @@ export default {
       });
     },
     onSort(column) {
+      console.log('onSort')
+      console.log(column)
       let { index, sorter, sortDirection } = column;
+      console.log(index)
+      console.log(this.sortMap)
       let columnSort = this.sortMap[index];
+      console.log('columnSort')
+      console.log(columnSort)
       let { direction } = columnSort;
       if (!direction) {
         columnSort.direction = "asc";
@@ -316,58 +322,61 @@ export default {
     isExpand(id) {
       return this.expandIds.indexOf(id) >= 0;
     },
-    updateActionColWidth() {
-      console.log(this.$refs.actions)
-      if(!this.$refs.actions && !this.$refs.actions[0]){
-       return
-      }
-      console.log(111)
-      let div = this.$refs.actions[0]; // 只取第一行
-      let { width } = div.getBoundingClientRect();
-      let parent = div.parentNode;
-      let paddingLeft = getComputedStyle(parent).getPropertyValue(
-        "padding-left"
-      );
-      let paddingRight = getComputedStyle(parent).getPropertyValue(
-        "padding-right"
-      );
-      let borderLeftWidth = getComputedStyle(parent).getPropertyValue(
-        "border-left-width"
-      );
-      let borderRightWidth = getComputedStyle(parent).getPropertyValue(
-        "border-right-width"
-      );
-      console.log(paddingLeft, paddingRight, borderLeftWidth, borderRightWidth);
-      let colWidth =
-        width +
-        parseInt(paddingRight) +
-        parseInt(paddingLeft) +
-        parseInt(borderLeftWidth) +
-        parseInt(borderRightWidth);
-      this.$refs.actionHeader.style.width = colWidth + "px";
-      this.$refs.actions.map(div => {
-        div.parentNode.style.width = colWidth + "px";
-      });
-    }
+    // updateActionColWidth() {
+    //   console.log(this.$refs.actions)
+    //   if(!this.$refs.actions && !this.$refs.actions[0]){
+    //    return
+    //   }
+    //   console.log(111)
+    //   let div = this.$refs.actions[0]; // 只取第一行
+    //   let { width } = div.getBoundingClientRect();
+    //   let parent = div.parentNode;
+    //   let paddingLeft = getComputedStyle(parent).getPropertyValue(
+    //     "padding-left"
+    //   );
+    //   let paddingRight = getComputedStyle(parent).getPropertyValue(
+    //     "padding-right"
+    //   );
+    //   let borderLeftWidth = getComputedStyle(parent).getPropertyValue(
+    //     "border-left-width"
+    //   );
+    //   let borderRightWidth = getComputedStyle(parent).getPropertyValue(
+    //     "border-right-width"
+    //   );
+    //   console.log(paddingLeft, paddingRight, borderLeftWidth, borderRightWidth);
+    //   let colWidth =
+    //     width +
+    //     parseInt(paddingRight) +
+    //     parseInt(paddingLeft) +
+    //     parseInt(borderLeftWidth) +
+    //     parseInt(borderRightWidth);
+    //   this.$refs.actionHeader.style.width = colWidth + "px";
+    //   this.$refs.actions.map(div => {
+    //     div.parentNode.style.width = colWidth + "px";
+    //   });
+    // }
   },
   created() {
     if (this.dataSource.length > 0) {
       this.copyDataSource = JSON.parse(JSON.stringify(this.dataSource));
     }
-    this.initSortMap();
   },
   mounted() {
     this.columns = this.$slots.default.map(node => {
-      let {text, index, width, sorter} = node.componentOptions.propsData
-      let render = node.data.scopedSlots && node.data.scopedSlots.default
-      return {text, index, width, sorter, render}
+      let render = node.data && node.data.scopedSlots && node.data.scopedSlots.default
+      if(node.componentOptions && node.componentOptions.propsData){
+        let { text, index, width, sorter, sortDirection } = node.componentOptions.propsData
+        return { text, index, width, sorter, sortDirection, render }
+      }
+      return { render }
     })
+    this.initSortMap();
     if (this.fixedHeader) {
       this.makeFixedHeaderStyle();
     }
-    if (this.$scopedSlots.default) {
-      this.updateActionColWidth();
-    }
+    // if (this.$scopedSlots.default) {
+    //   this.updateActionColWidth();
+    // }
   }
 };
 </script>

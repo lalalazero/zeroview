@@ -2,22 +2,16 @@
    <div id="app">
      <z-view-table :data-source="dataSource">
        <z-view-table-column index="name" text="姓名"></z-view-table-column>
-       <z-view-table-column index="address" text="地址">
+       <z-view-table-column index="score" text="分数"></z-view-table-column>
+       <z-view-table-column index="action" text="操作">
          <template slot-scope="props">
-           <span style="color: blue">{{ props.value }}</span>
-         </template>
+           <div>
+             {{ props }}
+             <button @click="edit(`${props.value}`)">edit</button>
+             <button @click="view(`${props.value}`)">view</button>
+           </div>
+           </template>
        </z-view-table-column>
-       <z-view-table-column index="score" text="分数">
-         <template slot-scope="props">
-           <a :href="`/user/${props.value}`" style="color: red">{{ props.value }}</a>
-         </template>
-       </z-view-table-column>
-       <template slot-scope="scope">
-         <div style="minWidth: 80px">
-           <button @click="edit(scope.item)" style="color: blue">编辑</button>
-           <button @click="view(scope.item)" style="color: blue">查看</button>
-         </div>
-       </template>
      </z-view-table>
    </div>
 </template>
