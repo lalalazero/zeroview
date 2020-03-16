@@ -1,17 +1,30 @@
 <template>
    <div id="app">
-     <jsx-test></jsx-test>
-     <z-view-table :data-source="dataSource" :columns="columns"></z-view-table>
+     <z-view-table :data-source="dataSource">
+       <z-view-table-column index="name" text="姓名"></z-view-table-column>
+       <z-view-table-column index="address" text="地址">
+         <template slot-scope="props">
+           <span style="color: blue">{{ props.value }}</span>
+         </template>
+       </z-view-table-column>
+       <z-view-table-column index="score" text="分数">
+         <template slot-scope="props">
+           <a :href="`/user/${props.value}`" style="color: red">{{ props.value }}</a>
+         </template>
+       </z-view-table-column>
+       <template slot-scope="scope">
+         <div style="minWidth: 80px">
+           <button @click="edit(scope.item)" style="color: blue">编辑</button>
+           <button @click="view(scope.item)" style="color: blue">查看</button>
+         </div>
+       </template>
+     </z-view-table>
    </div>
 </template>
 
 
 <script>
-import JsxTest from "./JsxTest";
 export default{
-  components: {
-    JsxTest
-  },
   data(){
     return {
       dataSource:[
@@ -94,20 +107,15 @@ export default{
           'score': '100'
         },
       ],
-      columns:[
-        {
-        index: 'name',
-        text: 'name'
-        },
-        {
-        index: 'address',
-        text: 'address'
-        },
-        {
-        index: 'score',
-        text: 'score'
-        }
-      ]
+
+    }
+  },
+  methods: {
+    edit(item){
+      alert('edit:'+item.name)
+    },
+    view(item){
+      alert('view:'+item.name)
     }
   }
 };

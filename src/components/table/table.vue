@@ -68,7 +68,14 @@
                 :key="column.index"
                 :style="{width: column.width + 'px'}"
                 v-for="(column) in columns"
-              >{{dataItem[column.index]}}</td>
+              >
+                <template v-if="column.render">
+                  <vnodes :vnodes="column.render({ value: dataItem[column.index] })"></vnodes>
+                </template>
+                <template v-else>
+                  {{dataItem[column.index]}}
+                </template>
+              </td>
               <td v-if="$scopedSlots.default">
                 <div ref="actions" style="display: inline-block">
                   <slot :item="dataItem" />
@@ -104,21 +111,24 @@
 </template>
 <script>
 import Icon from "../icon/icon.vue";
-import { get } from "https";
 export default {
   name: "zViewTable",
   components: {
-    zViewIcon: Icon
+    zViewIcon: Icon,
+    vnodes: {
+      functional: true,
+      render: (h, context) => context.props.vnodes
+    }
   },
   props: {
     loading: {
       type: Boolean,
       default: false
     },
-    columns: {
-      type: Array,
-      default: () => []
-    },
+    // columns: {
+    //   type: Array,
+    //   default: () => []
+    // },
     dataSource: {
       type: Array,
       default: () => [],
@@ -203,7 +213,8 @@ export default {
       sortDirection: "",
       copyDataSource: [],
       sortMap: {},
-      expandIds: []
+      expandIds: [],
+      columns: []
     };
   },
   watch: {
@@ -306,9 +317,13 @@ export default {
       return this.expandIds.indexOf(id) >= 0;
     },
     updateActionColWidth() {
+      console.log(this.$refs.actions)
+      if(!this.$refs.actions && !this.$refs.actions[0]){
+       return
+      }
+      console.log(111)
       let div = this.$refs.actions[0]; // 只取第一行
       let { width } = div.getBoundingClientRect();
-      console.log(width);
       let parent = div.parentNode;
       let paddingLeft = getComputedStyle(parent).getPropertyValue(
         "padding-left"
@@ -329,7 +344,6 @@ export default {
         parseInt(paddingLeft) +
         parseInt(borderLeftWidth) +
         parseInt(borderRightWidth);
-      console.log(colWidth);
       this.$refs.actionHeader.style.width = colWidth + "px";
       this.$refs.actions.map(div => {
         div.parentNode.style.width = colWidth + "px";
@@ -343,6 +357,11 @@ export default {
     this.initSortMap();
   },
   mounted() {
+    this.columns = this.$slots.default.map(node => {
+      let {text, index, width, sorter} = node.componentOptions.propsData
+      let render = node.data.scopedSlots && node.data.scopedSlots.default
+      return {text, index, width, sorter, render}
+    })
     if (this.fixedHeader) {
       this.makeFixedHeaderStyle();
     }
