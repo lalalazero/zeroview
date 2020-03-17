@@ -70,7 +70,7 @@
                 v-for="(column) in columns"
               >
                 <template v-if="column.render">
-                  <vnodes :vnodes="column.render({ value: dataItem[column.index] })"></vnodes>
+                  <vnodes :vnodes="column.render({ value: dataItem[column.index], item: dataItem })"></vnodes>
                 </template>
                 <template v-else>
                   {{dataItem[column.index]}}

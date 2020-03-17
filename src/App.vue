@@ -2,15 +2,19 @@
    <div id="app">
      <z-view-table :data-source="dataSource">
        <z-view-table-column index="name" text="姓名"></z-view-table-column>
-       <z-view-table-column index="score" text="分数"></z-view-table-column>
-       <z-view-table-column index="action" text="操作">
+       <z-view-table-column index="score" text="分数">
          <template slot-scope="props">
-           <div>
-             {{ props }}
-             <button @click="edit(`${props.value}`)">edit</button>
-             <button @click="view(`${props.value}`)">view</button>
-           </div>
-           </template>
+           <span style="color: red">{{ props.value }}</span>
+         </template>
+       </z-view-table-column>
+       <z-view-table-column index="action" text="操作">
+        <template slot-scope="props">
+          <div>
+            <!-- {{ props }} -->
+            <z-view-button @click="edit(props.item)">edit</z-view-button>
+            <z-view-button @click="view(props.item)">view</z-view-button>
+          </div>
+         </template>
        </z-view-table-column>
      </z-view-table>
    </div>
@@ -106,10 +110,10 @@ export default{
   },
   methods: {
     edit(item){
-      alert('edit:'+item.name)
+      alert('edit:'+item.id)
     },
     view(item){
-      alert('view:'+item.name)
+      alert('view:'+item.id)
     }
   }
 };
