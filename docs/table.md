@@ -440,8 +440,8 @@ export default {
 :::
 
 
-#### 可操作列
-:::demo 通过 column 定制操作按钮 
+#### 可定制的操作列
+:::demo 通过 table-column 定制操作列
 ```html
 <z-view-table :data-source="dataSource" >
   <z-view-table-column index="name" text="姓名"></z-view-table-column>
@@ -451,8 +451,8 @@ export default {
   <z-view-table-column index="action" text="操作">
     <template slot-scope="props">
      <div>
-       <button @click="edit(props)">edit</button>
-       <button @click="view(props)">view</button>
+       <button @click="edit(props.item)">edit</button>
+       <button @click="view(props.item)">view</button>
      </div> 
     </template>
   </z-view-table-column>
