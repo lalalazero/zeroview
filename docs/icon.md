@@ -18,7 +18,8 @@
 <z-view-icon name="filled-up" />
 <z-view-icon name="filled-down" />
 <z-view-icon name="download" />
-
+<z-view-icon name="next-double" />
+<z-view-icon name="prev-double" />
 ```
 :::
 
