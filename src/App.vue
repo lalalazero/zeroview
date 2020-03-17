@@ -1,6 +1,7 @@
 <template>
    <div id="app">
      <z-view-date-picker ></z-view-date-picker>
+     <p>其他内容</p>
    </div>
 </template>
 
