@@ -6,7 +6,7 @@
         <Icon name="prev-double" @click="clickPrevYear"/><Icon name="left" @click="clickPrevMonth" class="z-view-date-picker-nav-icon-left"/><span @click="onClickYear">{{ currentYear }}年</span><span @click="onClickMonth">{{ currentMonth }}月</span><Icon name="right" @click="clickNextMonth" class="z-view-date-picker-nav-icon-right" /><Icon @click="clickNextYear" name="next-double" />
       </div>
       <div class="z-view-date-picker-content-wrapper">
-        <div v-if="mode === 'day'" class="z-view-date-picker-content-days-panel">
+        <div v-show="mode === 'day'" class="z-view-date-picker-content-days-panel">
           <ul class="z-view-date-picker-content-days-panel-weekends">
             <li v-for="weekday in 7" :key="weekday" class="z-view-date-picker-weekday-cell">
               {{ WEEKDAYS[weekday - 1] }}
@@ -21,8 +21,16 @@
             </li>
           </ul>
         </div>
-        <div v-if="mode === 'month'" class="z-view-date-picker-content-months-panel">月</div>
-        <div v-if="mode === 'year'" class="z-view-date-picker-content-years-panel">年</div>
+        <div v-show="mode === 'month'" class="z-view-date-picker-content-months-panel">
+          <ul>
+            <li v-for="month in 12" :key="month" @click="clickMonthCell(month)">{{ month }}月</li>
+          </ul>
+        </div>
+        <div v-show="mode === 'year'" class="z-view-date-picker-content-years-panel">
+          <ul>
+            <li v-for="year in 10" :key="year" @click="clickYearCell(year)">{{ year }}年</li>
+          </ul>
+        </div>
       </div>
       <div class="z-view-date-picker-footer"></div>
     </div>
@@ -75,6 +83,7 @@ export default {
     },
     onBlur(){
       this.popVisible = false
+      console.log('blur')
     },
     onClickMonth(){
       this.mode = 'month'
@@ -163,7 +172,18 @@ export default {
     clickDateCell(date){
       if(!(date instanceof Date)) return
       this.selected = date
-      this.popVisible = false
+      console.log('click date cell')
+    },
+    clickMonthCell(month){
+      if(!(this.date instanceof Date)) return
+      let newDate = new Date(this.date.getTime())
+      newDate.setMonth(month - 1)
+      this.date = newDate
+      this.days = this.getDays()
+      this.mode = 'day'
+    },
+    clickYearCell(){
+      this.mode = 'month'
     },
     clickNextMonth(){
       let newDate = new Date(this.date.getTime())
