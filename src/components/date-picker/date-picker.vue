@@ -3,7 +3,13 @@
     <Input @focus="onFocus" :value="formattedValue"/>
     <div class="z-view-date-picker-panel" v-if="popVisible">
       <div class="z-view-date-picker-nav">
-        <Icon name="prev-double" @click="clickPrevYear"/><Icon name="left" @click="clickPrevMonth" class="z-view-date-picker-nav-icon-left"/><span @click="onClickYear">{{ currentYear }}年</span><span @click="onClickMonth">{{ currentMonth }}月</span><Icon name="right" @click="clickNextMonth" class="z-view-date-picker-nav-icon-right" /><Icon @click="clickNextYear" name="next-double" />
+        <Icon name="prev-double" @click="clickPrevYear"/>
+        <Icon v-show="mode === 'day'" name="left" @click="clickPrevMonth" class="z-view-date-picker-nav-icon-left"/>
+        <span v-show="mode === 'day' || mode === 'month'" @click="onClickYear">{{ currentYear }}年</span>
+        <span v-show="mode === 'year'">{{ yearRange }}</span>
+        <span v-show="mode === 'day'" @click="onClickMonth">{{ currentMonth }}月</span>
+        <Icon v-show="mode === 'day'" name="right" @click="clickNextMonth" class="z-view-date-picker-nav-icon-right" />
+        <Icon @click="clickNextYear" name="next-double" />
       </div>
       <div class="z-view-date-picker-content-wrapper">
         <div v-show="mode === 'day'" class="z-view-date-picker-content-days-panel">
@@ -23,7 +29,11 @@
         </div>
         <div v-show="mode === 'month'" class="z-view-date-picker-content-months-panel">
           <ul>
-            <li v-for="month in 12" :key="month" @click="clickMonthCell(month)">{{ month }}月</li>
+            <li v-for="i in 4" :key="i" >
+              <span v-for="j in 3" class="z-view-date-picker-month-cell"
+                    :class="{'z-view-date-picker-cell-selected':((i - 1) * 3 + j) === currentMonth}"
+                    @click="clickMonthCell((i - 1) * 3 + j)">{{ (i - 1) * 3 + j }}月</span>
+            </li>
           </ul>
         </div>
         <div v-show="mode === 'year'" class="z-view-date-picker-content-years-panel">
@@ -54,9 +64,11 @@ export default {
       mode: 'day',
       date: new Date(),
       days: [],
+      years: [],
       WEEKDAYS,
       today: new Date(),
-      selected: new Date()
+      selected: new Date(),
+      yearRange: '2020-2099',
     }
   },
   computed: {
@@ -90,6 +102,7 @@ export default {
     },
     onClickYear(){
       this.mode = 'year'
+
     },
     getCurrentMonthDays(){
       let currentMonthDays = []
@@ -256,6 +269,38 @@ export default {
     background: #fff;
     z-index: 3;
     border: 1px solid #000;
+    /*height: 265px;*/
+  }
+  &-content-wrapper {
+    height: 244px;
+  }
+  &-content-months-panel {
+    ul {
+      /*column-count: 3;*/
+      /*display: flex;*/
+      /*justify-content: space-evenly;*/
+      /*flex-wrap: wrap;*/
+      li {
+        &:first-child {
+          margin-top: 15px;
+        }
+        padding: 17px 0;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        span {
+          width: 60px;
+          height: 24px;
+          padding: 2px 0;
+          display: inline-block;
+          text-align: center;
+          &:hover {
+            background: #ccc;
+          }
+        }
+      }
+    }
+
   }
   &-content-days-panel {
     padding: 10px 0;
@@ -306,9 +351,10 @@ export default {
       }
     }
     &-selected{
+      background: $--primary-color;
+      border: none;
+      color: #fff;
       .z-view-date-picker-day-cell {
-        background: $--primary-color;
-        border: none;
         color: #fff;
       }
     }
