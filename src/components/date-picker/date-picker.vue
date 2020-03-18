@@ -1,9 +1,9 @@
 <template>
   <div class="z-view-date-picker" v-click-out-side="onBlur">
-    <Input @focus="onFocus"/>
+    <Input @focus="onFocus" :value="formattedValue"/>
     <div class="z-view-date-picker-panel" v-if="popVisible">
       <div class="z-view-date-picker-nav">
-        <Icon name="prev-double" /><Icon name="left" /><span @click="onClickYear">2020年</span><span @click="onClickMonth">8月</span><Icon name="right" /><Icon name="next-double" />
+        <Icon name="prev-double" @click="clickPrevYear"/><Icon name="left" @click="clickPrevMonth" class="z-view-date-picker-nav-icon-left"/><span @click="onClickYear">{{ currentYear }}年</span><span @click="onClickMonth">{{ currentMonth }}月</span><Icon name="right" @click="clickNextMonth" class="z-view-date-picker-nav-icon-right" /><Icon @click="clickNextYear" name="next-double" />
       </div>
       <div class="z-view-date-picker-content-wrapper">
         <div v-if="mode === 'day'" class="z-view-date-picker-content-days-panel">
@@ -52,7 +52,22 @@ export default {
     }
   },
   computed: {
-
+    formattedValue(){
+      if(this.selected instanceof Date){
+        const { year, month, day } = getYearMonthDate(this.selected)
+        return `${year}/${month+1}/${day}`
+      }
+    },
+    currentYear(){
+      if(this.date instanceof Date){
+        return this.date.getFullYear()
+      }
+    },
+    currentMonth(){
+      if(this.date instanceof Date){
+        return this.date.getMonth() + 1
+      }
+    }
   },
   methods: {
     onFocus(){
@@ -149,11 +164,35 @@ export default {
       if(!(date instanceof Date)) return
       this.selected = date
       this.popVisible = false
+    },
+    clickNextMonth(){
+      let newDate = new Date(this.date.getTime())
+      newDate.setMonth(newDate.getMonth() + 1)
+      this.date = newDate
+      this.days = this.getDays()
+    },
+    clickNextYear(){
+      let newDate = new Date(this.date.getTime())
+      newDate.setFullYear(newDate.getFullYear() + 1)
+      this.date = newDate
+      this.days = this.getDays()
+    },
+    clickPrevMonth(){
+      let newDate = new Date(this.date.getTime())
+      newDate.setMonth(newDate.getMonth() - 1)
+      this.date = newDate
+      this.days = this.getDays()
+
+    },
+    clickPrevYear(){
+      let newDate = new Date(this.date.getTime())
+      newDate.setFullYear(newDate.getFullYear() - 1)
+      this.date = newDate
+      this.days = this.getDays()
     }
   },
   mounted(){
     this.days = this.getDays()
-    console.log(this.days)
   },
 }
 </script>
@@ -161,6 +200,35 @@ export default {
 .z-view-date-picker {
   display: inline-block;
   border: 1px solid red;
+  &-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    > span {
+      user-select: none;
+      &:hover {
+        cursor: pointer;
+        color: $--primary-color;
+      }
+    }
+    svg {
+      fill: #ccc;
+      &:hover {
+        cursor: pointer;
+        fill: $bg-black;
+      }
+    }
+    &-icon-left {
+      margin-left: -25px;
+      /*transform: scale(1.2);*/
+    }
+    &-icon-right {
+      margin-right: -25px;
+      /*transform: scale(1.2);*/
+    }
+  }
   &-panel {
     padding: 5px 10px;
     width: 280px;
@@ -170,6 +238,7 @@ export default {
     border: 1px solid #000;
   }
   &-content-days-panel {
+    padding: 10px 0;
     &-weekends {
       display: flex;
       justify-content: space-evenly;
@@ -185,6 +254,7 @@ export default {
   &-weekday-cell {
     width: 36px;
     height: 30px;
+    user-select: none;
   }
   &-day-cell {
     width: 24px;
