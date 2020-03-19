@@ -1,15 +1,15 @@
 <template>
   <div class="z-view-date-picker" v-click-out-side="onBlur">
     <Input @focus="onFocus" :value="formattedValue"/>
-    <div class="z-view-date-picker-panel" v-if="popVisible">
+    <div class="z-view-date-picker-panel" v-show="popVisible">
       <div class="z-view-date-picker-nav">
-        <Icon name="prev-double" @click="clickPrevYear"/>
-        <Icon v-show="mode === 'day'" name="left" @click="clickPrevMonth" class="z-view-date-picker-nav-icon-left"/>
+        <Icon name="prev-double" @click="clickYearNav('prev')"/>
+        <Icon v-show="mode === 'day'" name="left" @click="clickMonthNav('prev')" class="z-view-date-picker-nav-icon-left"/>
         <span v-show="mode === 'day' || mode === 'month'" @click="onClickYear">{{ selectedYear }}年</span>
         <span v-show="mode === 'year'">{{ yearRange }}</span>
         <span v-show="mode === 'day'" @click="onClickMonth">{{ selectedMonth }}月</span>
-        <Icon v-show="mode === 'day'" name="right" @click="clickNextMonth" class="z-view-date-picker-nav-icon-right" />
-        <Icon @click="clickNextYear" name="next-double" />
+        <Icon v-show="mode === 'day'" name="right" @click="clickMonthNav('next')" class="z-view-date-picker-nav-icon-right" />
+        <Icon @click="clickYearNav('next')" name="next-double" />
       </div>
       <div class="z-view-date-picker-content-wrapper">
         <div v-show="mode === 'day'" class="z-view-date-picker-content-days-panel">
@@ -65,16 +65,23 @@ export default {
     return {
       popVisible: false,
       mode: 'day',
-      date: new Date(),
+      date: undefined,
       days: [],
       years: [],
       WEEKDAYS,
       today: new Date(),
-      selected: new Date(),
+      selected: undefined,
       selectedMonth: undefined,
       selectedYear: undefined,
-      currentMonth: new Date().getMonth(),
-      currentYear: new Date().getFullYear()
+    }
+  },
+  props: {
+    value: {
+      type: [Date, String],
+      validator(value){
+        // 有效的正则检验日期格式太可怕了，我就不写正则校验了 = =
+        return true
+      }
     }
   },
   computed: {
@@ -186,8 +193,9 @@ export default {
       let { year, month, day } = getYearMonthDate(date)
       this.selectedYear = year
       this.selectedMonth = month + 1
-      console.log('click date cell')
-      console.log(`${year}-${month+1}-${day}`)
+      this.$emit('update:value',this.formattedValue)
+      this.popVisible = false
+
     },
     clickMonthCell(month){
       if(!(this.date instanceof Date)) return
@@ -203,64 +211,65 @@ export default {
       this.date.setFullYear(year)
       this.mode = 'month'
     },
-    clickNextMonth(){
-      let newDate = new Date(this.date.getTime())
-      newDate.setMonth(newDate.getMonth() + 1)
+    clickMonthNav(type){
+      if(type === 'next'){
+        let newDate = new Date(this.date.getTime())
+        newDate.setMonth(newDate.getMonth() + 1)
+        this.updateDate(newDate)
+      }else {
+        let newDate = new Date(this.date.getTime())
+        newDate.setMonth(newDate.getMonth() - 1)
+        this.updateDate(newDate)
+      }
+    },
+    clickYearNav(type){
+      if(this.mode === 'year'){
+        this.selectedYear = type === 'next' ? this.selectedYear + 10 : this.selectedYear - 10
+        return
+      }else{
+        let newDate = new Date(this.date.getTime())
+        let temp = type === 'next' ? newDate.getFullYear() + 1 : newDate.getFullYear() - 1
+        newDate.setFullYear(temp)
+        this.updateDate(newDate)
+      }
+    },
+    updateDate(newDate){
       this.date = newDate
       let { year, month } = getYearMonthDate(newDate)
       this.selectedYear = year
       this.selectedMonth = month + 1
       this.days = this.getDays()
     },
-    clickNextYear(){
-      if(this.mode === 'year'){
-        this.selectedYear += 10
+    init(){
+      this.days = this.getDays()
+      let { year, month } = getYearMonthDate(this.date)
+      this.selectedYear = year
+      this.selectedMonth = month + 1
+    },
+    checkValue(){
+      if(!this.value) {
+        this.date = new Date()
         return
       }
-      let newDate = new Date(this.date.getTime())
-      newDate.setFullYear(newDate.getFullYear() + 1)
-      this.date = newDate
-      let { year, month } = getYearMonthDate(newDate)
-      this.selectedYear = year
-      this.selectedMonth = month + 1
-      this.days = this.getDays()
-    },
-    clickPrevMonth(){
-      let newDate = new Date(this.date.getTime())
-      newDate.setMonth(newDate.getMonth() - 1)
-      this.date = newDate
-      let { year, month } = getYearMonthDate(newDate)
-      this.selectedYear = year
-      this.selectedMonth = month + 1
-      this.days = this.getDays()
-
-    },
-    clickPrevYear(){
-      if(this.mode === 'year'){
-        this.selectedYear -= 10
-        return
+      if(typeof this.value === 'string'){
+        this.date = new Date(this.value)
+        this.selected = new Date(this.value)
+      }else if(this.value instanceof Date){
+        this.date = new Date(this.value.getTime())
+        this.selected = new Date(this.value.getTime())
       }
-      let newDate = new Date(this.date.getTime())
-      newDate.setFullYear(newDate.getFullYear() - 1)
-      this.date = newDate
-      let { year, month } = getYearMonthDate(newDate)
-      this.selectedYear = year
-      this.selectedMonth = month + 1
-      this.days = this.getDays()
     }
   },
   mounted(){
-    this.days = this.getDays()
-    let { year, month } = getYearMonthDate(this.date)
-    this.selectedYear = year
-    this.selectedMonth = month + 1
+    this.checkValue()
+    this.init()
   },
 }
 </script>
 <style lang="scss" scoped>
 .z-view-date-picker {
   display: inline-block;
-  border: 1px solid red;
+  // border: 1px solid red;
   &-nav {
     display: flex;
     justify-content: space-between;
@@ -296,8 +305,7 @@ export default {
     position: absolute;
     background: #fff;
     z-index: 3;
-    border: 1px solid #000;
-    /*height: 265px;*/
+    @extend %box-shadow;
   }
   &-content-wrapper {
     height: 244px;
