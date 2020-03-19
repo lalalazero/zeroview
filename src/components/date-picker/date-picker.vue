@@ -5,9 +5,9 @@
       <div class="z-view-date-picker-nav">
         <Icon name="prev-double" @click="clickPrevYear"/>
         <Icon v-show="mode === 'day'" name="left" @click="clickPrevMonth" class="z-view-date-picker-nav-icon-left"/>
-        <span v-show="mode === 'day' || mode === 'month'" @click="onClickYear">{{ currentYear }}年</span>
+        <span v-show="mode === 'day' || mode === 'month'" @click="onClickYear">{{ selectedYear }}年</span>
         <span v-show="mode === 'year'">{{ yearRange }}</span>
-        <span v-show="mode === 'day'" @click="onClickMonth">{{ currentMonth }}月</span>
+        <span v-show="mode === 'day'" @click="onClickMonth">{{ selectedMonth }}月</span>
         <Icon v-show="mode === 'day'" name="right" @click="clickNextMonth" class="z-view-date-picker-nav-icon-right" />
         <Icon @click="clickNextYear" name="next-double" />
       </div>
@@ -30,15 +30,18 @@
         <div v-show="mode === 'month'" class="z-view-date-picker-content-months-panel">
           <ul>
             <li v-for="i in 4" :key="i" >
-              <span v-for="j in 3" class="z-view-date-picker-month-cell"
-                    :class="{'z-view-date-picker-cell-selected':((i - 1) * 3 + j) === currentMonth}"
+              <span v-for="j in 3" class="z-view-date-picker-month-cell" :key="j"
                     @click="clickMonthCell((i - 1) * 3 + j)">{{ (i - 1) * 3 + j }}月</span>
             </li>
           </ul>
         </div>
         <div v-show="mode === 'year'" class="z-view-date-picker-content-years-panel">
           <ul>
-            <li v-for="year in 10" :key="year" @click="clickYearCell(year)">{{ year }}年</li>
+            <li v-for="row in 4" :key="row">
+              <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + selectedYear)">
+                 {{ column + (row - 1) * 3 - 2 + selectedYear }}
+               </span>
+            </li>
           </ul>
         </div>
       </div>
@@ -68,7 +71,10 @@ export default {
       WEEKDAYS,
       today: new Date(),
       selected: new Date(),
-      yearRange: '2020-2099',
+      selectedMonth: undefined,
+      selectedYear: undefined,
+      currentMonth: new Date().getMonth(),
+      currentYear: new Date().getFullYear()
     }
   },
   computed: {
@@ -78,15 +84,8 @@ export default {
         return `${year}/${month+1}/${day}`
       }
     },
-    currentYear(){
-      if(this.date instanceof Date){
-        return this.date.getFullYear()
-      }
-    },
-    currentMonth(){
-      if(this.date instanceof Date){
-        return this.date.getMonth() + 1
-      }
+    yearRange(){
+      return `${this.selectedYear}-${this.selectedYear + 9}`
     }
   },
   methods: {
@@ -102,7 +101,6 @@ export default {
     },
     onClickYear(){
       this.mode = 'year'
-
     },
     getCurrentMonthDays(){
       let currentMonthDays = []
@@ -185,47 +183,77 @@ export default {
     clickDateCell(date){
       if(!(date instanceof Date)) return
       this.selected = date
+      let { year, month, day } = getYearMonthDate(date)
+      this.selectedYear = year
+      this.selectedMonth = month + 1
       console.log('click date cell')
+      console.log(`${year}-${month+1}-${day}`)
     },
     clickMonthCell(month){
       if(!(this.date instanceof Date)) return
       let newDate = new Date(this.date.getTime())
       newDate.setMonth(month - 1)
       this.date = newDate
+      this.selectedMonth = month
       this.days = this.getDays()
       this.mode = 'day'
     },
-    clickYearCell(){
+    clickYearCell(year){
+      this.selectedYear = year
+      this.date.setFullYear(year)
       this.mode = 'month'
     },
     clickNextMonth(){
       let newDate = new Date(this.date.getTime())
       newDate.setMonth(newDate.getMonth() + 1)
       this.date = newDate
+      let { year, month } = getYearMonthDate(newDate)
+      this.selectedYear = year
+      this.selectedMonth = month + 1
       this.days = this.getDays()
     },
     clickNextYear(){
+      if(this.mode === 'year'){
+        this.selectedYear += 10
+        return
+      }
       let newDate = new Date(this.date.getTime())
       newDate.setFullYear(newDate.getFullYear() + 1)
       this.date = newDate
+      let { year, month } = getYearMonthDate(newDate)
+      this.selectedYear = year
+      this.selectedMonth = month + 1
       this.days = this.getDays()
     },
     clickPrevMonth(){
       let newDate = new Date(this.date.getTime())
       newDate.setMonth(newDate.getMonth() - 1)
       this.date = newDate
+      let { year, month } = getYearMonthDate(newDate)
+      this.selectedYear = year
+      this.selectedMonth = month + 1
       this.days = this.getDays()
 
     },
     clickPrevYear(){
+      if(this.mode === 'year'){
+        this.selectedYear -= 10
+        return
+      }
       let newDate = new Date(this.date.getTime())
       newDate.setFullYear(newDate.getFullYear() - 1)
       this.date = newDate
+      let { year, month } = getYearMonthDate(newDate)
+      this.selectedYear = year
+      this.selectedMonth = month + 1
       this.days = this.getDays()
     }
   },
   mounted(){
     this.days = this.getDays()
+    let { year, month } = getYearMonthDate(this.date)
+    this.selectedYear = year
+    this.selectedMonth = month + 1
   },
 }
 </script>
@@ -274,12 +302,37 @@ export default {
   &-content-wrapper {
     height: 244px;
   }
+  &-content-years-panel {
+    ul>li {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 17px 0;
+    }
+    ul>li>span {
+      width: 60px;
+      height: 24px;
+      padding: 2px 0;
+      display: inline-block;
+      text-align: center;
+      &:hover {
+        background: #ccc;
+      }
+
+    }
+    ul > li:first-child {
+      >span:first-child {
+        color: #ccc;
+      }
+    }
+    ul > li:last-child {
+      >span:last-child {
+        color: #ccc;
+      }
+    }
+  }
   &-content-months-panel {
     ul {
-      /*column-count: 3;*/
-      /*display: flex;*/
-      /*justify-content: space-evenly;*/
-      /*flex-wrap: wrap;*/
       li {
         &:first-child {
           margin-top: 15px;
@@ -316,6 +369,7 @@ export default {
       }
     }
   }
+
   &-weekday-cell {
     width: 36px;
     height: 30px;
@@ -351,10 +405,9 @@ export default {
       }
     }
     &-selected{
-      background: $--primary-color;
-      border: none;
-      color: #fff;
       .z-view-date-picker-day-cell {
+        background: $--primary-color;
+        border: none;
         color: #fff;
       }
     }
