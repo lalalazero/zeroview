@@ -26,6 +26,7 @@
                 </span>
             </li>
           </ul>
+          <div class="z-view-date-picker-content-days-panel-actions" @click="clickToday()">今天</div>
         </div>
         <div v-show="mode === 'month'" class="z-view-date-picker-content-months-panel">
           <ul>
@@ -240,6 +241,11 @@ export default {
       this.selectedMonth = month + 1
       this.days = this.getDays()
     },
+    clickToday(){
+      this.updateDate(new Date())
+      this.selected = new Date()
+      this.popVisible = false
+    },
     init(){
       this.days = this.getDays()
       let { year, month } = getYearMonthDate(this.date)
@@ -364,7 +370,7 @@ export default {
 
   }
   &-content-days-panel {
-    padding: 10px 0;
+    padding: 6px 0;
     &-weekends {
       display: flex;
       justify-content: space-evenly;
@@ -373,8 +379,21 @@ export default {
       li {
         display: flex;
         justify-content: space-evenly;
-        margin: 2px 0;
+        span {
+          font-size: 14px;
+        }
+        // margin: 2px 0;
       }
+    }
+    &-actions {
+      cursor: pointer;
+      padding: 5px 0;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      color: $--primary-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
