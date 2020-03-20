@@ -1,18 +1,19 @@
 <template>
   <div class="z-view-date-picker" v-click-out-side="onBlur">
     <Input @focus="onFocus" :value="formattedValue"/>
+    {{ x }}
     <div class="z-view-date-picker-panel" v-show="popVisible">
       <div class="z-view-date-picker-nav">
         <Icon name="prev-double" @click="clickYearNav('prev')"/>
-        <Icon v-show="mode === 'day'" name="left" @click="clickMonthNav('prev')" class="z-view-date-picker-nav-icon-left"/>
-        <span v-show="mode === 'day' || mode === 'month'" @click="onClickYear">{{ selectedYear }}年</span>
-        <span v-show="mode === 'year'">{{ yearRange }}</span>
-        <span v-show="mode === 'day'" @click="onClickMonth">{{ selectedMonth }}月</span>
-        <Icon v-show="mode === 'day'" name="right" @click="clickMonthNav('next')" class="z-view-date-picker-nav-icon-right" />
+        <Icon v-show="visiblePanelMode === 'day'" name="left" @click="clickMonthNav('prev')" class="z-view-date-picker-nav-icon-left"/>
+        <span v-show="visiblePanelMode === 'day' || visiblePanelMode === 'month'" @click="onClickYear">{{ x }}年</span>
+        <span v-show="visiblePanelMode === 'year'">{{ yearRange }}</span>
+        <span v-show="visiblePanelMode === 'day'" @click="onClickMonth">{{ selectedMonth }}月</span>
+        <Icon v-show="visiblePanelMode === 'day'" name="right" @click="clickMonthNav('next')" class="z-view-date-picker-nav-icon-right" />
         <Icon @click="clickYearNav('next')" name="next-double" />
       </div>
       <div class="z-view-date-picker-content-wrapper">
-        <div v-show="mode === 'day'" class="z-view-date-picker-content-days-panel">
+        <div v-show="visiblePanelMode === 'day'" class="z-view-date-picker-content-days-panel">
           <ul class="z-view-date-picker-content-days-panel-weekends">
             <li v-for="weekday in 7" :key="weekday" class="z-view-date-picker-weekday-cell">
               {{ WEEKDAYS[weekday - 1] }}
@@ -28,19 +29,21 @@
           </ul>
           <div class="z-view-date-picker-content-days-panel-actions" @click="clickToday()">今天</div>
         </div>
-        <div v-show="mode === 'month'" class="z-view-date-picker-content-months-panel">
+        <div v-show="visiblePanelMode === 'month'" class="z-view-date-picker-content-months-panel">
           <ul>
             <li v-for="i in 4" :key="i" >
               <span v-for="j in 3" class="z-view-date-picker-month-cell" :key="j"
+                    :class="{ 'z-view-date-picker-month-cell-selected': mode === 'month' && selectedMonth == ((i - 1) * 3 + j) }"
                     @click="clickMonthCell((i - 1) * 3 + j)">{{ (i - 1) * 3 + j }}月</span>
             </li>
           </ul>
         </div>
-        <div v-show="mode === 'year'" class="z-view-date-picker-content-years-panel">
+        <div v-show="visiblePanelMode === 'year'" class="z-view-date-picker-content-years-panel">
           <ul>
             <li v-for="row in 4" :key="row">
-              <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + selectedYear)">
-                 {{ column + (row - 1) * 3 - 2 + selectedYear }}
+              <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + x)"
+                 :class="{ 'z-view-date-picker-year-cell-selected': mode === 'year' && selectedYear == (column + (row - 1) * 3 - 2 + x) }" >
+                 {{ column + (row - 1) * 3 - 2 + x }}
                </span>
             </li>
           </ul>
@@ -65,7 +68,8 @@ export default {
   data(){
     return {
       popVisible: false,
-      mode: 'day',
+      visiblePanelMode: 'day',
+      // visiblePanelMode: 'day',
       date: undefined,
       days: [],
       years: [],
@@ -73,27 +77,58 @@ export default {
       today: new Date(),
       selected: undefined,
       selectedMonth: undefined,
-      selectedYear: undefined,
+      // selectedYear: undefined,
+      x: undefined
     }
   },
   props: {
     value: {
       type: [Date, String],
       validator(value){
-        // 有效的正则检验日期格式太可怕了，我就不写正则校验了 = =
         return true
+        // if(this.mode === 'day'){
+        //   if(typeof value === 'number' || value instanceof Date){
+        //     // 如果是字符串类型，直接返回true了，就不做校验了。正则校验太可怕 = =
+        //     return true
+        //   }
+        //   return false
+        // }else{
+        //   return typeof value === 'number' || typeof value === 'number'
+        // }
+      }
+    },
+    mode: {
+      type: String,
+      default: 'day',
+      validator(value){
+        return ['day', 'year', 'month'].indexOf(value) >= 0
       }
     }
   },
   computed: {
     formattedValue(){
+      let formateValue = ''
       if(this.selected instanceof Date){
         const { year, month, day } = getYearMonthDate(this.selected)
-        return `${year}/${month+1}/${day}`
+        if(this.mode === 'day'){
+          formateValue = `${year}/${month+1}/${day}`
+        }else if(this.mode === 'month'){
+          formateValue = `${year}/${month+1}`
+        }else if(this.mode === 'year') {
+          formateValue = `${year}`
+        }
       }
+      return formateValue
+
     },
     yearRange(){
-      return `${this.selectedYear}-${this.selectedYear + 9}`
+      return `${this.x}-${this.x + 9}`
+    },
+    selectedYear(){
+      if(this.selected instanceof Date){
+        return this.selected.getFullYear()
+      }
+      return ''
     }
   },
   methods: {
@@ -105,10 +140,10 @@ export default {
       console.log('blur')
     },
     onClickMonth(){
-      this.mode = 'month'
+      this.visiblePanelMode = 'month'
     },
     onClickYear(){
-      this.mode = 'year'
+      this.visiblePanelMode = 'year'
     },
     getCurrentMonthDays(){
       let currentMonthDays = []
@@ -192,7 +227,7 @@ export default {
       if(!(date instanceof Date)) return
       this.selected = date
       let { year, month, day } = getYearMonthDate(date)
-      this.selectedYear = year
+      this.x = year
       this.selectedMonth = month + 1
       this.$emit('update:value',this.formattedValue)
       this.popVisible = false
@@ -203,14 +238,26 @@ export default {
       let newDate = new Date(this.date.getTime())
       newDate.setMonth(month - 1)
       this.date = newDate
+      this.selected = new Date(newDate)
       this.selectedMonth = month
-      this.days = this.getDays()
-      this.mode = 'day'
+      if(this.mode === 'day'){
+        this.days = this.getDays()
+        this.visiblePanelMode = 'day'
+      }else{
+        this.$emit('update:value',this.formattedValue)
+        this.popVisible = false
+      }
     },
     clickYearCell(year){
-      this.selectedYear = year
-      this.date.setFullYear(year)
-      this.mode = 'month'
+      this.x = year
+      if(this.mode === 'year'){
+         this.selected = new Date(year, 0, 1)
+         this.$emit('update:value',this.formattedValue)
+         this.popVisible = false
+      }else{
+        this.date.setFullYear(year)
+        this.visiblePanelMode = 'month'
+      }
     },
     clickMonthNav(type){
       if(type === 'next'){
@@ -225,7 +272,7 @@ export default {
     },
     clickYearNav(type){
       if(this.mode === 'year'){
-        this.selectedYear = type === 'next' ? this.selectedYear + 10 : this.selectedYear - 10
+        this.x = type === 'next' ? this.x + 10 : this.x - 10
         return
       }else{
         let newDate = new Date(this.date.getTime())
@@ -237,7 +284,7 @@ export default {
     updateDate(newDate){
       this.date = newDate
       let { year, month } = getYearMonthDate(newDate)
-      this.selectedYear = year
+      this.x = year
       this.selectedMonth = month + 1
       this.days = this.getDays()
     },
@@ -246,15 +293,17 @@ export default {
       this.selected = new Date()
       this.popVisible = false
     },
-    init(){
+    initDaysPanel(){
       this.days = this.getDays()
       let { year, month } = getYearMonthDate(this.date)
-      this.selectedYear = year
+      this.x = year
       this.selectedMonth = month + 1
     },
     checkValue(){
+      this.visiblePanelMode = this.mode
       if(!this.value) {
         this.date = new Date()
+        this.initDaysPanel()
         return
       }
       if(typeof this.value === 'string'){
@@ -264,11 +313,11 @@ export default {
         this.date = new Date(this.value.getTime())
         this.selected = new Date(this.value.getTime())
       }
+      this.initDaysPanel()
     }
   },
   mounted(){
     this.checkValue()
-    this.init()
   },
 }
 </script>
@@ -438,6 +487,11 @@ export default {
         color: #fff;
       }
     }
+  }
+  &-month-cell-selected, &-year-cell-selected{
+    background: $--primary-color;
+    border: none;
+    color: #fff;
   }
 
 }
