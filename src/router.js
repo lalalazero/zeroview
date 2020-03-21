@@ -81,6 +81,10 @@ const router = new Router({
     {
       path: '/sticky',
       component: () => import('../docs/sticky.md')
+    },
+    {
+      path: '/datepicker',
+      component: () => import('../docs/datepicker.md')
     }
   ]
 })

@@ -1,7 +1,6 @@
 <template>
   <div class="z-view-date-picker" v-click-out-side="onBlur">
     <Input @focus="onFocus" :value="formattedValue"/>
-    {{ x }}
     <div class="z-view-date-picker-panel" v-show="popVisible">
       <div class="z-view-date-picker-nav">
         <Icon name="prev-double" @click="clickYearNav('prev')"/>

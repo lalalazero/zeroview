@@ -163,6 +163,11 @@
                   <p>Upload</p>
                 </router-link>
               </z-view-menu-item>
+              <z-view-menu-item name="datepicker">
+                <router-link to="/datepicker">
+                  <p>DatePicker</p>
+                </router-link>
+              </z-view-menu-item>
             </z-view-menu-group>
             <z-view-menu-group name="反馈">
               <z-view-menu-item name="popover">
