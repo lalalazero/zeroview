@@ -5,9 +5,9 @@
       <div class="z-view-date-picker-nav">
         <Icon name="prev-double" @click="clickYearNav('prev')"/>
         <Icon v-show="visiblePanelMode === 'day'" name="left" @click="clickMonthNav('prev')" class="z-view-date-picker-nav-icon-left"/>
-        <span v-show="visiblePanelMode === 'day' || visiblePanelMode === 'month'" @click="onClickYear">{{ x }}年</span>
+        <span v-show="visiblePanelMode === 'day' || visiblePanelMode === 'month'" @click="onClickYear">{{ year }}年</span>
         <span v-show="visiblePanelMode === 'year'">{{ yearRange }}</span>
-        <span v-show="visiblePanelMode === 'day'" @click="onClickMonth">{{ selectedMonth }}月</span>
+        <span v-show="visiblePanelMode === 'day'" @click="onClickMonth">{{ month }}月</span>
         <Icon v-show="visiblePanelMode === 'day'" name="right" @click="clickMonthNav('next')" class="z-view-date-picker-nav-icon-right" />
         <Icon @click="clickYearNav('next')" name="next-double" />
       </div>
@@ -55,18 +55,6 @@ export default {
   props: {
     value: {
       type: [Date, String],
-      validator(value){
-        return true
-        // if(this.mode === 'day'){
-        //   if(typeof value === 'number' || value instanceof Date){
-        //     // 如果是字符串类型，直接返回true了，就不做校验了。正则校验太可怕 = =
-        //     return true
-        //   }
-        //   return false
-        // }else{
-        //   return typeof value === 'number' || typeof value === 'number'
-        // }
-      }
     },
     mode: {
       type: String,
@@ -90,11 +78,24 @@ export default {
         }
       }
       return formateValue
-
     },
     yearRange(){
       return `${this.x}-${this.x + 9}`
     },
+    year(){
+      if(this.selected instanceof Date){
+        return this.selected.getFullYear()
+      }else if(this.date instanceof Date){
+        return this.date.getFullYear()
+      }
+    },
+    month(){
+      if(this.selected instanceof Date){
+        return this.selected.getMonth() + 1
+      }else if(this.date instanceof Date){
+        return this.date.getMonth() + 1
+      }
+    }
 
   },
   methods: {
@@ -103,7 +104,6 @@ export default {
     },
     onBlur(){
       this.popVisible = false
-      console.log('blur')
     },
     onClickMonth(){
       this.visiblePanelMode = 'month'

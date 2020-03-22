@@ -23,6 +23,13 @@
         if(this.date instanceof Date) {
           return this.date.getFullYear()
         }
+      },
+      date(){
+        if(this.selected instanceof Date){
+          return new Date(this.selected)
+        }else{
+          return new Date()
+        }
       }
     },
     methods: {
@@ -34,13 +41,6 @@
         if(this.date instanceof Date) {
           return this.date.getFullYear() === year
         }
-      }
-    },
-    created() {
-      if(this.selected instanceof Date){
-        this.date = this.selected
-      }else{
-        this.date = new Date()
       }
     }
   }

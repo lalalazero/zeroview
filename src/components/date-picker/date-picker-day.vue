@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-  import {firstDayOfMonth, getYearMonthDate, lastDayOfMonth, WEEKDAYS} from './helper'
+  import { firstDayOfMonth, getYearMonthDate, lastDayOfMonth, WEEKDAYS } from './helper'
   export default {
     name: 'zViewDatePickerDayPanel',
     props: {
@@ -57,11 +57,15 @@
         this.$emit('update:selected', new Date())
       },
       getDays(){
-        let currentMonthDays = this.getCurrentMonthDays()
-        let previousMonthDays = this.getPreviousMonthDays()
-        let len = currentMonthDays.length + previousMonthDays.length
-        let nextMonthDays = this.getNextMonthDays(42 - len)
-        return [...previousMonthDays,...currentMonthDays, ...nextMonthDays]
+        if(this.date instanceof Date){
+          let currentMonthDays = this.getCurrentMonthDays()
+          let previousMonthDays = this.getPreviousMonthDays()
+          let len = currentMonthDays.length + previousMonthDays.length
+          let nextMonthDays = this.getNextMonthDays(42 - len)
+          return [...previousMonthDays,...currentMonthDays, ...nextMonthDays]
+        }
+        return []
+
       },
       getCurrentMonthDays(){
         let currentMonthDays = []
@@ -114,17 +118,19 @@
       return {
         WEEKDAYS,
         today: new Date(),
-        _date: new Date(),
-        days: []
       }
     },
-    mounted() {
-      if(this.selected instanceof Date){
-        this.date = this.selected
-      }else{
-        this.date = new Date()
+    computed: {
+      date(){
+        if(this.selected instanceof Date){
+          return new Date(this.selected)
+        }
+        return new Date()
+      },
+      days(){
+        return this.getDays()
       }
-      this.days = this.getDays()
-    }
+    },
+
   }
 </script>

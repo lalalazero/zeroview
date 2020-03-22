@@ -19,11 +19,6 @@
         type: Date
       }
     },
-    data(){
-      return {
-        date: undefined
-      }
-    },
     computed: {
       yearSelected(){
         if(this.selected instanceof Date){
@@ -34,11 +29,17 @@
         if(this.selected instanceof Date) {
           return this.selected.getMonth() + 1
         }
+      },
+      date(){
+        if(this.selected instanceof Date){
+          return new Date(this.selected)
+        }else{
+          return new Date()
+        }
       }
     },
     methods: {
       clickMonthCell(month){
-        console.log('clickMonthCell')
         this.date.setMonth(month - 1)
         this.$emit('update:selected', new Date(this.date))
       },
@@ -49,12 +50,6 @@
         }
       }
     },
-    mounted() {
-      if(this.selected instanceof Date){
-        this.date = this.selected
-      }else{
-        this.date = new Date()
-      }
-    }
+
   }
 </script>
