@@ -72,9 +72,6 @@ export default {
       }
       return formateValue
     },
-    // yearRange(){
-    //   return `${this.x}-${this.x + 9}`
-    // },
     year(){
       if(this.selected instanceof Date){
         return this.selected.getFullYear()
@@ -98,12 +95,6 @@ export default {
     onBlur(){
       this.popVisible = false
     },
-    onClickMonth(){
-      this.visiblePanelMode = 'month'
-    },
-    onClickYear(){
-      this.visiblePanelMode = 'year'
-    },
     onMonthSelected(){
       if(this.mode === 'day'){
         this.visiblePanelMode = 'day'
@@ -118,14 +109,6 @@ export default {
         this.popVisible = false
       }
     },
-
-    updateDate(newDate){
-      this.date = newDate
-      let { year, month } = getYearMonthDate(newDate)
-      this.x = year
-      this.selectedMonth = month + 1
-    },
-
     initDaysPanel(){
       let { year, month } = getYearMonthDate(this.date)
       this.x = year
@@ -319,11 +302,7 @@ export default {
       }
     }
   }
-  &-month-cell-selected, &-year-cell-selected{
-    background: $--primary-color;
-    border: none;
-    color: #fff;
-  }
+
 
 }
 </style>

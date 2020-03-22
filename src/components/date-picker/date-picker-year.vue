@@ -9,8 +9,7 @@
       <div class="z-view-date-picker-content-years-panel">
         <ul>
           <li v-for="row in 4" :key="row">
-        <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + x)"
-              :class="{ 'z-view-date-picker-year-cell-selected': isSelectedYear(column + (row - 1) * 3 - 2 + x)}" >
+        <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + x)">
            {{ column + (row - 1) * 3 - 2 + x }}
          </span>
           </li>
@@ -53,11 +52,6 @@
         this.date.setFullYear(year)
         this.$emit('update:selected', new Date(this.date))
         this.$emit('click:year-cell')
-      },
-      isSelectedYear(year){
-        if(this.date instanceof Date) {
-          return this.date.getFullYear() === year
-        }
       },
       clickYearNav(type){
         let newDate = new Date(this.date)
