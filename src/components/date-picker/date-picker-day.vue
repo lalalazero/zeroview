@@ -1,25 +1,42 @@
 <template>
-  <div class="z-view-date-picker-content-days-panel">
-    <ul class="z-view-date-picker-content-days-panel-weekends">
-      <li v-for="weekday in 7" :key="weekday" class="z-view-date-picker-weekday-cell">
-        {{ WEEKDAYS[weekday - 1] }}
-      </li>
-    </ul>
-    <ul v-if="days.length > 0" class="z-view-date-picker-content-days-panel-days">
-      <li v-for="week in 6" :key="`${week}`">
+  <div>
+    <div class="z-view-date-picker-nav">
+      <Icon name="prev-double" @click="clickYearNav('prev')"/>
+      <Icon name="left" @click="clickMonthNav('prev')" class="z-view-date-picker-nav-icon-left"/>
+      <span @click="$emit('update:mode','year')">{{ year }}年</span>
+      <span @click="$emit('update:mode','month')">{{ month }}月</span>
+      <Icon name="right" @click="clickMonthNav('next')" class="z-view-date-picker-nav-icon-right" />
+      <Icon @click="clickYearNav('next')" name="next-double" />
+    </div>
+    <div class="z-view-date-picker-content-wrapper">
+      <div class="z-view-date-picker-content-days-panel">
+        <ul class="z-view-date-picker-content-days-panel-weekends">
+          <li v-for="weekday in 7" :key="weekday" class="z-view-date-picker-weekday-cell">
+            {{ WEEKDAYS[weekday - 1] }}
+          </li>
+        </ul>
+        <ul v-if="days.length > 0" class="z-view-date-picker-content-days-panel-days">
+          <li v-for="week in 6" :key="`${week}`">
                 <span v-for="day in 7" :key="`${week}-${day}`" class="z-view-date-picker-cell" @click="clickDateCell(days[(day + 7 * (week - 1)) - 1])"
                       :class="classes(days[(day + 7 * (week - 1)) - 1])">
                   <span class="z-view-date-picker-day-cell">{{ days[(day + 7 * (week - 1)) - 1].getDate() }}</span>
                 </span>
-      </li>
-    </ul>
-    <div class="z-view-date-picker-content-days-panel-actions" @click="clickToday()">今天</div>
+          </li>
+        </ul>
+        <div class="z-view-date-picker-content-days-panel-actions" @click="clickToday()">今天</div>
+      </div>
+    </div>
   </div>
+
 </template>
 <script>
+  import Icon from '../icon/icon'
   import { firstDayOfMonth, getYearMonthDate, lastDayOfMonth, WEEKDAYS } from './helper'
   export default {
     name: 'zViewDatePickerDayPanel',
+    components: {
+      Icon
+    },
     props: {
       selected: {
         type: Date
@@ -52,9 +69,11 @@
       clickDateCell(date){
         if(!(date instanceof Date)) return
         this.$emit('update:selected', date)
+        this.$emit('closePanel')
       },
       clickToday(){
         this.$emit('update:selected', new Date())
+        this.$emit('closePanel')
       },
       getDays(){
         if(this.date instanceof Date){
@@ -113,6 +132,23 @@
         }
         return nextMonthDays
       },
+      clickMonthNav(type){
+        if(type === 'next'){
+          let newDate = new Date(this.date)
+          newDate.setMonth(newDate.getMonth() + 1)
+            this.$emit('update:selected', newDate)
+        }else {
+          let newDate = new Date(this.date)
+          newDate.setMonth(newDate.getMonth() - 1)
+            this.$emit('update:selected', newDate)
+        }
+      },
+      clickYearNav(type){
+        let newDate = new Date(this.date)
+        let year = type === 'next' ? newDate.getFullYear() + 1 : newDate.getFullYear() - 1
+        newDate.setFullYear(year)
+        this.$emit('update:selected', newDate)
+      },
     },
     data(){
       return {
@@ -129,6 +165,12 @@
       },
       days(){
         return this.getDays()
+      },
+      year(){
+        return this.date.getFullYear()
+      },
+      month(){
+        return this.date.getMonth() + 1
       }
     },
 

@@ -1,15 +1,18 @@
 <template>
-  <div class="z-view-date-picker-content-months-panel">
-    <ul>
-      <li v-for="i in 4" :key="i" >
+  <div class="z-view-date-picker-content-wrapper">
+    <div class="z-view-date-picker-content-months-panel">
+      <ul>
+        <li v-for="i in 4" :key="i" >
         <span v-for="j in 3"
               class="z-view-date-picker-month-cell"
               :key="j"
               :class="{ 'z-view-date-picker-month-cell-selected': isSelectedMonth((i - 1) * 3 + j)}"
               @click="clickMonthCell((i - 1) * 3 + j)">{{ (i - 1) * 3 + j }}月</span>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
+
 </template>
 <script>
   export default {

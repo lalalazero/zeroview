@@ -2,21 +2,23 @@
   <div class="z-view-date-picker" v-click-out-side="onBlur">
     <Input @focus="onFocus" :value="formattedValue"/>
     <div class="z-view-date-picker-panel" v-show="popVisible">
-      <div class="z-view-date-picker-nav">
-        <Icon name="prev-double" @click="clickYearNav('prev')"/>
-        <Icon v-show="visiblePanelMode === 'day'" name="left" @click="clickMonthNav('prev')" class="z-view-date-picker-nav-icon-left"/>
-        <span v-show="visiblePanelMode === 'day' || visiblePanelMode === 'month'" @click="onClickYear">{{ year }}年</span>
-        <span v-show="visiblePanelMode === 'year'">{{ yearRange }}</span>
-        <span v-show="visiblePanelMode === 'day'" @click="onClickMonth">{{ month }}月</span>
-        <Icon v-show="visiblePanelMode === 'day'" name="right" @click="clickMonthNav('next')" class="z-view-date-picker-nav-icon-right" />
-        <Icon @click="clickYearNav('next')" name="next-double" />
-      </div>
-      <div class="z-view-date-picker-content-wrapper">
-          <DayPanel v-show="visiblePanelMode === 'day'" :selected.sync="selected" @update:selected="popVisible = false"/>
-          <MonthPanel v-show="visiblePanelMode === 'month'" :selected.sync="selected"
-                      @update:selected="onMonthSelected"></MonthPanel>
-          <YearPanel v-show="visiblePanelMode === 'year'" :selected.sync="selected" @update:selected="onYearSelected"></YearPanel>
-      </div>
+<!--      <div class="z-view-date-picker-nav">-->
+<!--        <Icon name="prev-double" @click="clickYearNav('prev')"/>-->
+<!--        <Icon v-show="visiblePanelMode === 'day'" name="left" @click="clickMonthNav('prev')" class="z-view-date-picker-nav-icon-left"/>-->
+<!--        <span v-show="visiblePanelMode === 'day' || visiblePanelMode === 'month'" @click="onClickYear">{{ year }}年</span>-->
+<!--        <span v-show="visiblePanelMode === 'year'">{{ yearRange }}</span>-->
+<!--        <span v-show="visiblePanelMode === 'day'" @click="onClickMonth">{{ month }}月</span>-->
+<!--        <Icon v-show="visiblePanelMode === 'day'" name="right" @click="clickMonthNav('next')" class="z-view-date-picker-nav-icon-right" />-->
+<!--        <Icon @click="clickYearNav('next')" name="next-double" />-->
+<!--      </div>-->
+          <DayPanel v-show="visiblePanelMode === 'day'"
+                    @update:mode="visiblePanelMode = $event"
+                    :selected.sync="selected" @closePanel="popVisible = false"/>
+          <MonthPanel v-show="visiblePanelMode === 'month'"
+                      @update:mode="visiblePanelMode = $event"
+                      :selected.sync="selected"
+                      @closePanel="onMonthSelected"></MonthPanel>
+          <YearPanel v-show="visiblePanelMode === 'year'" :selected.sync="selected" @closePanel="onYearSelected"></YearPanel>
       <div class="z-view-date-picker-footer"></div>
     </div>
   </div>
@@ -125,28 +127,7 @@ export default {
         this.popVisible = false
       }
     },
-    clickMonthNav(type){
-      if(type === 'next'){
-        let newDate = new Date(this.date.getTime())
-        newDate.setMonth(newDate.getMonth() + 1)
-        this.updateDate(newDate)
-      }else {
-        let newDate = new Date(this.date.getTime())
-        newDate.setMonth(newDate.getMonth() - 1)
-        this.updateDate(newDate)
-      }
-    },
-    clickYearNav(type){
-      if(this.mode === 'year'){
-        this.x = type === 'next' ? this.x + 10 : this.x - 10
-        return
-      }else{
-        let newDate = new Date(this.date.getTime())
-        let temp = type === 'next' ? newDate.getFullYear() + 1 : newDate.getFullYear() - 1
-        newDate.setFullYear(temp)
-        this.updateDate(newDate)
-      }
-    },
+
     updateDate(newDate){
       this.date = newDate
       let { year, month } = getYearMonthDate(newDate)

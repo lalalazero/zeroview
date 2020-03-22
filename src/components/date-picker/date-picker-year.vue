@@ -1,14 +1,17 @@
 <template>
-  <div class="z-view-date-picker-content-years-panel">
-    <ul>
-      <li v-for="row in 4" :key="row">
+  <div class="z-view-date-picker-content-wrapper">
+    <div class="z-view-date-picker-content-years-panel">
+      <ul>
+        <li v-for="row in 4" :key="row">
         <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + x)"
               :class="{ 'z-view-date-picker-year-cell-selected': isSelectedYear(column + (row - 1) * 3 - 2 + x)}" >
            {{ column + (row - 1) * 3 - 2 + x }}
          </span>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
+
 </template>
 <script>
   export default {
