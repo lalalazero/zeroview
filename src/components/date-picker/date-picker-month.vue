@@ -33,24 +33,17 @@
         type: Date
       }
     },
+    data(){
+      return {
+        date: new Date()
+      }
+    },
+    watch: {
+      selected(){
+        this.date = new Date(this.selected)
+      }
+    },
     computed: {
-      yearSelected(){
-        if(this.selected instanceof Date){
-          return this.selected.getFullYear()
-        }
-      },
-      monthSelected(){
-        if(this.selected instanceof Date) {
-          return this.selected.getMonth() + 1
-        }
-      },
-      date(){
-        if(this.selected instanceof Date){
-          return new Date(this.selected)
-        }else{
-          return new Date()
-        }
-      },
       year(){
         return this.date.getFullYear()
       }
@@ -65,9 +58,14 @@
         let newDate = new Date(this.date)
         let year = type === 'next' ? newDate.getFullYear() + 1 : newDate.getFullYear() - 1
         newDate.setFullYear(year)
-        this.$emit('update:selected', newDate)
+        this.date = newDate
       },
     },
+    mounted() {
+      if(this.selected instanceof Date){
+        this.date = this.selected
+      }
+    }
 
   }
 </script>

@@ -8,8 +8,10 @@
       <MonthPanel v-show="visiblePanelMode === 'month'"
                   @update:mode="visiblePanelMode = $event"
                   :selected.sync="selected"
-                  @click:month-cell="onMonthSelected"></MonthPanel>
-      <YearPanel v-show="visiblePanelMode === 'year'" :selected.sync="selected" @click:year-cell="onYearSelected"></YearPanel>
+                  @click:month-cell="onMonthSelected" />
+      <YearPanel v-show="visiblePanelMode === 'year'"
+                 :selected.sync="selected"
+                 @click:year-cell="onYearSelected" />
       <div class="z-view-date-picker-footer"></div>
     </div>
   </div>
@@ -37,12 +39,7 @@ export default {
       popVisible: false,
       visiblePanelMode: 'day',
       date: undefined,
-      days: [],
-      years: [],
-      today: new Date(),
       selected: undefined,
-      selectedMonth: undefined,
-      x: undefined
     }
   },
   props: {
@@ -72,21 +69,6 @@ export default {
       }
       return formateValue
     },
-    year(){
-      if(this.selected instanceof Date){
-        return this.selected.getFullYear()
-      }else if(this.date instanceof Date){
-        return this.date.getFullYear()
-      }
-    },
-    month(){
-      if(this.selected instanceof Date){
-        return this.selected.getMonth() + 1
-      }else if(this.date instanceof Date){
-        return this.date.getMonth() + 1
-      }
-    }
-
   },
   methods: {
     onFocus(){
@@ -109,16 +91,10 @@ export default {
         this.popVisible = false
       }
     },
-    initDaysPanel(){
-      let { year, month } = getYearMonthDate(this.date)
-      this.x = year
-      this.selectedMonth = month + 1
-    },
     checkValue(){
       this.visiblePanelMode = this.mode
       if(!this.value) {
         this.date = new Date()
-        this.initDaysPanel()
         return
       }
       if(typeof this.value === 'string'){
@@ -128,7 +104,6 @@ export default {
         this.date = new Date(this.value.getTime())
         this.selected = new Date(this.value.getTime())
       }
-      this.initDaysPanel()
     }
   },
   mounted(){

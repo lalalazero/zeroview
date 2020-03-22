@@ -136,33 +136,44 @@
         if(type === 'next'){
           let newDate = new Date(this.date)
           newDate.setMonth(newDate.getMonth() + 1)
-            this.$emit('update:selected', newDate)
+          this.date = newDate
         }else {
           let newDate = new Date(this.date)
           newDate.setMonth(newDate.getMonth() - 1)
-            this.$emit('update:selected', newDate)
+          this.date = newDate
         }
       },
       clickYearNav(type){
         let newDate = new Date(this.date)
         let year = type === 'next' ? newDate.getFullYear() + 1 : newDate.getFullYear() - 1
         newDate.setFullYear(year)
-        this.$emit('update:selected', newDate)
+        this.date = newDate
       },
     },
     data(){
       return {
         WEEKDAYS,
+        date: new Date(),
         today: new Date(),
       }
     },
+    mounted() {
+      if(this.selected instanceof Date) {
+        this.date = new Date(this.selected)
+      }
+    },
+    watch: {
+      selected(){
+        this.date = new Date(this.selected)
+      }
+    },
+    // updated() {
+    //   console.log('选日期 updated..')
+    //   if(this.selected instanceof Date) {
+    //     this.date = new Date(this.selected)
+    //   }
+    // },
     computed: {
-      date(){
-        if(this.selected instanceof Date){
-          return new Date(this.selected)
-        }
-        return new Date()
-      },
       days(){
         return this.getDays()
       },

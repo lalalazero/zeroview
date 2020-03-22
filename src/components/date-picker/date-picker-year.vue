@@ -9,8 +9,8 @@
       <div class="z-view-date-picker-content-years-panel">
         <ul>
           <li v-for="row in 4" :key="row">
-        <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + x)">
-           {{ column + (row - 1) * 3 - 2 + x }}
+        <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + fullYear)">
+           {{ column + (row - 1) * 3 - 2 + fullYear }}
          </span>
           </li>
         </ul>
@@ -30,21 +30,26 @@
         type: Date
       }
     },
+    data(){
+      return {
+        date: new Date()
+      }
+    },
+    watch: {
+      selected(){
+        if(this.selected instanceof Date){
+          this.date = this.selected
+        }
+      },
+    },
     computed: {
-      x(){
+      fullYear(){
         if(this.date instanceof Date) {
           return this.date.getFullYear()
         }
       },
-      date(){
-        if(this.selected instanceof Date){
-          return new Date(this.selected)
-        }else{
-          return new Date()
-        }
-      },
       yearRange(){
-        return `${this.x}-${this.x + 9}`
+        return `${this.fullYear}-${this.fullYear + 9}`
       }
     },
     methods: {
@@ -57,7 +62,7 @@
         let newDate = new Date(this.date)
         let year = type === 'next' ? newDate.getFullYear() + 10 : newDate.getFullYear() - 10
         newDate.setFullYear(year)
-        this.$emit('update:selected', newDate)
+        this.date = newDate
       },
     }
   }
