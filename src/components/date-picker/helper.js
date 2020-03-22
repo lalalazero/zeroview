@@ -10,10 +10,13 @@ const lastDayOfMonth = date => {
 }
 
 const getYearMonthDate = date => {
-  let year = date.getFullYear()
-  let month = date.getMonth()
-  let day = date.getDate()
-  return { year, month, day }
+  if(date instanceof Date){
+    let year = date.getFullYear()
+    let month = date.getMonth()
+    let day = date.getDate()
+    return { year, month, day }
+  }
+  console.warn('date is not valid')
 }
 
 const WEEKDAYS = ['一','二','三','四','五','六','日']

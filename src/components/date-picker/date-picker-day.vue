@@ -47,7 +47,7 @@
       isCurrentMonth(date){
         if(!(date instanceof Date)) return
         let { year, month, day } = getYearMonthDate(date)
-        return month === this._date.getMonth()
+        return month === this.date.getMonth()
       },
       clickDateCell(date){
         if(!(date instanceof Date)) return
@@ -65,9 +65,9 @@
       },
       getCurrentMonthDays(){
         let currentMonthDays = []
-        let { year, month, day } = getYearMonthDate(this._date)
-        let firstDay = firstDayOfMonth(this._date)
-        let lastDay = lastDayOfMonth(this._date)
+        let { year, month, day } = getYearMonthDate(this.date)
+        let firstDay = firstDayOfMonth(this.date)
+        let lastDay = lastDayOfMonth(this.date)
         let firstDayDate = firstDay.getDate()
         let lastDayDate = lastDay.getDate()
         for(let i = firstDayDate; i <= lastDayDate; i++){
@@ -77,7 +77,7 @@
       },
       getPreviousMonthDays(){
         // 0 - Sunday
-        let firstDay = firstDayOfMonth(this._date)
+        let firstDay = firstDayOfMonth(this.date)
         let weekDay = firstDay.getDay()
         // 从星期一开始
         let len = 0
@@ -90,7 +90,7 @@
         }
 
         let prevMonthDays = []
-        let temp = new Date(this._date.getTime())
+        let temp = new Date(this.date.getTime())
         temp.setDate(0)
         let lastDayOfLastMonth = new Date(temp.getTime())
         let { year, month, day } = getYearMonthDate(lastDayOfLastMonth)
@@ -101,7 +101,7 @@
         return prevMonthDays.reverse()
       },
       getNextMonthDays(len){
-        let firstDay = firstDayOfMonth(this._date)
+        let firstDay = firstDayOfMonth(this.date)
         let { year, month, day} =  getYearMonthDate(firstDay)
         let nextMonthDays = []
         for(let i = 0; i < len; i++){
@@ -119,10 +119,10 @@
       }
     },
     mounted() {
-      if(this.selected){
-        this._date = this.selected
+      if(this.selected instanceof Date){
+        this.date = this.selected
       }else{
-        this._date = new Date()
+        this.date = new Date()
       }
       this.days = this.getDays()
     }

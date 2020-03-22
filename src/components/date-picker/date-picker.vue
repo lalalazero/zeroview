@@ -12,18 +12,13 @@
         <Icon @click="clickYearNav('next')" name="next-double" />
       </div>
       <div class="z-view-date-picker-content-wrapper">
-        <template v-show="visiblePanelMode === 'day'">
+        <template v-if="visiblePanelMode === 'day'">
           <DayPanel :selected.sync="selected" @update:selected="popVisible = false"/>
         </template>
-        <div v-show="visiblePanelMode === 'month'" class="z-view-date-picker-content-months-panel">
-          <ul>
-            <li v-for="i in 4" :key="i" >
-              <span v-for="j in 3" class="z-view-date-picker-month-cell" :key="j"
-                    :class="{ 'z-view-date-picker-month-cell-selected': mode === 'month' && selectedMonth == ((i - 1) * 3 + j) }"
-                    @click="clickMonthCell((i - 1) * 3 + j)">{{ (i - 1) * 3 + j }}月</span>
-            </li>
-          </ul>
-        </div>
+        <template v-if="visiblePanelMode === 'month'">
+          <MonthPanel :selected.sync="selected"
+                      @update:selected="onMonthSelected"></MonthPanel>
+        </template>
         <div v-show="visiblePanelMode === 'year'" class="z-view-date-picker-content-years-panel">
           <ul>
             <li v-for="row in 4" :key="row">
@@ -44,14 +39,16 @@ import Input from '../input/input.vue'
 import Icon from '../icon/icon.vue'
 import ClickOutSide from '@/directives/click-outside.js'
 import DayPanel from './date-picker-day'
-import { firstDayOfMonth, lastDayOfMonth, getYearMonthDate } from './helper'
+import MonthPanel from './date-picker-month'
+import { getYearMonthDate } from './helper'
 export default {
   name: 'zViewDatePicker',
   directives: { ClickOutSide },
   components: {
     Input,
     Icon,
-    DayPanel
+    DayPanel,
+    MonthPanel
   },
   data(){
     return {
@@ -133,22 +130,14 @@ export default {
     onClickYear(){
       this.visiblePanelMode = 'year'
     },
-
-    clickMonthCell(month){
-      if(!(this.date instanceof Date)) return
-      let newDate = new Date(this.date.getTime())
-      newDate.setMonth(month - 1)
-      this.date = newDate
-      this.selected = new Date(newDate)
-      this.selectedMonth = month
+    onMonthSelected(){
       if(this.mode === 'day'){
-        // this.days = this.getDays()
         this.visiblePanelMode = 'day'
       }else{
-        this.$emit('update:value',this.formattedValue)
         this.popVisible = false
       }
     },
+
     clickYearCell(year){
       this.x = year
       if(this.mode === 'year'){
