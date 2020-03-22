@@ -12,23 +12,10 @@
         <Icon @click="clickYearNav('next')" name="next-double" />
       </div>
       <div class="z-view-date-picker-content-wrapper">
-        <template v-if="visiblePanelMode === 'day'">
-          <DayPanel :selected.sync="selected" @update:selected="popVisible = false"/>
-        </template>
-        <template v-if="visiblePanelMode === 'month'">
-          <MonthPanel :selected.sync="selected"
+          <DayPanel v-show="visiblePanelMode === 'day'" :selected.sync="selected" @update:selected="popVisible = false"/>
+          <MonthPanel v-show="visiblePanelMode === 'month'" :selected.sync="selected"
                       @update:selected="onMonthSelected"></MonthPanel>
-        </template>
-        <div v-show="visiblePanelMode === 'year'" class="z-view-date-picker-content-years-panel">
-          <ul>
-            <li v-for="row in 4" :key="row">
-              <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + x)"
-                 :class="{ 'z-view-date-picker-year-cell-selected': mode === 'year' && selectedYear == (column + (row - 1) * 3 - 2 + x) }" >
-                 {{ column + (row - 1) * 3 - 2 + x }}
-               </span>
-            </li>
-          </ul>
-        </div>
+          <YearPanel v-show="visiblePanelMode === 'year'" :selected.sync="selected" @update:selected="onYearSelected"></YearPanel>
       </div>
       <div class="z-view-date-picker-footer"></div>
     </div>
@@ -40,6 +27,7 @@ import Icon from '../icon/icon.vue'
 import ClickOutSide from '@/directives/click-outside.js'
 import DayPanel from './date-picker-day'
 import MonthPanel from './date-picker-month'
+import YearPanel from './date-picker-year'
 import { getYearMonthDate } from './helper'
 export default {
   name: 'zViewDatePicker',
@@ -48,21 +36,19 @@ export default {
     Input,
     Icon,
     DayPanel,
-    MonthPanel
+    MonthPanel,
+    YearPanel
   },
   data(){
     return {
       popVisible: false,
       visiblePanelMode: 'day',
-      // visiblePanelMode: 'day',
       date: undefined,
       days: [],
       years: [],
-      // WEEKDAYS,
       today: new Date(),
       selected: undefined,
       selectedMonth: undefined,
-      // selectedYear: undefined,
       x: undefined
     }
   },
@@ -109,12 +95,7 @@ export default {
     yearRange(){
       return `${this.x}-${this.x + 9}`
     },
-    selectedYear(){
-      if(this.selected instanceof Date){
-        return this.selected.getFullYear()
-      }
-      return ''
-    }
+
   },
   methods: {
     onFocus(){
@@ -137,16 +118,11 @@ export default {
         this.popVisible = false
       }
     },
-
-    clickYearCell(year){
-      this.x = year
-      if(this.mode === 'year'){
-         this.selected = new Date(year, 0, 1)
-         this.$emit('update:value',this.formattedValue)
-         this.popVisible = false
-      }else{
-        this.date.setFullYear(year)
+    onYearSelected(){
+      if(this.mode !== 'year'){
         this.visiblePanelMode = 'month'
+      }else{
+        this.popVisible = false
       }
     },
     clickMonthNav(type){
@@ -176,11 +152,9 @@ export default {
       let { year, month } = getYearMonthDate(newDate)
       this.x = year
       this.selectedMonth = month + 1
-      // this.days = this.getDays()
     },
 
     initDaysPanel(){
-      // this.days = this.getDays()
       let { year, month } = getYearMonthDate(this.date)
       this.x = year
       this.selectedMonth = month + 1
