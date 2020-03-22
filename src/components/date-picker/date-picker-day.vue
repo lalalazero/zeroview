@@ -69,11 +69,11 @@
       clickDateCell(date){
         if(!(date instanceof Date)) return
         this.$emit('update:selected', date)
-        this.$emit('closePanel')
+        this.$emit('click:day-cell')
       },
       clickToday(){
         this.$emit('update:selected', new Date())
-        this.$emit('closePanel')
+        this.$emit('click:day-cell')
       },
       getDays(){
         if(this.date instanceof Date){

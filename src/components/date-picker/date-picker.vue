@@ -2,23 +2,14 @@
   <div class="z-view-date-picker" v-click-out-side="onBlur">
     <Input @focus="onFocus" :value="formattedValue"/>
     <div class="z-view-date-picker-panel" v-show="popVisible">
-<!--      <div class="z-view-date-picker-nav">-->
-<!--        <Icon name="prev-double" @click="clickYearNav('prev')"/>-->
-<!--        <Icon v-show="visiblePanelMode === 'day'" name="left" @click="clickMonthNav('prev')" class="z-view-date-picker-nav-icon-left"/>-->
-<!--        <span v-show="visiblePanelMode === 'day' || visiblePanelMode === 'month'" @click="onClickYear">{{ year }}年</span>-->
-<!--        <span v-show="visiblePanelMode === 'year'">{{ yearRange }}</span>-->
-<!--        <span v-show="visiblePanelMode === 'day'" @click="onClickMonth">{{ month }}月</span>-->
-<!--        <Icon v-show="visiblePanelMode === 'day'" name="right" @click="clickMonthNav('next')" class="z-view-date-picker-nav-icon-right" />-->
-<!--        <Icon @click="clickYearNav('next')" name="next-double" />-->
-<!--      </div>-->
-          <DayPanel v-show="visiblePanelMode === 'day'"
-                    @update:mode="visiblePanelMode = $event"
-                    :selected.sync="selected" @closePanel="popVisible = false"/>
-          <MonthPanel v-show="visiblePanelMode === 'month'"
-                      @update:mode="visiblePanelMode = $event"
-                      :selected.sync="selected"
-                      @closePanel="onMonthSelected"></MonthPanel>
-          <YearPanel v-show="visiblePanelMode === 'year'" :selected.sync="selected" @closePanel="onYearSelected"></YearPanel>
+      <DayPanel v-show="visiblePanelMode === 'day'"
+                @update:mode="visiblePanelMode = $event"
+                :selected.sync="selected" @click:day-cell="popVisible = false"/>
+      <MonthPanel v-show="visiblePanelMode === 'month'"
+                  @update:mode="visiblePanelMode = $event"
+                  :selected.sync="selected"
+                  @click:month-cell="onMonthSelected"></MonthPanel>
+      <YearPanel v-show="visiblePanelMode === 'year'" :selected.sync="selected" @click:year-cell="onYearSelected"></YearPanel>
       <div class="z-view-date-picker-footer"></div>
     </div>
   </div>
@@ -81,9 +72,9 @@ export default {
       }
       return formateValue
     },
-    yearRange(){
-      return `${this.x}-${this.x + 9}`
-    },
+    // yearRange(){
+    //   return `${this.x}-${this.x + 9}`
+    // },
     year(){
       if(this.selected instanceof Date){
         return this.selected.getFullYear()
