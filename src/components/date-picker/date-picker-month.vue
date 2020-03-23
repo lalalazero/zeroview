@@ -2,7 +2,7 @@
   <div>
     <div class="z-view-date-picker-nav">
       <Icon name="prev-double" @click="clickYearNav('prev')"/>
-      <span @click="$emit('update:mode','year')">{{ year }}年</span>
+      <span @click="clickYear">{{ year }}年</span>
       <Icon @click="clickYearNav('next')" name="next-double" />
     </div>
     <div class="z-view-date-picker-content-wrapper">
@@ -30,19 +30,35 @@
       Icon
     },
     props: {
-      selected: {
-        type: Date
+      selectedMonth: {
+        type: Number
+      },
+      selectedYear: {
+        type: Number
       }
     },
     data(){
       return {
-        date: new Date()
+        date: new Date(),
+        clickFlag: 1,
       }
     },
     watch: {
-      selected(){
-        this.date = new Date(this.selected)
-      }
+      selectedMonth(){
+        if(typeof this.selectedMonth === 'number'){
+          this.date.setMonth(this.selectedMonth)
+          this.date = new Date(this.date)
+        }
+      },
+      selectedYear(){
+        console.log(this.selectedYear)
+        console.log(typeof this.selectedYear)
+        if(typeof this.selectedYear === 'number'){
+          console.log('setFullYear')
+          this.date.setFullYear(this.selectedYear)
+          this.date = new Date(this.date)
+        }
+      },
     },
     computed: {
       year(){
@@ -52,7 +68,8 @@
     methods: {
       clickMonthCell(month){
         this.date.setMonth(month - 1)
-        this.$emit('update:selected', new Date(this.date))
+        this.$emit('update:selectedMonth', month - 1)
+        this.$emit('update:selectedYear', this.year)
         this.$emit('click:month-cell')
       },
       clickYearNav(type){
@@ -62,16 +79,25 @@
         this.date = newDate
       },
       isMonthSelected(month){
-        if(this.selected instanceof Date){
-          let f1 = this.date.getFullYear() === this.selected.getFullYear()
-          let f2 = month - 1 === this.selected.getMonth()
-          return f1 && f2
+        let f1 = this.year === this.selectedYear
+        let f2 = month - 1 === this.selectedMonth
+        return f1 && f2
+      },
+      clickYear(){
+        this.clickFlag++
+        if(this.clickFlag % 2 === 0){
+          this.$emit('update:mode','year')
+        }else if(this.clickFlag % 2 === 1){
+          this.$emit('closePanel')
         }
       }
     },
     mounted() {
-      if(this.selected instanceof Date){
-        this.date = this.selected
+      if(typeof this.selectedMonth === 'number'){
+        this.date.setMonth(this.selectedMonth)
+      }
+      if(typeof this.selectedYear === 'number'){
+        this.date.setFullYear(this.selectedYear)
       }
     }
 

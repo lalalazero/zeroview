@@ -4,13 +4,20 @@
     <div class="z-view-date-picker-panel" v-show="popVisible">
       <DayPanel v-show="visiblePanelMode === 'day'"
                 @update:mode="visiblePanelMode = $event"
+                :mode="mode"
                 :selected.sync="selected" @click:day-cell="popVisible = false"/>
       <MonthPanel v-show="visiblePanelMode === 'month'"
                   @update:mode="visiblePanelMode = $event"
-                  :selected.sync="selected"
+                  :selectedMonth.sync="selectedMonth"
+                  :selectedYear.sync="selectedYear"
+                  @closePanel="popVisible = false"
+                  :mode="mode"
                   @click:month-cell="onMonthSelected" />
       <YearPanel v-show="visiblePanelMode === 'year'"
-                 :selected.sync="selected"
+                 @update:mode="visiblePanelMode = $event"
+                 @closePanel="popVisible = false"
+                 :selectedYear.sync="selectedYear"
+                 :mode="mode"
                  @click:year-cell="onYearSelected" />
       <div class="z-view-date-picker-footer"></div>
     </div>
@@ -39,7 +46,10 @@ export default {
       popVisible: false,
       visiblePanelMode: 'day',
       date: undefined,
-      selected: undefined,
+      // selected: undefined,
+      selectedYear: undefined,
+      selectedMonth: undefined,
+      selectedDay: undefined,
     }
   },
   props: {
@@ -69,6 +79,24 @@ export default {
       }
       return formateValue
     },
+    selected(){
+      let { selectedMonth, selectedYear, selectedDay } = this
+      if(this.mode === 'day'){
+       if(selectedDay && selectedYear && selectedMonth){
+         return new Date(selectedYear, selectedMonth, selectedDay)
+       }
+      }
+      if(this.mode === 'month'){
+        if(selectedYear && selectedMonth){
+          return new Date(selectedYear, selectedMonth, 1)
+        }
+      }
+      if(this.mode === 'year'){
+        if(selectedYear){
+          return new Date(selectedYear, 0, 1)
+        }
+      }
+    }
   },
   methods: {
     onFocus(){
@@ -86,6 +114,9 @@ export default {
     },
     onYearSelected(){
       if(this.mode !== 'year'){
+        console.log('year selected..')
+        console.log(this.selectedYear)
+        this.selectedMonth = undefined
         this.visiblePanelMode = 'month'
       }else{
         this.popVisible = false

@@ -2,7 +2,7 @@
   <div>
     <div class="z-view-date-picker-nav">
       <Icon name="prev-double" @click="clickYearNav('prev')"/>
-      <span @click="$emit('update:mode','year')">{{ yearRange }}</span>
+      <span @click="clickYearRange">{{ yearRange }}</span>
       <Icon @click="clickYearNav('next')" name="next-double" />
     </div>
     <div class="z-view-date-picker-content-wrapper">
@@ -28,19 +28,23 @@
       Icon
     },
     props: {
-      selected: {
-        type: Date
+      selectedYear: {
+        type: Number
+      },
+      mode: {
+        type: String
       }
     },
     data(){
       return {
-        date: new Date()
+        date: new Date(),
+        flag: true
       }
     },
     watch: {
-      selected(){
-        if(this.selected instanceof Date){
-          this.date = this.selected
+      selectedYear(){
+        if(typeof this.selectedYear === 'number'){
+          this.date.setFullYear(this.selectedYear)
         }
       },
     },
@@ -68,7 +72,7 @@
     methods: {
       clickYearCell(year) {
         this.date.setFullYear(year)
-        this.$emit('update:selected', new Date(this.date))
+        this.$emit('update:selectedYear', year)
         this.$emit('click:year-cell')
       },
       clickYearNav(type){
@@ -78,14 +82,19 @@
         this.date = newDate
       },
       isYearSelected(year){
-        if(this.selected instanceof Date) {
-          return this.selected.getFullYear() === year
+        return this.selectedYear === year
+      },
+      clickYearRange(){
+        if(this.mode === 'year'){
+          this.$emit('closePanel')
+        }else{
+          this.$emit('update:mode','month')
         }
       }
     },
     mounted() {
-      if(this.selected instanceof Date){
-        this.date = this.selected
+      if(typeof this.selectedYear === 'number'){
+        this.date.setFullYear(this.selectedYear)
       }
     }
   }
