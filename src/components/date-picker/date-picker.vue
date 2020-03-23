@@ -85,12 +85,12 @@ export default {
     selected(){
       let { selectedMonth, selectedYear, selectedDay } = this
       if(this.mode === 'day'){
-       if(selectedDay && selectedYear && selectedMonth){
+       if(selectedDay && selectedYear && selectedMonth >= 0){
          return new Date(selectedYear, selectedMonth, selectedDay)
        }
       }
       if(this.mode === 'month'){
-        if(selectedYear && selectedMonth){
+        if(selectedYear && selectedMonth >= 0){
           return new Date(selectedYear, selectedMonth, 1)
         }
       }

@@ -71,10 +71,8 @@
         return date.getMonth() === this.date.getMonth()
       },
       clickDateCell(date){
-        console.log('click date cell')
         if(!(date instanceof Date)) return
         const { year, month, day } = getYearMonthDate(date)
-        console.log(year,month,day)
         this.$emit('update:selectedDay', day)
         this.$emit('update:selectedMonth', month)
         this.$emit('update:selectedYear', year)
