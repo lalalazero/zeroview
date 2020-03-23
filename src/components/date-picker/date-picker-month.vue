@@ -11,6 +11,7 @@
           <li v-for="i in 4" :key="i" >
         <span v-for="j in 3"
               class="z-view-date-picker-month-cell"
+              :class="{'z-view-date-picker-month-cell-selected': isMonthSelected((i - 1) * 3 + j)}"
               :key="j"
               @click="clickMonthCell((i - 1) * 3 + j)">{{ (i - 1) * 3 + j }}月</span>
           </li>
@@ -60,6 +61,13 @@
         newDate.setFullYear(year)
         this.date = newDate
       },
+      isMonthSelected(month){
+        if(this.selected instanceof Date){
+          let f1 = this.date.getFullYear() === this.selected.getFullYear()
+          let f2 = month - 1 === this.selected.getMonth()
+          return f1 && f2
+        }
+      }
     },
     mounted() {
       if(this.selected instanceof Date){
