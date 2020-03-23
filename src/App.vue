@@ -1,7 +1,7 @@
 <template>
    <div id="app">
      {{ value }}
-     <z-view-date-picker :value.sync="value" mode="year"></z-view-date-picker>
+     <z-view-date-picker :value.sync="value"></z-view-date-picker>
      <p>其他内容</p>
    </div>
 </template>

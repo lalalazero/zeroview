@@ -5,7 +5,10 @@
       <DayPanel v-show="visiblePanelMode === 'day'"
                 @update:mode="visiblePanelMode = $event"
                 :mode="mode"
-                :selected.sync="selected" @click:day-cell="popVisible = false"/>
+                :selectedYear.sync="selectedYear"
+                :selectedMonth.sync="selectedMonth"
+                :selectedDay.sync="selectedDay"
+                @click:day-cell="popVisible = false"/>
       <MonthPanel v-show="visiblePanelMode === 'month'"
                   @update:mode="visiblePanelMode = $event"
                   :selectedMonth.sync="selectedMonth"
@@ -108,14 +111,13 @@ export default {
     onMonthSelected(){
       if(this.mode === 'day'){
         this.visiblePanelMode = 'day'
+        this.selectedDay = undefined
       }else{
         this.popVisible = false
       }
     },
     onYearSelected(){
       if(this.mode !== 'year'){
-        console.log('year selected..')
-        console.log(this.selectedYear)
         this.selectedMonth = undefined
         this.visiblePanelMode = 'month'
       }else{

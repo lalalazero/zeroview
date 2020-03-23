@@ -51,10 +51,7 @@
         }
       },
       selectedYear(){
-        console.log(this.selectedYear)
-        console.log(typeof this.selectedYear)
         if(typeof this.selectedYear === 'number'){
-          console.log('setFullYear')
           this.date.setFullYear(this.selectedYear)
           this.date = new Date(this.date)
         }
@@ -88,7 +85,11 @@
         if(this.clickFlag % 2 === 0){
           this.$emit('update:mode','year')
         }else if(this.clickFlag % 2 === 1){
-          this.$emit('closePanel')
+          if(this.mode === 'month'){
+            this.$emit('closePanel')
+          }else {
+            this.$emit('update:mode','day')
+          }
         }
       }
     },

@@ -38,8 +38,14 @@
       Icon
     },
     props: {
-      selected: {
-        type: Date
+      selectedMonth: {
+        type: Number
+      },
+      selectedYear: {
+        type: Number
+      },
+      selectedDay: {
+        type: Number
       }
     },
     methods: {
@@ -56,23 +62,29 @@
         return year === year2 && month === month2 && day === day2
       },
       isSelectedDay(date){
-        if(!this.selected) return false
         let { year, month, day } = getYearMonthDate(date)
-        let { year: year2, month: month2, day: day2 } = getYearMonthDate(this.selected)
-        return year === year2 && month === month2 && day === day2
+        let { selectedYear, selectedDay, selectedMonth } = this
+        return year === selectedYear && month === selectedMonth && day === selectedDay
       },
       isCurrentMonth(date){
         if(!(date instanceof Date)) return
-        let { year, month, day } = getYearMonthDate(date)
-        return month === this.date.getMonth()
+        return date.getMonth() === this.date.getMonth()
       },
       clickDateCell(date){
+        console.log('click date cell')
         if(!(date instanceof Date)) return
-        this.$emit('update:selected', date)
+        const { year, month, day } = getYearMonthDate(date)
+        console.log(year,month,day)
+        this.$emit('update:selectedDay', day)
+        this.$emit('update:selectedMonth', month)
+        this.$emit('update:selectedYear', year)
         this.$emit('click:day-cell')
       },
       clickToday(){
-        this.$emit('update:selected', new Date())
+        const { year, month, day } = getYearMonthDate(new Date())
+        this.$emit('update:selectedDay', day)
+        this.$emit('update:selectedMonth', month)
+        this.$emit('update:selectedYear', year)
         this.$emit('click:day-cell')
       },
       getDays(){
@@ -158,21 +170,36 @@
       }
     },
     mounted() {
-      if(this.selected instanceof Date) {
-        this.date = new Date(this.selected)
+      if(typeof this.selectedMonth === 'number'){
+        this.date.setMonth(this.selectedMonth)
+      }
+      if(typeof this.selectedYear === 'number'){
+        this.date.setFullYear(this.selectedYear)
+      }
+      if(typeof this.selectedDay === 'number'){
+        this.date.setDate(this.selectedDay)
       }
     },
     watch: {
-      selected(){
-        this.date = new Date(this.selected)
-      }
+      selectedMonth(){
+        if(typeof this.selectedMonth === 'number'){
+          this.date.setMonth(this.selectedMonth)
+          this.date = new Date(this.date)
+        }
+      },
+      selectedYear(){
+        if(typeof this.selectedYear === 'number'){
+          this.date.setFullYear(this.selectedYear)
+          this.date = new Date(this.date)
+        }
+      },
+      selectedDay(){
+        if(typeof this.selectedDay === 'number'){
+          this.date.setDate(this.selectedDay)
+          this.date = new Date(this.date)
+        }
+      },
     },
-    // updated() {
-    //   console.log('选日期 updated..')
-    //   if(this.selected instanceof Date) {
-    //     this.date = new Date(this.selected)
-    //   }
-    // },
     computed: {
       days(){
         return this.getDays()
