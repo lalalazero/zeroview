@@ -278,6 +278,13 @@ export default {
     }
   }
 
+  &-month-cell-selected,
+  &-year-cell-selected, {
+    background: $--primary-color;
+    border: none;
+    color: #fff;
+  }
+
 
 }
 </style>

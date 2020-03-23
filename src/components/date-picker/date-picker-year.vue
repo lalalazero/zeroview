@@ -9,8 +9,10 @@
       <div class="z-view-date-picker-content-years-panel">
         <ul>
           <li v-for="row in 4" :key="row">
-        <span v-for="column in 3" :key="column" @click="clickYearCell(column + (row - 1) * 3 - 2 + fullYear)">
-           {{ column + (row - 1) * 3 - 2 + fullYear }}
+        <span v-for="column in 3" :key="column"
+              :class="{'z-view-date-picker-year-cell-selected': isYearSelected(column + (row - 1) * 3 - 2 + yearStart)}"
+              @click="clickYearCell(column + (row - 1) * 3 - 2 + yearStart)">
+           {{ column + (row - 1) * 3 - 2 + yearStart }}
          </span>
           </li>
         </ul>
@@ -48,8 +50,19 @@
           return this.date.getFullYear()
         }
       },
+      yearStart(){
+        if(typeof this.fullYear === 'number'){
+          return parseInt(this.fullYear / 10, 10) * 10
+        }
+
+      },
+      yearEnd(){
+        if(typeof this.yearStart === 'number'){
+          return this.yearStart + 9
+        }
+      },
       yearRange(){
-        return `${this.fullYear}-${this.fullYear + 9}`
+        return `${this.yearStart}-${this.yearEnd}`
       }
     },
     methods: {
@@ -64,6 +77,16 @@
         newDate.setFullYear(year)
         this.date = newDate
       },
+      isYearSelected(year){
+        if(this.selected instanceof Date) {
+          return this.selected.getFullYear() === year
+        }
+      }
+    },
+    mounted() {
+      if(this.selected instanceof Date){
+        this.date = this.selected
+      }
     }
   }
 </script>
