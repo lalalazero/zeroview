@@ -2,6 +2,7 @@
   <div class="z-view-input-wrapper" :class="{ 'error': error }">
     <input
       :value="value"
+      :placeholder="placeholder"
       type="text"
       @change="$emit('change', $event.target.value)"
       @blur="$emit('blur', $event.target.value)"
@@ -36,6 +37,9 @@ export default {
       default: false
     },
     error: {
+      type: String
+    },
+    placeholder: {
       type: String
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="z-view-date-picker" v-click-out-side="onBlur">
-    <Input @focus="onFocus" :value="formattedValue"/>
+    <Input @focus="onFocus" :value="formattedValue" :placeholder="placeholder"/>
     <div class="z-view-date-picker-panel" v-show="popVisible">
       <DayPanel v-show="visiblePanelMode === 'day'"
                 @update:mode="visiblePanelMode = $event"
@@ -49,7 +49,6 @@ export default {
       popVisible: false,
       visiblePanelMode: 'day',
       date: undefined,
-      // selected: undefined,
       selectedYear: undefined,
       selectedMonth: undefined,
       selectedDay: undefined,
@@ -65,6 +64,10 @@ export default {
       validator(value){
         return ['day', 'year', 'month'].indexOf(value) >= 0
       }
+    },
+    placeholder: {
+      type: String,
+      default: '请选择日期'
     }
   },
   computed: {
@@ -145,8 +148,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-/deep/ .z-view-date-picker {
+.z-view-date-picker {
   display: inline-block;
+}
+/deep/ .z-view-date-picker {
   &-nav {
     display: flex;
     justify-content: space-between;
@@ -312,7 +317,7 @@ export default {
   }
 
   &-month-cell-selected,
-  &-year-cell-selected, {
+  &-year-cell-selected {
     background: $--primary-color;
     border: none;
     color: #fff;

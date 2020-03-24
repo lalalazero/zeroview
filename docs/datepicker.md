@@ -2,12 +2,29 @@
 可以根据不同的模式（年、月、日）选择日期
 :::demo 基础用法
 ```html
-<z-view-date-picker :value.sync="value"></z-view-date-picker>
+<div class="date-picker-demo">
+  <p>
+    <z-view-date-picker :value.sync="value"></z-view-date-picker>
+  </p>
+  <p>
+    <z-view-date-picker :value.sync="value2" placeholder="请选择月" mode="month"></z-view-date-picker>
+  </p>
+  <p>
+    <z-view-date-picker :value.sync="value3" placeholder="请选择年" mode="year"></z-view-date-picker>
+  </p>
+</div>
+<style>
+.date-picker-demo > p > .z-view-date-picker{
+ margin-bottom: 10px; 
+}
+</style>
 <script>
 export default{
   data(){
     return {
-      value: undefined
+      value: undefined,
+      value2: undefined,
+      value3: undefined
     }
   }
 };
