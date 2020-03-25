@@ -94,7 +94,8 @@ ps: 请使用如下 css-reset, 否则样式会有问题
   - [ ] 测试用例
 - [x] Sticky 
   - [x] 示例文档
-- [ ] DatePicker 日期
+- [x] DatePicker 日期
+  - [x] 示例文档
 - [ ] Scroll 滑动
 
 ### 其他
