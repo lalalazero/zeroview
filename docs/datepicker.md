@@ -37,5 +37,6 @@ export default{
 
 | 参数      | 说明    | 类型      | 可选值       | 默认值   | 是否必填 |
 |---------- |-------- |---------- |-------------  |-------- |-------- |
-| value | 日期值 | String, Date | - | - | - |
+| value | 日期值，支持 .sync 语法 | Date | - | - | - |
 | mode | 模式 | String | year/month/day | day | - |
+| placeholder | 占位符 | string | - | '请选择日期' | - |
