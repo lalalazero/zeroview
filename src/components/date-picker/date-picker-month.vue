@@ -85,10 +85,10 @@
         if(this.clickFlag % 2 === 0){
           this.$emit('update:mode','year')
         }else if(this.clickFlag % 2 === 1){
-          if(this.mode === 'month'){
-            this.$emit('closePanel')
-          }else {
+          if(this.mode === 'day'){
             this.$emit('update:mode','day')
+          }else {
+            this.$emit('closePanel')
           }
         }
       }

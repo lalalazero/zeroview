@@ -120,6 +120,7 @@ export default {
         let d = new Date()
         d.setFullYear(this.selectedYear)
         d.setMonth(this.selectedMonth)
+        d.setDate(1)
         this.$emit('update:value', d)
       }
     },
@@ -131,6 +132,8 @@ export default {
         this.popVisible = false
         let d = new Date()
         d.setFullYear(this.selectedYear)
+        d.setMonth(0)
+        d.setDate(1)
         this.$emit('update:value',d)
       }
     },
