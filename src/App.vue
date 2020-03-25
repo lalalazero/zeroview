@@ -1,6 +1,6 @@
 <template>
    <div id="app">
-     {{ value }}
+     {{ value ? value.toLocaleDateString() : 'undefined' }}
      <z-view-date-picker :value.sync="value"></z-view-date-picker>
      <p>其他内容</p>
    </div>

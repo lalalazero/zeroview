@@ -8,7 +8,7 @@
                 :selectedYear.sync="selectedYear"
                 :selectedMonth.sync="selectedMonth"
                 :selectedDay.sync="selectedDay"
-                @click:day-cell="popVisible = false"/>
+                @click:day-cell="onDaySelected"/>
       <MonthPanel v-show="visiblePanelMode === 'month'"
                   @update:mode="visiblePanelMode = $event"
                   :selectedMonth.sync="selectedMonth"
@@ -56,7 +56,7 @@ export default {
   },
   props: {
     value: {
-      type: [Date, String],
+      type: Date,
     },
     mode: {
       type: String,
@@ -117,6 +117,10 @@ export default {
         this.selectedDay = undefined
       }else{
         this.popVisible = false
+        let d = new Date()
+        d.setFullYear(this.selectedYear)
+        d.setMonth(this.selectedMonth)
+        this.$emit('update:value', d)
       }
     },
     onYearSelected(){
@@ -125,7 +129,14 @@ export default {
         this.visiblePanelMode = 'month'
       }else{
         this.popVisible = false
+        let d = new Date()
+        d.setFullYear(this.selectedYear)
+        this.$emit('update:value',d)
       }
+    },
+    onDaySelected(){
+      this.$emit('update:value', new Date(this.selectedYear, this.selectedMonth, this.selectedDay))
+      this.popVisible = false
     },
     checkValue(){
       this.visiblePanelMode = this.mode
@@ -133,10 +144,7 @@ export default {
         this.date = new Date()
         return
       }
-      if(typeof this.value === 'string'){
-        this.date = new Date(this.value)
-        this.selected = new Date(this.value)
-      }else if(this.value instanceof Date){
+      if(this.value instanceof Date){
         this.date = new Date(this.value.getTime())
         this.selected = new Date(this.value.getTime())
       }
