@@ -9,6 +9,11 @@
 <script>
 export default {
   name: 'zViewScroll',
+  data(){
+    return {
+      canScroll: true
+    }
+  },
   mounted(){
     let parent = this.$refs.parent
     let child = this.$refs.child
@@ -30,29 +35,36 @@ export default {
 
     console.log("maxHeight")
     console.log(maxHeight)
+    if(maxHeight < 0){
+      console.log('不需要滚动')
+      this.canScroll = false
+    }
     let translateY = 0
-    parent.addEventListener('wheel', e => {
+    if(this.canScroll){
+      parent.addEventListener('wheel', e => {
 
-      let { deltaY } = e
-      translateY += deltaY
-      // if(Math.abs(deltaY) > 20){
-      //   translateY += 20 * 3
-      // }else{
-      //   translateY += deltaY * 3
-      // }
-      console.log("translateY")
-      console.log(translateY)
-      if(translateY < 0){
-        console.log('滑动到顶部了')
-        translateY = 0
-      }else if(translateY > maxHeight){
-        console.log('滑动到底部了')
-        translateY = maxHeight
-      }else{
-        e.preventDefault()
-      }
-      child.style.transform = `translateY(${-translateY}px)`
-    })
+        let { deltaY } = e
+        translateY += deltaY
+        // if(Math.abs(deltaY) > 20){
+        //   translateY += 20 * 3
+        // }else{
+        //   translateY += deltaY * 3
+        // }
+        console.log("translateY")
+        console.log(translateY)
+        if(translateY < 0){
+          console.log('滑动到顶部了')
+          translateY = 0
+        }else if(translateY > maxHeight && maxHeight > 0){
+          console.log('滑动到底部了')
+          translateY = maxHeight
+        }else{
+          e.preventDefault()
+        }
+        child.style.transform = `translateY(${-translateY}px)`
+      })
+    }
+
 
   }
 }

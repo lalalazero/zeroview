@@ -1,11 +1,11 @@
 <template>
    <div id="app">
-     <z-view-scroll style="height: 400px">
+     <z-view-scroll style="width: 800px; height: 400px">
        <p>段落 1</p>
        <p>段落 2</p>
        <p>段落 3</p>
        <p>段落 4</p>
-       <p>段落 5</p>
+       <!-- <p>段落 5</p>
        <p>段落 6</p>
        <p>段落 7</p>
        <p>段落 8</p>
@@ -100,7 +100,7 @@
        <p>段落 97</p>
        <p>段落 98</p>
        <p>段落 99</p>
-       <p>段落 100</p>
+       <p>段落 100</p> -->
      </z-view-scroll>
    </div>
 </template>
