@@ -1,9 +1,9 @@
 <template>
-  <div class="z-view-scroll-wrapper" ref="parent">
+  <div class="z-view-scroll-wrapper" ref="parent" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
     <div class="z-view-scroll" ref="child">
       <slot></slot>
     </div>
-    <div class="z-view-scroll-track">
+    <div class="z-view-scroll-track" v-show="scrollBarVisible">
       <div class="z-view-scroll-bar" ref="bar">
         <div class="z-view-scroll-bar-inner"></div>
       </div>
@@ -16,79 +16,108 @@ export default {
   name: 'zViewScroll',
   data(){
     return {
-      canScroll: true
+      canScroll: true,
+      scrollBarVisible: false,
+      translateY: 0,
+      maxHeight: 0,
+      parentHeight: 0,
+      childHeight: 0
     }
+  },
+  beforeDestroy(){
+    this.$refs.parent.removeEventListener('wheel', this.onWheel)
   },
   mounted(){
     let parent = this.$refs.parent
-    let child = this.$refs.child
-
-    let { height: childHeight } = child.getBoundingClientRect()
-    let { height: parentHeight } = parent.getBoundingClientRect()
-
-    console.log("childHeight")
-    console.log(childHeight)
-    console.log("parentHeight")
-    console.log(parentHeight)
-
-    let { borderTopWidth, borderBottomWidth, paddingTop, paddingBottom } = window.getComputedStyle(parent)
-    borderTopWidth = parseInt(borderTopWidth)
-    borderBottomWidth = parseInt(borderBottomWidth)
-    paddingTop = parseInt(paddingTop)
-    paddingBottom = parseInt(paddingBottom)
-    let maxHeight = childHeight - parentHeight + (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
-
-    console.log("maxHeight")
-    console.log(maxHeight)
-    if(maxHeight < 0){
-      console.log('不需要滚动')
-      this.canScroll = false
-    }
-    let translateY = 0
+    this.initHeight()
     if(this.canScroll){
-      parent.addEventListener('wheel', e => {
-
-        let { deltaY } = e
-        translateY += deltaY
-        // if(Math.abs(deltaY) > 20){
-        //   translateY += 20 * 3
-        // }else{
-        //   translateY += deltaY * 3
-        // }
-        console.log("translateY")
-        console.log(translateY)
-        if(translateY < 0){
-          console.log('滑动到顶部了')
-          translateY = 0
-        }else if(translateY > maxHeight && maxHeight > 0){
-          console.log('滑动到底部了')
-          translateY = maxHeight
-        }else{
-          e.preventDefault()
-        }
-        child.style.transform = `translateY(${-translateY}px)`
-        this.translateScrollBar(parentHeight, childHeight, translateY)
-      })
-      this.initScrollBarHeight(parentHeight, childHeight, translateY)
+      parent.addEventListener('wheel', this.onWheel)
+      this.initScrollBarHeight()
     }
   },
   methods: {
-    initScrollBarHeight(parentHeight, childHeight, translateY){
+    initScrollBarHeight(){
       // 高度占比应相等
       // scrollBarHeight 除以 parentHeight === parentHeight 除以 childHeight
       let bar = this.$refs.bar
+      let { translateY , parentHeight, childHeight} = this
       let scrollBarHeight = Math.round(parentHeight * parentHeight / childHeight)
       console.log("scrollBarHeight")
       console.log(scrollBarHeight)
       bar.style.height = `${scrollBarHeight}px`
     },
-    translateScrollBar(parentHeight, childHeight, translateY){
+    translateScrollBar(){
       // 滑动比例应相等
       // y 除以 parentHeight === translateY 除以 childHeight
+      let { parentHeight, childHeight, translateY } = this
       let y = Math.round(parentHeight * translateY / childHeight)
       let bar = this.$refs.bar
       console.log(`scrollBar translateY：${y}px`)
       bar.style.transform = `translateY(${y}px)`
+
+    },
+    onMouseEnter(){
+      if(this.canScroll){
+        this.scrollBarVisible = true
+      }
+    },
+    onMouseLeave(){
+      if(this.canScroll){
+        this.scrollBarVisible = false
+      }
+    },
+    onWheel(e){
+      let child = this.$refs.child
+      let { translateY, maxHeight } = this
+      let { deltaY } = e
+      translateY += deltaY
+      // if(Math.abs(deltaY) > 20){
+      //   translateY += 20 * 3
+      // }else{
+      //   translateY += deltaY * 3
+      // }
+      console.log("translateY")
+      console.log(translateY)
+      if(translateY < 0){
+        console.log('滑动到顶部了')
+        translateY = 0
+      }else if(translateY > maxHeight && maxHeight > 0){
+        console.log('滑动到底部了')
+        translateY = maxHeight
+      }else{
+        e.preventDefault()
+      }
+      this.translateY = translateY
+      child.style.transform = `translateY(${-translateY}px)`
+      this.translateScrollBar()
+    },
+    initHeight(){
+      let { child, parent } = this.$refs
+      let { height: childHeight } = child.getBoundingClientRect()
+      let { height: parentHeight } = parent.getBoundingClientRect()
+
+      console.log("childHeight")
+      console.log(childHeight)
+      console.log("parentHeight")
+      console.log(parentHeight)
+
+      this.parentHeight = parentHeight
+      this.childHeight = childHeight
+
+      let { borderTopWidth, borderBottomWidth, paddingTop, paddingBottom } = window.getComputedStyle(parent)
+      borderTopWidth = parseInt(borderTopWidth)
+      borderBottomWidth = parseInt(borderBottomWidth)
+      paddingTop = parseInt(paddingTop)
+      paddingBottom = parseInt(paddingBottom)
+      let maxHeight = childHeight - parentHeight + (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
+
+      console.log("maxHeight")
+      console.log(maxHeight)
+      if(maxHeight < 0){
+        console.log('不需要滚动')
+        this.canScroll = false
+      }
+      this.maxHeight = maxHeight
 
     }
   }
