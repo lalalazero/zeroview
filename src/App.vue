@@ -133,7 +133,7 @@ ol {
   list-style: none;
 }
 #app {
-  padding: 40px;
+  padding: 0 40px ;
 }
 
 </style>>

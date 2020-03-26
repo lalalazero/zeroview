@@ -32,6 +32,7 @@ export default {
     console.log(maxHeight)
     let translateY = 0
     parent.addEventListener('wheel', e => {
+
       let { deltaY } = e
       translateY += deltaY
       // if(Math.abs(deltaY) > 20){
@@ -47,6 +48,8 @@ export default {
       }else if(translateY > maxHeight){
         console.log('滑动到底部了')
         translateY = maxHeight
+      }else{
+        e.preventDefault()
       }
       child.style.transform = `translateY(${-translateY}px)`
     })
@@ -58,10 +61,9 @@ export default {
 <style lang="scss" scoped>
 .z-view-scroll {
   transition: transform 0.05s ease;
-  border: 4px solid #000;
   &-wrapper {
     position: relative;
-    border: 4px solid red;
+    border: 1px solid red;
     overflow: hidden;
   }
 }
