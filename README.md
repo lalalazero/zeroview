@@ -111,7 +111,7 @@ ps: 请使用如下 css-reset, 否则样式会有问题
 ### 学习文档
 
 在写组件库的过程中，基本按照一个组件一个文档的方式记录了过程和一些比较容易踩坑的点。
-具体的都在我的[个人博客](https://lalalazero.github.io/blog/)上。
+具体的都在我的[个人博客](https://github.com/lalalazero/blog/)上。
 
 ### 交流
 
