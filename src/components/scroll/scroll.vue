@@ -1,9 +1,15 @@
 <template>
-  <div class="z-view-scroll-wrapper" ref="parent" @wheel="onWheel" @mouseleave="onMouseLeave">
+  <div
+    class="z-view-scroll-wrapper"
+    ref="parent"
+    :style="{ 'height': height }"
+    @wheel="onWheel"
+    @mouseleave="onMouseLeave"
+  >
     <div class="z-view-scroll" ref="child">
       <slot></slot>
     </div>
-    <div class="z-view-scroll-track" ref="track">
+    <div class="z-view-scroll-track" v-show="canScroll" ref="track">
       <div
         class="z-view-scroll-bar"
         ref="bar"
@@ -19,17 +25,20 @@
 <script>
 export default {
   name: "zViewScroll",
+  props: {
+    height: String
+  },
   data() {
     return {
       canScroll: true,
       contentTranslateY: 0,
-      contentMaxScrollHeight: 0,
+      maxContentTranslateY: 0,
       parentHeight: 0,
       childHeight: 0,
       isScrolling: false,
       startPosition: [0, 0],
       endPosition: [0, 0],
-      maxScrollBarMovingHeight: 0,
+      maxScrollBarTranslateY: 0,
       scrollBarTranslateY: 0
     };
   },
@@ -53,7 +62,7 @@ export default {
       this.$refs.bar.style.height = `${scrollBarHeight}px`;
 
       // 计算滚动条最大滑动高度
-      this.maxScrollBarMovingHeight = this.parentHeight - scrollBarHeight;
+      this.maxScrollBarTranslateY = this.parentHeight - scrollBarHeight;
     },
     translateScrollBar() {
       // 滑动比例应相等
@@ -66,18 +75,18 @@ export default {
     },
     onWheel(e) {
       if (!this.canScroll) return;
-      let { contentTranslateY, contentMaxScrollHeight } = this;
+      let { contentTranslateY, maxContentTranslateY } = this;
       let { deltaY } = e;
       contentTranslateY += deltaY;
       if (contentTranslateY < 0) {
         // console.log('滑动到顶部了')
         contentTranslateY = 0;
       } else if (
-        contentTranslateY > contentMaxScrollHeight &&
-        contentMaxScrollHeight > 0
+        contentTranslateY > maxContentTranslateY &&
+        maxContentTranslateY > 0
       ) {
         // console.log('滑动到底部了')
-        contentTranslateY = contentMaxScrollHeight;
+        contentTranslateY = maxContentTranslateY;
       } else {
         e.preventDefault();
       }
@@ -86,11 +95,15 @@ export default {
       this.translateScrollBar();
     },
     initHeight() {
-      this.childHeight = this.$refs.child.getBoundingClientRect().height;
-      this.parentHeight = this.$refs.parent.getBoundingClientRect().height;
-      this.calculateContentMaxScrollHeight();
+      this.childHeight = parseInt(
+        window.getComputedStyle(this.$refs.child).height
+      );
+      this.parentHeight = parseInt(
+        window.getComputedStyle(this.$refs.parent).height
+      );
+      this.calculateMaxContentTranslateY();
     },
-    calculateContentMaxScrollHeight() {
+    calculateMaxContentTranslateY() {
       let {
         borderTopWidth,
         borderBottomWidth,
@@ -101,16 +114,16 @@ export default {
       borderBottomWidth = parseInt(borderBottomWidth);
       paddingTop = parseInt(paddingTop);
       paddingBottom = parseInt(paddingBottom);
-      let contentMaxScrollHeight = Math.round(
+      let maxContentTranslateY = Math.round(
         this.childHeight -
           this.parentHeight +
           (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
       );
-      if (contentMaxScrollHeight <= 0) {
+      if (maxContentTranslateY <= 0) {
         // console.log('不需要滚动')
         this.canScroll = false;
       }
-      this.contentMaxScrollHeight = contentMaxScrollHeight;
+      this.maxContentTranslateY = maxContentTranslateY;
     },
     onMouseDownAtScrollBar(e) {
       if (!this.canScroll) return;
@@ -132,7 +145,7 @@ export default {
         isScrolling,
         startPosition,
         endPosition,
-        maxScrollBarMovingHeight
+        maxScrollBarTranslateY
       } = this;
       if (isScrolling) {
         let { screenX, screenY } = e;
@@ -143,8 +156,8 @@ export default {
         this.scrollBarTranslateY += deltaY;
         if (this.scrollBarTranslateY < 0) {
           this.scrollBarTranslateY = 0;
-        } else if (this.scrollBarTranslateY > maxScrollBarMovingHeight) {
-          this.scrollBarTranslateY = maxScrollBarMovingHeight;
+        } else if (this.scrollBarTranslateY > maxScrollBarTranslateY) {
+          this.scrollBarTranslateY = maxScrollBarTranslateY;
         }
         this.$refs.bar.style.transform = `translateY(${this.scrollBarTranslateY}px)`;
         this.scrollContentTogether();
