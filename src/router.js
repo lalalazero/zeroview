@@ -85,6 +85,10 @@ const router = new Router({
     {
       path: '/datepicker',
       component: () => import('../docs/datepicker.md')
+    },
+    {
+      path: '/scroll',
+      component: () => import('../docs/scroll.md')
     }
   ]
 })

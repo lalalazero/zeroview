@@ -192,6 +192,11 @@
                   <p>Sticky</p>
                 </router-link>
               </z-view-menu-item>
+              <z-view-menu-item name="scroll">
+                <router-link to="/scroll">
+                  <p>Scroll</p>
+                </router-link>
+              </z-view-menu-item>
             </z-view-menu-group>
           </z-view-sub-menu>
         </z-view-menu>
