@@ -1,10 +1,10 @@
 <template>
   <div class="z-view-scroll-wrapper" ref="parent" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
-    <div class="z-view-scroll" ref="child">
+    <div class="z-view-scroll" ref="child" >
       <slot></slot>
     </div>
     <div class="z-view-scroll-track" v-show="scrollBarVisible">
-      <div class="z-view-scroll-bar" ref="bar">
+      <div class="z-view-scroll-bar" ref="bar" @mousedown="onMouseDownAtScrollBar" @selectstart="onSelectStart">
         <div class="z-view-scroll-bar-inner"></div>
       </div>
     </div>
@@ -21,7 +21,11 @@ export default {
       translateY: 0,
       maxHeight: 0,
       parentHeight: 0,
-      childHeight: 0
+      childHeight: 0,
+      isScrolling: false,
+      startPosition: [0, 0],
+      endPosition: [0, 0],
+      translateDelta: [0, 0]
     }
   },
   beforeDestroy(){
@@ -34,6 +38,7 @@ export default {
       parent.addEventListener('wheel', this.onWheel)
       this.initScrollBarHeight()
     }
+    this.addDocumentLisenter()
   },
   methods: {
     initScrollBarHeight(){
@@ -42,8 +47,8 @@ export default {
       let bar = this.$refs.bar
       let { translateY , parentHeight, childHeight} = this
       let scrollBarHeight = Math.round(parentHeight * parentHeight / childHeight)
-      console.log("scrollBarHeight")
-      console.log(scrollBarHeight)
+      // console.log("scrollBarHeight")
+      // console.log(scrollBarHeight)
       bar.style.height = `${scrollBarHeight}px`
     },
     translateScrollBar(){
@@ -52,18 +57,13 @@ export default {
       let { parentHeight, childHeight, translateY } = this
       let y = Math.round(parentHeight * translateY / childHeight)
       let bar = this.$refs.bar
-      console.log(`scrollBar translateY：${y}px`)
+      // console.log(`scrollBar translateY：${y}px`)
       bar.style.transform = `translateY(${y}px)`
 
     },
     onMouseEnter(){
       if(this.canScroll){
         this.scrollBarVisible = true
-      }
-    },
-    onMouseLeave(){
-      if(this.canScroll){
-        this.scrollBarVisible = false
       }
     },
     onWheel(e){
@@ -76,13 +76,13 @@ export default {
       // }else{
       //   translateY += deltaY * 3
       // }
-      console.log("translateY")
-      console.log(translateY)
+      // console.log("translateY")
+      // console.log(translateY)
       if(translateY < 0){
-        console.log('滑动到顶部了')
+        // console.log('滑动到顶部了')
         translateY = 0
       }else if(translateY > maxHeight && maxHeight > 0){
-        console.log('滑动到底部了')
+        // console.log('滑动到底部了')
         translateY = maxHeight
       }else{
         e.preventDefault()
@@ -96,10 +96,10 @@ export default {
       let { height: childHeight } = child.getBoundingClientRect()
       let { height: parentHeight } = parent.getBoundingClientRect()
 
-      console.log("childHeight")
-      console.log(childHeight)
-      console.log("parentHeight")
-      console.log(parentHeight)
+      // console.log("childHeight")
+      // console.log(childHeight)
+      // console.log("parentHeight")
+      // console.log(parentHeight)
 
       this.parentHeight = parentHeight
       this.childHeight = childHeight
@@ -111,14 +111,49 @@ export default {
       paddingBottom = parseInt(paddingBottom)
       let maxHeight = childHeight - parentHeight + (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
 
-      console.log("maxHeight")
-      console.log(maxHeight)
+      // console.log("maxHeight")
+      // console.log(maxHeight)
       if(maxHeight < 0){
-        console.log('不需要滚动')
+        // console.log('不需要滚动')
         this.canScroll = false
       }
       this.maxHeight = maxHeight
 
+    },
+    onMouseDownAtScrollBar(e){
+      let { isScrolling, startPosition } = this
+      let { screenX, screenY } = e
+      isScrolling = true
+      startPosition = [screenX, screenY]
+      this.isScrolling = isScrolling
+      this.startPosition = startPosition
+    },
+    addDocumentLisenter(){
+      document.addEventListener('mousemove', this.handleScrolling)
+      document.addEventListener('mouseup', this.stopScroll)
+    },
+    handleScrolling(e){
+      let { isScrolling, startPosition, endPosition, translateDelta } = this
+      let { bar } = this.$refs
+      if(isScrolling){
+        let { screenX, screenY } = e
+        this.endPosition = [screenX, screenY]
+        let deltaX = endPosition[0] - startPosition[0]
+        let deltaY = endPosition[1] - startPosition[1]
+        this.translateDelta = [deltaX + translateDelta[0], deltaY + translateDelta[1]]
+        this.startPosition = endPosition
+        bar.style.transform = `translateY(${translateDelta[1]}px)`
+      }
+    },
+    stopScroll(e){
+      this.isScrolling = false
+    },
+    onSelectStart(e){
+      e.preventDefault()
+    },
+    onMouseLeave(e){
+      this.isScrolling = false
+      this.scrollBarVisible = false
     }
   }
 }
