@@ -1,10 +1,20 @@
 <template>
-  <div class="z-view-scroll-wrapper" ref="parent" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
-    <div class="z-view-scroll" ref="child" >
+  <div
+    class="z-view-scroll-wrapper"
+    ref="parent"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+  >
+    <div class="z-view-scroll" ref="child">
       <slot></slot>
     </div>
     <div class="z-view-scroll-track" v-show="scrollBarVisible">
-      <div class="z-view-scroll-bar" ref="bar" @mousedown="onMouseDownAtScrollBar" @selectstart="onSelectStart">
+      <div
+        class="z-view-scroll-bar"
+        ref="bar"
+        @mousedown="onMouseDownAtScrollBar"
+        @selectstart="onSelectStart"
+      >
         <div class="z-view-scroll-bar-inner"></div>
       </div>
     </div>
@@ -13,8 +23,8 @@
 
 <script>
 export default {
-  name: 'zViewScroll',
-  data(){
+  name: "zViewScroll",
+  data() {
     return {
       canScroll: true,
       scrollBarVisible: false,
@@ -26,51 +36,53 @@ export default {
       startPosition: [0, 0],
       endPosition: [0, 0],
       translateDelta: [0, 0]
-    }
+    };
   },
-  beforeDestroy(){
-    this.$refs.parent.removeEventListener('wheel', this.onWheel)
+  beforeDestroy() {
+    this.$refs.parent.removeEventListener("wheel", this.onWheel);
+    this.removeDocumentLisenter();
   },
-  mounted(){
-    let parent = this.$refs.parent
-    this.initHeight()
-    if(this.canScroll){
-      parent.addEventListener('wheel', this.onWheel)
-      this.initScrollBarHeight()
+  mounted() {
+    let parent = this.$refs.parent;
+    this.initHeight();
+    if (this.canScroll) {
+      parent.addEventListener("wheel", this.onWheel);
+      this.initScrollBarHeight();
     }
-    this.addDocumentLisenter()
+    this.addDocumentLisenter();
   },
   methods: {
-    initScrollBarHeight(){
+    initScrollBarHeight() {
       // 高度占比应相等
       // scrollBarHeight 除以 parentHeight === parentHeight 除以 childHeight
-      let bar = this.$refs.bar
-      let { translateY , parentHeight, childHeight} = this
-      let scrollBarHeight = Math.round(parentHeight * parentHeight / childHeight)
+      let bar = this.$refs.bar;
+      let { translateY, parentHeight, childHeight } = this;
+      let scrollBarHeight = Math.round(
+        (parentHeight * parentHeight) / childHeight
+      );
       // console.log("scrollBarHeight")
       // console.log(scrollBarHeight)
-      bar.style.height = `${scrollBarHeight}px`
+      bar.style.height = `${scrollBarHeight}px`;
     },
-    translateScrollBar(){
+    translateScrollBar() {
       // 滑动比例应相等
       // y 除以 parentHeight === translateY 除以 childHeight
-      let { parentHeight, childHeight, translateY } = this
-      let y = Math.round(parentHeight * translateY / childHeight)
-      let bar = this.$refs.bar
+      let { parentHeight, childHeight, translateY } = this;
+      let y = Math.round((parentHeight * translateY) / childHeight);
+      let bar = this.$refs.bar;
       // console.log(`scrollBar translateY：${y}px`)
-      bar.style.transform = `translateY(${y}px)`
-
+      bar.style.transform = `translateY(${y}px)`;
     },
-    onMouseEnter(){
-      if(this.canScroll){
-        this.scrollBarVisible = true
+    onMouseEnter() {
+      if (this.canScroll) {
+        this.scrollBarVisible = true;
       }
     },
-    onWheel(e){
-      let child = this.$refs.child
-      let { translateY, maxHeight } = this
-      let { deltaY } = e
-      translateY += deltaY
+    onWheel(e) {
+      let child = this.$refs.child;
+      let { translateY, maxHeight } = this;
+      let { deltaY } = e;
+      translateY += deltaY;
       // if(Math.abs(deltaY) > 20){
       //   translateY += 20 * 3
       // }else{
@@ -78,85 +90,99 @@ export default {
       // }
       // console.log("translateY")
       // console.log(translateY)
-      if(translateY < 0){
+      if (translateY < 0) {
         // console.log('滑动到顶部了')
-        translateY = 0
-      }else if(translateY > maxHeight && maxHeight > 0){
+        translateY = 0;
+      } else if (translateY > maxHeight && maxHeight > 0) {
         // console.log('滑动到底部了')
-        translateY = maxHeight
-      }else{
-        e.preventDefault()
+        translateY = maxHeight;
+      } else {
+        e.preventDefault();
       }
-      this.translateY = translateY
-      child.style.transform = `translateY(${-translateY}px)`
-      this.translateScrollBar()
+      this.translateY = translateY;
+      child.style.transform = `translateY(${-translateY}px)`;
+      this.translateScrollBar();
     },
-    initHeight(){
-      let { child, parent } = this.$refs
-      let { height: childHeight } = child.getBoundingClientRect()
-      let { height: parentHeight } = parent.getBoundingClientRect()
+    initHeight() {
+      let { child, parent } = this.$refs;
+      let { height: childHeight } = child.getBoundingClientRect();
+      let { height: parentHeight } = parent.getBoundingClientRect();
 
       // console.log("childHeight")
       // console.log(childHeight)
       // console.log("parentHeight")
       // console.log(parentHeight)
 
-      this.parentHeight = parentHeight
-      this.childHeight = childHeight
+      this.parentHeight = parentHeight;
+      this.childHeight = childHeight;
 
-      let { borderTopWidth, borderBottomWidth, paddingTop, paddingBottom } = window.getComputedStyle(parent)
-      borderTopWidth = parseInt(borderTopWidth)
-      borderBottomWidth = parseInt(borderBottomWidth)
-      paddingTop = parseInt(paddingTop)
-      paddingBottom = parseInt(paddingBottom)
-      let maxHeight = childHeight - parentHeight + (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
+      let {
+        borderTopWidth,
+        borderBottomWidth,
+        paddingTop,
+        paddingBottom
+      } = window.getComputedStyle(parent);
+      borderTopWidth = parseInt(borderTopWidth);
+      borderBottomWidth = parseInt(borderBottomWidth);
+      paddingTop = parseInt(paddingTop);
+      paddingBottom = parseInt(paddingBottom);
+      let maxHeight =
+        childHeight -
+        parentHeight +
+        (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom);
 
       // console.log("maxHeight")
       // console.log(maxHeight)
-      if(maxHeight < 0){
+      if (maxHeight < 0) {
         // console.log('不需要滚动')
-        this.canScroll = false
+        this.canScroll = false;
       }
-      this.maxHeight = maxHeight
-
+      this.maxHeight = maxHeight;
     },
-    onMouseDownAtScrollBar(e){
-      let { isScrolling, startPosition } = this
-      let { screenX, screenY } = e
-      isScrolling = true
-      startPosition = [screenX, screenY]
-      this.isScrolling = isScrolling
-      this.startPosition = startPosition
+    onMouseDownAtScrollBar(e) {
+      let { isScrolling, startPosition } = this;
+      let { screenX, screenY } = e;
+      isScrolling = true;
+      startPosition = [screenX, screenY];
+      this.isScrolling = isScrolling;
+      this.startPosition = startPosition;
     },
-    addDocumentLisenter(){
-      document.addEventListener('mousemove', this.handleScrolling)
-      document.addEventListener('mouseup', this.stopScroll)
+    addDocumentLisenter() {
+      document.addEventListener("mousemove", this.handleScrolling);
+      document.addEventListener("mouseup", this.stopScroll);
     },
-    handleScrolling(e){
-      let { isScrolling, startPosition, endPosition, translateDelta } = this
-      let { bar } = this.$refs
-      if(isScrolling){
-        let { screenX, screenY } = e
-        this.endPosition = [screenX, screenY]
-        let deltaX = endPosition[0] - startPosition[0]
-        let deltaY = endPosition[1] - startPosition[1]
-        this.translateDelta = [deltaX + translateDelta[0], deltaY + translateDelta[1]]
-        this.startPosition = endPosition
-        bar.style.transform = `translateY(${translateDelta[1]}px)`
+    removeDocumentLisenter() {
+      document.removeEventListener("mousemove", this.handleScrolling);
+      document.removeEventListener("mouseup", this.stopScroll);
+    },
+    handleScrolling(e) {
+      let { isScrolling, startPosition, endPosition, translateDelta } = this;
+      let { bar } = this.$refs;
+      if (isScrolling) {
+        let { screenX, screenY } = e;
+        this.endPosition = [screenX, screenY];
+        let deltaX = endPosition[0] - startPosition[0];
+        let deltaY = endPosition[1] - startPosition[1];
+        this.translateDelta = [
+          deltaX + translateDelta[0],
+          deltaY + translateDelta[1]
+        ];
+        this.startPosition = endPosition;
+        bar.style.transform = `translateY(${translateDelta[1]}px)`;
       }
     },
-    stopScroll(e){
-      this.isScrolling = false
+    stopScroll(e) {
+      this.isScrolling = false;
     },
-    onSelectStart(e){
-      e.preventDefault()
+    onSelectStart(e) {
+      e.preventDefault();
     },
-    onMouseLeave(e){
-      this.isScrolling = false
-      this.scrollBarVisible = false
+    onMouseLeave(e) {
+      this.isScrolling = false;
+      this.scrollBarVisible = false;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -173,11 +199,10 @@ export default {
     width: 14px;
     top: 0;
     right: 0;
-    border-left: 1px solid #E8E7E8;
-    border-right: 1px solid #E8E7E8;
-    background: #FAFAFA;
+    border-left: 1px solid #e8e7e8;
+    border-right: 1px solid #e8e7e8;
+    background: #fafafa;
     opacity: 0.9;
-
   }
   &-bar {
     position: absolute;
@@ -190,9 +215,9 @@ export default {
     &-inner {
       height: 100%;
       // border-radius: 4px;
-      background: #C2C2C2;
+      background: #c2c2c2;
       &:hover {
-        background: #7D7D7D;
+        background: #7d7d7d;
       }
     }
   }
