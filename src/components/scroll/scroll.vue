@@ -1,14 +1,9 @@
 <template>
-  <div
-    class="z-view-scroll-wrapper"
-    ref="parent"
-    @mouseenter="onMouseEnter"
-    @mouseleave="onMouseLeave"
-  >
+  <div class="z-view-scroll-wrapper" ref="parent" @mouseleave="onMouseLeave">
     <div class="z-view-scroll" ref="child">
       <slot></slot>
     </div>
-    <div class="z-view-scroll-track" v-show="scrollBarVisible">
+    <div class="z-view-scroll-track" ref="track">
       <div
         class="z-view-scroll-bar"
         ref="bar"
@@ -27,7 +22,6 @@ export default {
   data() {
     return {
       canScroll: true,
-      scrollBarVisible: false,
       translateY: 0,
       maxHeight: 0,
       parentHeight: 0,
@@ -35,7 +29,9 @@ export default {
       isScrolling: false,
       startPosition: [0, 0],
       endPosition: [0, 0],
-      translateDelta: [0, 0]
+      translateDelta: [0, 0],
+      maxScrollBarMovingHeight: 0,
+      scrollBarTranslateY: 0
     };
   },
   beforeDestroy() {
@@ -55,7 +51,7 @@ export default {
     initScrollBarHeight() {
       // 高度占比应相等
       // scrollBarHeight 除以 parentHeight === parentHeight 除以 childHeight
-      let bar = this.$refs.bar;
+      let { bar } = this.$refs;
       let { translateY, parentHeight, childHeight } = this;
       let scrollBarHeight = Math.round(
         (parentHeight * parentHeight) / childHeight
@@ -63,6 +59,9 @@ export default {
       // console.log("scrollBarHeight")
       // console.log(scrollBarHeight)
       bar.style.height = `${scrollBarHeight}px`;
+
+      // 计算滚动条最大滑动高度
+      this.maxScrollBarMovingHeight = this.parentHeight - scrollBarHeight;
     },
     translateScrollBar() {
       // 滑动比例应相等
@@ -72,11 +71,6 @@ export default {
       let bar = this.$refs.bar;
       // console.log(`scrollBar translateY：${y}px`)
       bar.style.transform = `translateY(${y}px)`;
-    },
-    onMouseEnter() {
-      if (this.canScroll) {
-        this.scrollBarVisible = true;
-      }
     },
     onWheel(e) {
       let child = this.$refs.child;
@@ -148,15 +142,21 @@ export default {
       this.startPosition = startPosition;
     },
     addDocumentLisenter() {
-      document.addEventListener("mousemove", this.handleScrolling);
-      document.addEventListener("mouseup", this.stopScroll);
+      document.addEventListener("mousemove", this.onScrollBarMoving);
+      document.addEventListener("mouseup", this.stopScrollBarMove);
     },
     removeDocumentLisenter() {
-      document.removeEventListener("mousemove", this.handleScrolling);
-      document.removeEventListener("mouseup", this.stopScroll);
+      document.removeEventListener("mousemove", this.onScrollBarMoving);
+      document.removeEventListener("mouseup", this.stopScrollBarMove);
     },
-    handleScrolling(e) {
-      let { isScrolling, startPosition, endPosition, translateDelta } = this;
+    onScrollBarMoving(e) {
+      let {
+        isScrolling,
+        startPosition,
+        endPosition,
+        translateDelta,
+        maxScrollBarMovingHeight
+      } = this;
       let { bar } = this.$refs;
       if (isScrolling) {
         let { screenX, screenY } = e;
@@ -168,10 +168,16 @@ export default {
           deltaY + translateDelta[1]
         ];
         this.startPosition = endPosition;
-        bar.style.transform = `translateY(${translateDelta[1]}px)`;
+        this.scrollBarTranslateY = this.translateDelta[1];
+        if (this.scrollBarTranslateY < 0) {
+          this.scrollBarTranslateY = 0;
+        } else if (this.scrollBarTranslateY > maxScrollBarMovingHeight) {
+          this.scrollBarTranslateY = maxScrollBarMovingHeight;
+        }
+        bar.style.transform = `translateY(${this.scrollBarTranslateY}px)`;
       }
     },
-    stopScroll(e) {
+    stopScrollBarMove(e) {
       this.isScrolling = false;
     },
     onSelectStart(e) {
@@ -179,7 +185,6 @@ export default {
     },
     onMouseLeave(e) {
       this.isScrolling = false;
-      this.scrollBarVisible = false;
     }
   }
 };
