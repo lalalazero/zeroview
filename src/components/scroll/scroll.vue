@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       canScroll: true,
-      translateY: 0,
+      contentTranslateY: 0,
       maxHeight: 0,
       parentHeight: 0,
       childHeight: 0,
@@ -52,12 +52,10 @@ export default {
       // 高度占比应相等
       // scrollBarHeight 除以 parentHeight === parentHeight 除以 childHeight
       let { bar } = this.$refs;
-      let { translateY, parentHeight, childHeight } = this;
+      let { contentTranslateY, parentHeight, childHeight } = this;
       let scrollBarHeight = Math.round(
         (parentHeight * parentHeight) / childHeight
       );
-      // console.log("scrollBarHeight")
-      // console.log(scrollBarHeight)
       bar.style.height = `${scrollBarHeight}px`;
 
       // 计算滚动条最大滑动高度
@@ -65,48 +63,36 @@ export default {
     },
     translateScrollBar() {
       // 滑动比例应相等
-      // y 除以 parentHeight === translateY 除以 childHeight
-      let { parentHeight, childHeight, translateY } = this;
-      let y = Math.round((parentHeight * translateY) / childHeight);
+      // y 除以 parentHeight === contentTranslateY 除以 childHeight
+      let { parentHeight, childHeight, contentTranslateY } = this;
+      this.scrollBarTranslateY = Math.round(
+        (parentHeight * contentTranslateY) / childHeight
+      );
       let bar = this.$refs.bar;
-      // console.log(`scrollBar translateY：${y}px`)
-      bar.style.transform = `translateY(${y}px)`;
+      bar.style.transform = `translateY(${this.scrollBarTranslateY}px)`;
     },
     onWheel(e) {
       let child = this.$refs.child;
-      let { translateY, maxHeight } = this;
+      let { contentTranslateY, maxHeight } = this;
       let { deltaY } = e;
-      translateY += deltaY;
-      // if(Math.abs(deltaY) > 20){
-      //   translateY += 20 * 3
-      // }else{
-      //   translateY += deltaY * 3
-      // }
-      // console.log("translateY")
-      // console.log(translateY)
-      if (translateY < 0) {
+      contentTranslateY += deltaY;
+      if (contentTranslateY < 0) {
         // console.log('滑动到顶部了')
-        translateY = 0;
-      } else if (translateY > maxHeight && maxHeight > 0) {
+        contentTranslateY = 0;
+      } else if (contentTranslateY > maxHeight && maxHeight > 0) {
         // console.log('滑动到底部了')
-        translateY = maxHeight;
+        contentTranslateY = maxHeight;
       } else {
         e.preventDefault();
       }
-      this.translateY = translateY;
-      child.style.transform = `translateY(${-translateY}px)`;
+      this.contentTranslateY = contentTranslateY;
+      child.style.transform = `translateY(${-contentTranslateY}px)`;
       this.translateScrollBar();
     },
     initHeight() {
       let { child, parent } = this.$refs;
       let { height: childHeight } = child.getBoundingClientRect();
       let { height: parentHeight } = parent.getBoundingClientRect();
-
-      // console.log("childHeight")
-      // console.log(childHeight)
-      // console.log("parentHeight")
-      // console.log(parentHeight)
-
       this.parentHeight = parentHeight;
       this.childHeight = childHeight;
 
@@ -124,9 +110,6 @@ export default {
         childHeight -
         parentHeight +
         (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom);
-
-      // console.log("maxHeight")
-      // console.log(maxHeight)
       if (maxHeight < 0) {
         // console.log('不需要滚动')
         this.canScroll = false;
@@ -175,7 +158,18 @@ export default {
           this.scrollBarTranslateY = maxScrollBarMovingHeight;
         }
         bar.style.transform = `translateY(${this.scrollBarTranslateY}px)`;
+        this.scrollContentTogether();
       }
+    },
+    scrollContentTogether() {
+      // 等比关系
+      // scrollBarTranslateY 除以 parentHeight = contentTranslateY 除以 childHeight
+      let { scrollBarTranslateY, parentHeight, childHeight } = this;
+      this.contentTranslateY = Math.round(
+        (childHeight * scrollBarTranslateY) / parentHeight
+      );
+      this.$refs.child.style.transform = `translateY(${-this
+        .contentTranslateY}px)`;
     },
     stopScrollBarMove(e) {
       this.isScrolling = false;
