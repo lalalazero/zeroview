@@ -130,7 +130,6 @@ export default {
       let { screenX, screenY } = e;
       this.isScrolling = true;
       this.startPosition = [screenX, screenY];
-      this.endPosition = [screenX, screenY];
     },
     addDocumentLisenter() {
       document.addEventListener("mousemove", this.onScrollBarMoving);
@@ -141,18 +140,13 @@ export default {
       document.removeEventListener("mouseup", this.stopScrollBarMove);
     },
     onScrollBarMoving(e) {
-      let {
-        isScrolling,
-        startPosition,
-        endPosition,
-        maxScrollBarTranslateY
-      } = this;
+      let { isScrolling, maxScrollBarTranslateY } = this;
       if (isScrolling) {
         let { screenX, screenY } = e;
         this.endPosition = [screenX, screenY];
-        let deltaX = endPosition[0] - startPosition[0];
-        let deltaY = endPosition[1] - startPosition[1];
-        this.startPosition = endPosition;
+        let deltaX = this.endPosition[0] - this.startPosition[0];
+        let deltaY = this.endPosition[1] - this.startPosition[1];
+        this.startPosition = this.endPosition;
         this.scrollBarTranslateY += deltaY;
         if (this.scrollBarTranslateY < 0) {
           this.scrollBarTranslateY = 0;

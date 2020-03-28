@@ -102,8 +102,8 @@
       <p>段落 99</p>
       <p>段落 100</p>
     </z-view-scroll>
-    <z-view-scroll height="100px" style="border: 1px solid #000">
-      <p style="height: 400px; border: 1px solid red;">1123</p>
+    <z-view-scroll style="border: 1px solid #000">
+      <p>1123</p>
     </z-view-scroll>
   </div>
 </template>
