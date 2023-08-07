@@ -16,9 +16,9 @@
               :key="index"
               :name="item.path"
             >
-              <router-link :to="item.path">
-                {{ item.meta.text }}
-              </router-link>
+                    <a @click="click(item)">
+                      {{ item.meta.text }}
+                    </a>
             </z-view-menu-item>
           </z-view-menu>
         </template>
@@ -36,15 +36,15 @@ import Header from "./layout-header.vue";
 export default {
   components: { Header },
   watch: {
-    $route(to, from) {
-      if (to.path === "/") {
-        this.selected = "intro";
-      } else {
-        this.$nextTick(() => {
-          this.selected = to.path.substr(1);
-        });
-      }
-    },
+    // $route(to, from) {
+    //   if (to.path === "/") {
+    //     this.selected = "intro";
+    //   } else {
+    //     this.$nextTick(() => {
+    //       this.selected = to.path.substr(1);
+    //     });
+    //   }
+    // },
   },
   data() {
     return {
@@ -52,8 +52,15 @@ export default {
       routes,
     };
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    click(item) {
+      this.selected = item.path
+      this.$router.push({ path: item.path })
+    }
+  },
+  mounted() {
+    // this.click({ path: '/intro' })
+  },
 };
 </script>
 <style lang="scss">
