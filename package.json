@@ -3,22 +3,13 @@
   "version": "0.0.14",
   "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "serve-example": "cross-env EXAMPLE_ENV=true vue-cli-service serve src/example.js",
-    "build": "webpack ",
-    "build-example": "cross-env EXAMPLE_ENV=true vue-cli-service build src/example.js",
-    "test": "cross-env BABEL_ENV=test karma start --single-run",
-    "test-dev": "karma start",
-    "analyze": "cross-env ANALYZE=true vue-cli-service build --target lib --name zeroview src/index.js",
-    "analyze-example": "cross-env EXAMPLE_ENV=true ANALYZE=true vue-cli-service build src/example.js",
-    "webpack-build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
-    "webpack-build-example": "cross-env EXAMPLE_ENV=true webpack --config build/webpack.config.example.js",
-    "new-dev": "webpack serve --config ./example/webpack.config.js",
-    "new-dev-build": "webpack --config ./example/webpack.config.js",
-    "new-build-prod": "webpack",
-    "new-build": "pnpm run new-dev-build && pnpm run new-build-prod"
+    "test": "echo \"I haven't re-write them :( \"",
+    "dev": "webpack serve --config ./example/webpack.config.js",
+    "build-dev": "webpack --config ./example/webpack.config.js",
+    "build-prod": "webpack",
+    "build-all": "pnpm run build-dev && pnpm run build-prod"
   },
-  "main": "dist/zeroview.umd.min.js",
+  "main": "dist/vue2-components.js",
   "files": [
     "src/components",
     "src/directives",

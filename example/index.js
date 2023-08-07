@@ -2,7 +2,7 @@ import Vue from "vue";
 import Components from '../dist/vue2-components.js'
 import Example from "./Example.vue";
 import DemoBlock from './demo-block.vue'
-import '../dist/main.css'
+import '../dist/style.css'
 import router from "./router";
 // import store from "./store";
 

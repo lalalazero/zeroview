@@ -3,7 +3,7 @@ const { VueLoaderPlugin } = require("vue-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: './src/index.js',
   output: {
     filename: 'vue2-components.js',
@@ -64,6 +64,8 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'style.css'
+    }),
   ]
 }

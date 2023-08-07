@@ -84,14 +84,14 @@ export default {
   $class-prefix: col-;
   @for $n from 1 through 24 {
     &.#{$class-prefix}#{$n} {
-      width: ($n / 24) * 100%;
+      width: calc($n / 24) * 100%;
     }
   }
 
   $offset: offset-;
   @for $n from 1 through 24 {
     &.#{$offset}#{$n} {
-      margin-left: ($n / 24) * 100%;
+      margin-left: calc($n / 24) * 100%;
     }
   }
 
@@ -99,14 +99,14 @@ export default {
     $class-prefix: col-ipad-;
     @for $n from 1 through 24 {
       &.#{$class-prefix}#{$n} {
-        width: ($n / 24) * 100%;
+        width: calc($n / 24) * 100%;
       }
     }
 
     $offset: offset-ipad-;
     @for $n from 1 through 24 {
       &.#{$offset}#{$n} {
-        margin-left: ($n / 24) * 100%;
+        margin-left: calc($n / 24) * 100%;
       }
     }
   }
@@ -115,14 +115,14 @@ export default {
     $class-prefix: col-narrow-pc-;
     @for $n from 1 through 24 {
       &.#{$class-prefix}#{$n} {
-        width: ($n / 24) * 100%;
+        width: calc($n / 24) * 100%;
       }
     }
 
     $offset: offset-narrow-pc-;
     @for $n from 1 through 24 {
       &.#{$offset}#{$n} {
-        margin-left: ($n / 24) * 100%;
+        margin-left: calc($n / 24) * 100%;
       }
     }
   }
@@ -131,14 +131,14 @@ export default {
     $class-prefix: col-pc-;
     @for $n from 1 through 24 {
       &.#{$class-prefix}#{$n} {
-        width: ($n / 24) * 100%;
+        width: calc($n / 24) * 100%;
       }
     }
 
     $offset: offset-pc-;
     @for $n from 1 through 24 {
       &.#{$offset}#{$n} {
-        margin-left: ($n / 24) * 100%;
+        margin-left: calc($n / 24) * 100%;
       }
     }
   }
@@ -147,14 +147,14 @@ export default {
     $class-prefix: col-wide-pc-;
     @for $n from 1 through 24 {
       &.#{$class-prefix}#{$n} {
-        width: ($n / 24) * 100%;
+        width: calc($n / 24) * 100%;
       }
     }
 
     $offset: offset-wide-pc-;
     @for $n from 1 through 24 {
       &.#{$offset}#{$n} {
-        margin-left: ($n / 24) * 100%;
+        margin-left: calc($n / 24) * 100%;
       }
     }
   }
