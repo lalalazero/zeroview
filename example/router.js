@@ -31,6 +31,10 @@ const router = new Router({
       component: () => import("./docs/input.md")
     },
     {
+      path: "/tag",
+      component: () => import("./docs/tag.md")
+    },
+    {
       path: "/popover",
       component: () => import("./docs/popover.md")
     },

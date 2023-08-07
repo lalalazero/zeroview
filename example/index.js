@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Components from '../dist/vue2-components.js'
+import Components from '../src/index.js'
 import Example from "./Example.vue";
 import DemoBlock from './demo-block.vue'
 import '../dist/style.css'

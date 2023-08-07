@@ -105,6 +105,11 @@
                   <p>Icon</p>
                 </router-link>
               </z-view-menu-item>
+              <z-view-menu-item name="tag">
+                <router-link to="/tag">
+                  <p>Tag</p>
+                </router-link>
+              </z-view-menu-item>
             </z-view-menu-group>
             <z-view-menu-group name="布局">
               <z-view-menu-item name="grid">
