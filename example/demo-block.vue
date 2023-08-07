@@ -8,19 +8,20 @@
       <div class="html">
         <div class="code-toggle" @click="codeVisible = !codeVisible" @mouseenter="onMouseEnter"
           @mouseleave="onMouseLeave">
-          <!-- <z-view-icon name="down" ></z-view-icon> -->
-          <span v-if="spanVisible && !codeVisible">查看代码</span>
-          <span v-if="codeVisible">隐藏代码</span>
-        </div>
-        <div class="demo-script" v-show="codeVisible">
-          <div class="description">
-            <slot name="description"></slot>
+              <z-view-icon name="down" ></z-view-icon>
+            <span v-if="spanVisible && !codeVisible">查看代码</span>
+            <span v-if="codeVisible">隐藏代码</span>
           </div>
-          <slot name="highlight"></slot>
+          <div class="demo-script" v-show="codeVisible">
+            <div class="description">
+              <slot name="description"></slot>
+            </div>
+            <slot name="highlight"></slot>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </div
+>
 </template>
 <script>
 export default {
@@ -43,7 +44,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '~/example/style-variable.scss';
 
 .demo-block {
   border: 1px solid $border-color-ant-design;

@@ -14,7 +14,9 @@
     "webpack-build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
     "webpack-build-example": "cross-env EXAMPLE_ENV=true webpack --config build/webpack.config.example.js",
     "new-dev": "webpack serve --config ./example/webpack.config.js",
-    "new-dev-build": "webpack --config ./example/webpack.config.js"
+    "new-dev-build": "webpack --config ./example/webpack.config.js",
+    "new-build-prod": "webpack",
+    "new-build": "pnpm run new-dev-build && pnpm run new-build-prod"
   },
   "main": "dist/zeroview.umd.min.js",
   "files": [
@@ -76,7 +78,8 @@
     "vue-template-compiler": "^2.7.14",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "webpack-merge": "^5.9.0"
   },
   "postcss": {
     "plugins": {

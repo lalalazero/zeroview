@@ -1,22 +1,17 @@
-const path = require("path");
+const path = require('path')
 const { VueLoaderPlugin } = require("vue-loader");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  mode: "development",
-  entry: {
-    app: "./example/index.js",
-  },
+  mode: 'development',
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "app.js",
+    filename: 'vue2-components.js',
     clean: true,
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, "dist"),
-    },
+    library: 'vue2Components',
+    libraryTarget: 'umd',
+    globalObject: 'this', // 如果输出是 umd，global 全局设置成 this
+    path: path.resolve(__dirname, 'dist')
   },
   module: {
     rules: [
@@ -48,14 +43,13 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader, // 搞成单独的 CSS 文件
           // "vue-style-loader", // 把 CSS 通过 <style> 标签输出到 html 页面
-          "css-loader", // 把 CSS 转成 CommonJS
+          "css-loader",  // 把 CSS 转成 CommonJS
           // "postcss-loader", // TODO 暂时好像没用到
           {
             loader: "sass-loader", // 把 Scss 转成 CSS
             options: {
               implementation: require("sass"),
-              // sass-loader version < 8 要用 data 属性，而不是 additionalData 属性，参见 https://vue-loader.vuejs.org/guide/pre-processors.html#sharing-global-variables
-              data: '@import "~/src/style.scss";',
+              data: '@import "~@/style.scss";',
             },
           },
         ],
@@ -71,9 +65,5 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin(),
-    new HtmlWebpackPlugin({
-      filename: "example.html",
-      template: "example/index.htm",
-    }),
-  ],
-};
+  ]
+}
