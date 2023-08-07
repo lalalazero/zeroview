@@ -2,6 +2,11 @@
   "name": "@zeroplayground/vue2-components",
   "version": "0.0.14",
   "private": false,
+  "author": "lalalazero",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lalalazero/zeroview.git"
+  },
   "scripts": {
     "test": "echo \"I haven't re-write them :( \"",
     "dev": "webpack serve --config ./example/webpack.config.js",
