@@ -17,6 +17,7 @@ import Sticky from './components/sticky/index.js'
 import DatePicker from './components/date-picker/index.js'
 import Scroll from './components/scroll/index.js'
 import Tag from './components/tag/index.js'
+import Layout from './components/layout/index.js'
 
 const components = [
   Button,
@@ -38,6 +39,7 @@ const components = [
   DatePicker,
   Scroll,
   Tag,
+  Layout
 ];
 
 const install = Vue => {
@@ -49,7 +51,8 @@ const install = Vue => {
 export {
   Button, Icon, ButtonGroup, Input, Tag,
   Grid, Tab, Toast, Menu, Collapse, Popover, Cascader, Carousel, Pagination,
-  Table, Upload, Sticky, DatePicker, Scroll
+  Table, Upload, Sticky, DatePicker, Scroll,
+  Layout
 };
 
 export default install;
