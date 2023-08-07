@@ -30,6 +30,20 @@ module.exports = {
         },
       },
       {
+        test: /\.md$/,
+        use: [
+          {
+            loader: "vue-loader",
+            options: {
+              compilerOptions: {
+                preserveWhitespace: false,
+              },
+            },
+          },
+          require.resolve("./md-loader.js"),
+        ],
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {

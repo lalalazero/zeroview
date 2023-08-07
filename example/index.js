@@ -3,8 +3,7 @@ import Components from '../dist/vue2-components.js'
 import Example from "./Example.vue";
 import DemoBlock from './demo-block.vue'
 import '../dist/main.css'
-// import zeroview from './index.js'
-// import router from "./router";
+import router from "./router";
 // import store from "./store";
 
 // 注册为 Vue 的全局组件
@@ -15,7 +14,7 @@ Vue.use(Components)
 Vue.component('demo-block', DemoBlock)
 
 new Vue({
-  // router,
+  router,
   // store,
   render: h => h(Example)
 }).$mount("#app");

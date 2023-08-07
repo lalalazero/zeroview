@@ -6,6 +6,7 @@ specifiers:
   '@vue/cli-plugin-babel': ^3.10.0
   '@vue/cli-plugin-unit-mocha': ^3.10.0
   '@vue/cli-service': ^3.10.0
+  '@vue/component-compiler-utils': ^3.3.0
   '@vue/test-utils': ^1.0.0-beta.29
   babel-loader: ^9.1.3
   babel-plugin-istanbul: ^6.0.0
@@ -60,6 +61,7 @@ devDependencies:
   '@vue/cli-plugin-babel': 3.12.1_2gw3kifvplhuniwber2dipen4a
   '@vue/cli-plugin-unit-mocha': 3.12.1_webpack@5.88.2
   '@vue/cli-service': 3.12.1_4bgy2hnyuaiwcy7q24cbhqjb3u
+  '@vue/component-compiler-utils': 3.3.0
   '@vue/test-utils': 1.3.6_rhqkolmkwunxzlyyxxsuwaiuri
   babel-loader: 9.1.3_v3f5kst7nrvctlwreoikt26coq
   babel-plugin-istanbul: 6.1.1
