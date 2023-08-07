@@ -11,22 +11,12 @@
   },
   "main": "dist/vue2-components.js",
   "files": [
-    "src/components",
-    "src/directives",
-    "src/index.js",
-    "src/style.scss",
-    "vue.config.js",
-    "babel.config.js",
     "README.md",
-    "dist/zeroview.common.js",
-    "dist/zeroview.css",
-    "dist/zeroview.umd.js"
+    "src",
+    "dist"
   ],
-  "dependencies": {
-    "core-js": "^2.6.5",
-    "vue": "^2.7.14",
-    "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+  "peerDependencies": {
+    "vue": "^2.7.14"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
