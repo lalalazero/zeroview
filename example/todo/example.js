@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Example from "./Example.vue";
 import DemoBlock from './demo-block.vue'
-import zeroview from './index.js'
+import zeroview from '../../src/index.js'
 import router from "./router";
 import store from "./store";
 
