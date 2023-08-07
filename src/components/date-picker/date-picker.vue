@@ -158,11 +158,11 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .z-view-date-picker {
   display: inline-block;
 }
-/deep/ .z-view-date-picker {
+.z-view-date-picker {
   &-nav {
     display: flex;
     justify-content: space-between;
